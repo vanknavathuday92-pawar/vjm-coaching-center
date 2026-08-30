@@ -1,30 +1,37 @@
 import { Routes } from '@angular/router';
 
-import { Home } from './home/home';
-import { Register } from './register/register';
-import { AdminLogin } from './admin-login/admin-login';
-import { AdminDashboard } from './admin-dashboard/admin-dashboard';
+import { authGuard } from './auth-guard';
 
 export const routes: Routes = [
 
   {
     path: '',
-    component: Home
+    loadComponent: () =>
+      import('./home/home')
+        .then(m => m.Home)
   },
 
   {
     path: 'register',
-    component: Register
+    loadComponent: () =>
+      import('./register/register')
+        .then(m => m.Register)
   },
 
   {
     path: 'admin-login',
-    component: AdminLogin
+    loadComponent: () =>
+      import('./admin-login/admin-login')
+        .then(m => m.AdminLogin)
   },
 
   {
     path: 'admin-dashboard',
-    component: AdminDashboard
+    loadComponent: () =>
+      import('./admin-dashboard/admin-dashboard')
+        .then(m => m.AdminDashboard),
+
+    canActivate: [authGuard]
   }
 
 ];
