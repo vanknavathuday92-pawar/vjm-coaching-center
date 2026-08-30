@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/vjm-coaching-center",
+    "public": "dist/vjm-coaching-center/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
