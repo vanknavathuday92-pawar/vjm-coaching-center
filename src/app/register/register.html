@@ -1,0 +1,540 @@
+<div class="registration-page">
+
+  <!-- Header -->
+  <header class="registration-header">
+
+    <a routerLink="/" class="back-home">
+      ← Back to Home
+    </a>
+
+    <div class="header-content">
+      <h1>VJM COACHING CENTER</h1>
+      <p>Student Registration</p>
+      <span>Learn Today • Lead Tomorrow</span>
+    </div>
+
+  </header>
+
+
+  <!-- Registration Form -->
+
+  <main class="registration-container">
+
+    <div class="form-intro">
+      <h2>Student Registration Form</h2>
+
+      <p>
+        Please provide the correct details of the student.
+        Our team will contact you after receiving the registration.
+      </p>
+
+      <div class="required-note">
+        * Required fields
+      </div>
+    </div>
+
+
+    <form [formGroup]="registrationForm"
+          (ngSubmit)="submitForm()">
+
+
+      <!-- STUDENT DETAILS -->
+
+      <section class="form-section">
+
+        <div class="section-title">
+          <span>01</span>
+          <div>
+            <h3>Student Details</h3>
+            <p>Basic information about the student</p>
+          </div>
+        </div>
+
+
+        <div class="form-grid">
+
+          <!-- Student Name -->
+
+          <div class="form-group full-width">
+
+            <label>
+              Student Full Name
+              <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="studentName"
+              placeholder="Enter student's full name">
+
+            @if (registrationForm.get('studentName')?.touched &&
+                 registrationForm.get('studentName')?.invalid) {
+
+              <small class="error">
+                Please enter the student's name.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- Date of Birth -->
+
+          <div class="form-group">
+
+            <label>
+              Date of Birth
+              <span>*</span>
+            </label>
+
+            <input
+              type="date"
+              formControlName="dateOfBirth">
+
+            @if (registrationForm.get('dateOfBirth')?.touched &&
+                 registrationForm.get('dateOfBirth')?.invalid) {
+
+              <small class="error">
+                Date of birth is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- Gender -->
+
+          <div class="form-group">
+
+            <label>
+              Gender
+              <span>*</span>
+            </label>
+
+            <select formControlName="gender">
+
+              <option value="">
+                Select Gender
+              </option>
+
+              <option value="Male">
+                Male
+              </option>
+
+              <option value="Female">
+                Female
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- Current Class -->
+
+          <div class="form-group">
+
+            <label>
+              Current Class
+              <span>*</span>
+            </label>
+
+            <select formControlName="class">
+
+              <option value="">
+                Select Class
+              </option>
+
+              <option value="1st">1st Class</option>
+              <option value="2nd">2nd Class</option>
+              <option value="3rd">3rd Class</option>
+              <option value="4th">4th Class</option>
+              <option value="5th">5th Class</option>
+              <option value="6th">6th Class</option>
+              <option value="7th">7th Class</option>
+              <option value="8th">8th Class</option>
+              <option value="9th">9th Class</option>
+              <option value="10th">10th Class</option>
+
+            </select>
+
+          </div>
+
+
+          <!-- School -->
+
+          <div class="form-group">
+
+            <label>
+              School Name
+            </label>
+
+            <input
+              type="text"
+              formControlName="schoolName"
+              placeholder="Enter school name">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- COURSE DETAILS -->
+
+      <section class="form-section">
+
+        <div class="section-title">
+          <span>02</span>
+
+          <div>
+            <h3>Course Selection</h3>
+            <p>Select the coaching program</p>
+          </div>
+
+        </div>
+
+
+        <div class="course-options">
+
+          <label class="course-option">
+
+            <input
+              type="radio"
+              value="Navodaya"
+              formControlName="course">
+
+            <div>
+              <strong>Navodaya</strong>
+              <small>Entrance Exam Coaching</small>
+            </div>
+
+          </label>
+
+
+          <label class="course-option">
+
+            <input
+              type="radio"
+              value="Sainik School"
+              formControlName="course">
+
+            <div>
+              <strong>Sainik School</strong>
+              <small>Entrance Exam Coaching</small>
+            </div>
+
+          </label>
+
+
+          <label class="course-option">
+
+            <input
+              type="radio"
+              value="Gurukula"
+              formControlName="course">
+
+            <div>
+              <strong>Gurukula</strong>
+              <small>Entrance Exam Coaching</small>
+            </div>
+
+          </label>
+
+
+          <label class="course-option">
+
+            <input
+              type="radio"
+              value="School Tuition"
+              formControlName="course">
+
+            <div>
+              <strong>School Tuition</strong>
+              <small>Classes 1st to 10th</small>
+            </div>
+
+          </label>
+
+        </div>
+
+      </section>
+
+
+      <!-- PARENT DETAILS -->
+
+      <section class="form-section">
+
+        <div class="section-title">
+
+          <span>03</span>
+
+          <div>
+            <h3>Parent / Guardian Details</h3>
+            <p>Contact information</p>
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>
+              Parent / Guardian Name
+              <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="parentName"
+              placeholder="Enter parent/guardian name">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Relationship
+              <span>*</span>
+            </label>
+
+            <select formControlName="relationship">
+
+              <option value="">
+                Select Relationship
+              </option>
+
+              <option value="Father">Father</option>
+              <option value="Mother">Mother</option>
+              <option value="Guardian">Guardian</option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Mobile Number
+              <span>*</span>
+            </label>
+
+            <input
+              type="tel"
+              formControlName="mobile"
+              maxlength="10"
+              placeholder="10-digit mobile number">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              WhatsApp Number
+            </label>
+
+            <input
+              type="tel"
+              formControlName="whatsapp"
+              maxlength="10"
+              placeholder="WhatsApp number">
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label>
+              Email Address
+            </label>
+
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter email address">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ADDRESS -->
+
+      <section class="form-section">
+
+        <div class="section-title">
+
+          <span>04</span>
+
+          <div>
+            <h3>Address Details</h3>
+            <p>Where does the student live?</p>
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group full-width">
+
+            <label>
+              Address
+              <span>*</span>
+            </label>
+
+            <textarea
+              formControlName="address"
+              rows="3"
+              placeholder="Enter complete address">
+            </textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Village / Town
+              <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="village"
+              placeholder="Village / Town">
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              District
+              <span>*</span>
+            </label>
+
+            <input
+              type="text"
+              formControlName="district"
+              placeholder="District">
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ADDITIONAL INFORMATION -->
+
+      <section class="form-section">
+
+        <div class="section-title">
+
+          <span>05</span>
+
+          <div>
+            <h3>Additional Information</h3>
+            <p>Help us understand the student's needs</p>
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+          <div class="form-group full-width">
+
+            <label>
+              Previous Academic Performance
+            </label>
+
+            <textarea
+              formControlName="performance"
+              rows="3"
+              placeholder="Optional - Enter previous exam marks or performance">
+            </textarea>
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label>
+              How did you hear about VJM?
+            </label>
+
+            <select formControlName="reference">
+
+              <option value="">
+                Select an option
+              </option>
+
+              <option value="Friend">
+                Friend / Relative
+              </option>
+
+              <option value="WhatsApp">
+                WhatsApp
+              </option>
+
+              <option value="Google">
+                Google
+              </option>
+
+              <option value="Poster">
+                Poster / Banner
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- SUBMIT -->
+
+      <div class="submit-area">
+
+        <p>
+          By submitting this form, you confirm that the information
+          provided is correct.
+        </p>
+
+        <button
+  type="submit"
+  [disabled]="registrationForm.invalid || isSubmitting">
+
+  {{ isSubmitting ? 'Submitting...' : 'Submit Registration' }}
+
+</button>
+
+      </div>
+
+    </form>
+
+  </main>
+
+</div>

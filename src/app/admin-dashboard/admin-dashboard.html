@@ -1,0 +1,1273 @@
+<div class="dashboard-page">
+
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
+  <header class="dashboard-header">
+
+    <div class="brand">
+
+      <img
+        src="assets/vjm-logo.png"
+        alt="VJM Coaching Center Logo"
+      />
+
+      <div class="brand-text">
+
+        <h1>Admin Dashboard</h1>
+
+        <p>VJM COACHING CENTER</p>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="logout-btn"
+      (click)="logout()"
+    >
+      Logout
+    </button>
+
+  </header>
+
+
+  <!-- ========================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================= -->
+
+  <main class="dashboard-container">
+
+    <!-- PAGE TITLE -->
+
+    <div class="page-title">
+
+      <div>
+
+        <h2>Student Overview</h2>
+
+        <p>
+          Manage and monitor student registrations
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="refresh-btn"
+        [disabled]="isLoading"
+        (click)="refreshStudents()"
+      >
+
+        @if (isLoading) {
+
+          ↻ Loading...
+
+        } @else {
+
+          ↻ Refresh
+
+        }
+
+      </button>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- STATISTICS -->
+    <!-- ========================================= -->
+
+    <section class="stats-grid">
+
+      <!-- TOTAL -->
+
+      <div class="stat-card total">
+
+        <div class="stat-icon">
+          👨‍🎓
+        </div>
+
+        <div class="stat-content">
+
+          <span>Total Students</span>
+
+          <strong>
+            {{ totalStudents }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- NAVODAYA -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🎓
+        </div>
+
+        <div class="stat-content">
+
+          <span>Navodaya</span>
+
+          <strong>
+            {{ navodayaStudents }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- SAINIK SCHOOL -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🏫
+        </div>
+
+        <div class="stat-content">
+
+          <span>Sainik School</span>
+
+          <strong>
+            {{ sainikStudents }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- GURUKULA -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📚
+        </div>
+
+        <div class="stat-content">
+
+          <span>Gurukula</span>
+
+          <strong>
+            {{ gurukulaStudents }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- SCHOOL TUITION -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📖
+        </div>
+
+        <div class="stat-content">
+
+          <span>School Tuition</span>
+
+          <strong>
+            {{ tuitionStudents }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- ERROR MESSAGE -->
+    <!-- ========================================= -->
+
+    @if (errorMessage) {
+
+      <div class="error-message">
+
+        <span>⚠️</span>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+        <button
+          type="button"
+          (click)="refreshStudents()"
+        >
+          Try Again
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- LOADING -->
+    <!-- ========================================= -->
+
+    @if (isLoading) {
+
+      <div class="loading-card">
+
+        <div class="loading-spinner"></div>
+
+        <p>
+          Loading student registrations...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- REGISTERED STUDENTS -->
+    <!-- ========================================= -->
+
+    @if (!isLoading && students.length > 0) {
+
+      <section class="students-section">
+
+        <!-- SECTION HEADER -->
+
+        <div class="section-header">
+
+          <div>
+
+            <h2>
+              Registered Students
+            </h2>
+
+            <p>
+              {{ totalStudents }}
+              student(s) registered
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="small-refresh-btn"
+            (click)="refreshStudents()"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>#</th>
+
+                <th>Student Name</th>
+
+                <th>Class</th>
+
+                <th>Course</th>
+
+                <th>Parent / Guardian</th>
+
+                <th>Mobile</th>
+
+                <th>District</th>
+
+                <th>Action</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                student of students;
+                track student.id;
+                let i = $index
+              ) {
+
+                <tr>
+
+                  <td>
+                    {{ i + 1 }}
+                  </td>
+
+
+                  <td class="student-name">
+
+                    {{ student.studentName }}
+
+                  </td>
+
+
+                  <td>
+
+                    {{ student.class }}
+
+                  </td>
+
+
+                  <td>
+
+                    <span class="course-badge">
+
+                      {{ student.course }}
+
+                    </span>
+
+                  </td>
+
+
+                  <td>
+
+                    {{ student.parentName }}
+
+                  </td>
+
+
+                  <td>
+
+                    <a
+                      class="mobile-link"
+                      [href]="'tel:' + student.mobile"
+                    >
+                      {{ student.mobile }}
+                    </a>
+
+                  </td>
+
+
+                  <td>
+
+                    {{ student.district }}
+
+                  </td>
+
+
+                  <td>
+
+                    <button
+                      type="button"
+                      class="view-btn"
+                      (click)="viewStudent(student)"
+                    >
+                      View
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ========================================= -->
+    <!-- NO STUDENTS -->
+    <!-- ========================================= -->
+
+    @if (!isLoading && students.length === 0 && !errorMessage) {
+
+      <section class="empty-state">
+
+        <div class="empty-icon">
+          👨‍🎓
+        </div>
+
+        <h2>
+          No Students Registered Yet
+        </h2>
+
+        <p>
+          Student registrations will appear here
+          after someone submits the registration form.
+        </p>
+
+        <button
+          type="button"
+          class="empty-refresh-btn"
+          (click)="refreshStudents()"
+        >
+          ↻ Refresh
+        </button>
+
+      </section>
+
+    }
+
+  </main>
+
+
+  <!-- ================================================= -->
+  <!-- STUDENT DETAILS MODAL -->
+  <!-- ================================================= -->
+
+  @if (showStudentModal && selectedStudent) {
+
+    <div
+      class="modal-overlay"
+      (click)="closeStudentModal()"
+    >
+
+      <div
+        class="student-modal"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- ========================================= -->
+        <!-- MODAL HEADER -->
+        <!-- ========================================= -->
+
+        <div class="modal-header">
+
+          <div>
+
+            <h2>
+              Student Details
+            </h2>
+
+            <p>
+              Complete registration information
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="modal-close"
+            aria-label="Close"
+            (click)="closeStudentModal()"
+          >
+            ✕
+          </button>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- MODAL BODY -->
+        <!-- ========================================= -->
+
+        <div class="modal-body">
+
+          <!-- ================================================= -->
+          <!-- EDIT MODE -->
+          <!-- ================================================= -->
+
+          @if (isEditingStudent) {
+
+            <section class="edit-student-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  ✏️
+                </span>
+
+                <h3>
+                  Edit Student Information
+                </h3>
+
+              </div>
+
+
+              <!-- STUDENT INFORMATION -->
+
+              <div class="edit-grid">
+
+                <div class="edit-field">
+
+                  <label>
+                    Student Name
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.studentName"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Date of Birth
+                  </label>
+
+                  <input
+                    type="date"
+                    [(ngModel)]="selectedStudent.dateOfBirth"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Gender
+                  </label>
+
+                  <select
+                    [(ngModel)]="selectedStudent.gender"
+                  >
+
+                    <option value="">
+                      Select Gender
+                    </option>
+
+                    <option value="Male">
+                      Male
+                    </option>
+
+                    <option value="Female">
+                      Female
+                    </option>
+
+                    <option value="Other">
+                      Other
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Class
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.class"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    School Name
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.schoolName"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Course
+                  </label>
+
+                  <select
+                    [(ngModel)]="selectedStudent.course"
+                  >
+
+                    <option value="Navodaya">
+                      Navodaya
+                    </option>
+
+                    <option value="Sainik School">
+                      Sainik School
+                    </option>
+
+                    <option value="Gurukula">
+                      Gurukula
+                    </option>
+
+                    <option value="School Tuition">
+                      School Tuition
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              <!-- PARENT INFORMATION -->
+
+              <div class="edit-section-heading">
+
+                <span>
+                  👨‍👩‍👦
+                </span>
+
+                Parent / Guardian Information
+
+              </div>
+
+
+              <div class="edit-grid">
+
+                <div class="edit-field">
+
+                  <label>
+                    Parent / Guardian
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.parentName"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Relationship
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.relationship"
+                  />
+
+                </div>
+
+              </div>
+
+
+              <!-- CONTACT INFORMATION -->
+
+              <div class="edit-section-heading">
+
+                <span>
+                  📞
+                </span>
+
+                Contact Information
+
+              </div>
+
+
+              <div class="edit-grid">
+
+                <div class="edit-field">
+
+                  <label>
+                    Mobile Number
+                  </label>
+
+                  <input
+                    type="tel"
+                    [(ngModel)]="selectedStudent.mobile"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    WhatsApp Number
+                  </label>
+
+                  <input
+                    type="tel"
+                    [(ngModel)]="selectedStudent.whatsapp"
+                  />
+
+                </div>
+
+
+                <div class="edit-field full-width">
+
+                  <label>
+                    Email
+                  </label>
+
+                  <input
+                    type="email"
+                    [(ngModel)]="selectedStudent.email"
+                  />
+
+                </div>
+
+              </div>
+
+
+              <!-- ADDRESS -->
+
+              <div class="edit-section-heading">
+
+                <span>
+                  📍
+                </span>
+
+                Address Information
+
+              </div>
+
+
+              <div class="edit-grid">
+
+                <div class="edit-field full-width">
+
+                  <label>
+                    Address
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.address"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    Village
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.village"
+                  />
+
+                </div>
+
+
+                <div class="edit-field">
+
+                  <label>
+                    District
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.district"
+                  />
+
+                </div>
+
+              </div>
+
+
+              <!-- ACADEMIC INFORMATION -->
+
+              <div class="edit-section-heading">
+
+                <span>
+                  📚
+                </span>
+
+                Academic Information
+
+              </div>
+
+
+              <div class="edit-grid">
+
+                <div class="edit-field full-width">
+
+                  <label>
+                    Academic Performance
+                  </label>
+
+                  <textarea
+                    rows="4"
+                    [(ngModel)]="selectedStudent.performance"
+                  ></textarea>
+
+                </div>
+
+
+                <div class="edit-field full-width">
+
+                  <label>
+                    Reference
+                  </label>
+
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedStudent.reference"
+                  />
+
+                </div>
+
+              </div>
+
+            </section>
+
+          } @else {
+
+
+            <!-- ================================================= -->
+            <!-- VIEW MODE -->
+            <!-- ================================================= -->
+
+            <!-- STUDENT INFORMATION -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  👨‍🎓
+                </span>
+
+                <h3>
+                  Student Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item">
+
+                  <span>
+                    Student Name
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.studentName || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Date of Birth
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.dateOfBirth || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Gender
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.gender || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Class
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.class || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    School Name
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.schoolName || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Course
+                  </span>
+
+                  <strong class="course-detail-badge">
+
+                    {{ selectedStudent.course || 'Not provided' }}
+
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            <!-- PARENT INFORMATION -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  👨‍👩‍👦
+                </span>
+
+                <h3>
+                  Parent / Guardian Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item">
+
+                  <span>
+                    Parent / Guardian
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.parentName || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Relationship
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.relationship || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  📞
+                </span>
+
+                <h3>
+                  Contact Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item">
+
+                  <span>
+                    Mobile Number
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.mobile || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    WhatsApp Number
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.whatsapp || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item full-width">
+
+                  <span>
+                    Email
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.email || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- CONTACT BUTTONS -->
+
+              <div class="contact-actions">
+
+                @if (selectedStudent.mobile) {
+
+                  <button
+                    type="button"
+                    class="call-btn"
+                    (click)="callStudent(selectedStudent.mobile)"
+                  >
+                    📞 Call Parent
+                  </button>
+
+                }
+
+
+                @if (selectedStudent.whatsapp) {
+
+                  <button
+                    type="button"
+                    class="whatsapp-btn"
+                    (click)="openWhatsApp(selectedStudent.whatsapp)"
+                  >
+                    💬 WhatsApp
+                  </button>
+
+                }
+
+              </div>
+
+            </section>
+
+
+            <!-- ADDRESS -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  📍
+                </span>
+
+                <h3>
+                  Address Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item full-width">
+
+                  <span>
+                    Address
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.address || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Village
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.village || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    District
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.district || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </section>
+
+
+            <!-- ACADEMIC INFORMATION -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  📚
+                </span>
+
+                <h3>
+                  Academic Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item full-width">
+
+                  <span>
+                    Academic Performance
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.performance || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item full-width">
+
+                  <span>
+                    Reference
+                  </span>
+
+                  <strong>
+                    {{ selectedStudent.reference || 'Not provided' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          }
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- MODAL FOOTER -->
+        <!-- ========================================= -->
+
+        <div class="modal-footer">
+
+
+          @if (isEditingStudent) {
+
+            <button
+              type="button"
+              class="save-btn"
+              (click)="saveStudentChanges()"
+            >
+              💾 Save Changes
+            </button>
+
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="cancelEditStudent()"
+            >
+              Cancel
+            </button>
+
+          } @else {
+
+            <button
+              type="button"
+              class="edit-btn"
+              (click)="startEditStudent()"
+            >
+              ✏️ Edit Student
+            </button>
+
+
+            <button
+              type="button"
+              class="delete-btn"
+              (click)="deleteStudent(selectedStudent)"
+            >
+              🗑 Delete Student
+            </button>
+
+
+            <button
+              type="button"
+              class="close-btn"
+              (click)="closeStudentModal()"
+            >
+              Close
+            </button>
+
+          }
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

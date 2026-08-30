@@ -1,0 +1,72 @@
+<div class="admin-page">
+
+  <div class="login-card">
+
+    <div class="logo-section">
+      <img
+        src="assets/vjm-logo.png"
+        alt="VJM Coaching Center">
+
+      <h1>Admin Login</h1>
+
+      <p>
+        VJM COACHING CENTER
+      </p>
+    </div>
+
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="login()">
+
+      <div class="form-group">
+
+        <label>Email Address</label>
+
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Enter admin email">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Password</label>
+
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Enter password">
+
+      </div>
+
+
+      @if (errorMessage) {
+
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+
+      }
+
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid || isLoggingIn">
+
+        {{ isLoggingIn ? 'Logging in...' : 'Login' }}
+
+      </button>
+
+    </form>
+
+
+    <a routerLink="/" class="back-home">
+      ← Back to Home
+    </a>
+
+  </div>
+
+</div>

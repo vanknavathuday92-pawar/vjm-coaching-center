@@ -1,0 +1,322 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f4f6fb;
+  color: #07143d;
+  font-family: Arial, sans-serif;
+}
+
+
+/* HEADER */
+
+.registration-header {
+  background: #07143d;
+  color: white;
+  padding: 20px 7%;
+  position: relative;
+}
+
+.back-home {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.header-content {
+  text-align: center;
+  padding: 25px 0;
+}
+
+.header-content h1 {
+  color: #ffc400;
+  font-size: 38px;
+  margin: 0;
+  font-weight: 900;
+}
+
+.header-content p {
+  font-size: 25px;
+  margin: 10px 0;
+}
+
+.header-content span {
+  color: #ffc400;
+}
+
+
+/* MAIN */
+
+.registration-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+
+/* INTRO */
+
+.form-intro {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-intro h2 {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.form-intro p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.required-note {
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+
+/* FORM SECTION */
+
+.form-section {
+  background: white;
+  padding: 35px;
+  margin-bottom: 25px;
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #eee;
+}
+
+.section-title > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  background: #ffc400;
+  color: #07143d;
+
+  font-weight: 900;
+}
+
+.section-title h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.section-title p {
+  margin: 5px 0 0;
+  color: #777;
+}
+
+
+/* GRID */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+
+/* FORM CONTROLS */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.form-group label span {
+  color: #d32f2f;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 13px 15px;
+
+  border: 1px solid #d5d8e0;
+  border-radius: 9px;
+
+  font-size: 15px;
+  font-family: inherit;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #ffc400;
+
+  box-shadow:
+    0 0 0 3px rgba(255, 196, 0, 0.15);
+}
+
+
+/* COURSE OPTIONS */
+
+.course-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.course-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px;
+
+  border: 2px solid #e5e7ed;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.course-option:hover {
+  border-color: #ffc400;
+  background: #fffdf3;
+}
+
+.course-option input {
+  width: 20px;
+  height: 20px;
+  accent-color: #07143d;
+}
+
+.course-option strong {
+  display: block;
+  font-size: 17px;
+}
+
+.course-option small {
+  display: block;
+  margin-top: 5px;
+  color: #777;
+}
+
+
+/* ERROR */
+
+.error {
+  color: #d32f2f;
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+
+/* SUBMIT */
+
+.submit-area {
+  text-align: center;
+  padding: 20px 0 50px;
+}
+
+.submit-area p {
+  color: #666;
+  font-size: 14px;
+}
+
+.submit-area button {
+  border: none;
+
+  padding: 16px 45px;
+
+  border-radius: 30px;
+
+  background: #ffc400;
+  color: #07143d;
+
+  font-size: 17px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.submit-area button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.submit-area button:disabled {
+  background: #cfd2d8;
+  color: #777;
+  cursor: not-allowed;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .header-content h1 {
+    font-size: 27px;
+  }
+
+  .header-content p {
+    font-size: 21px;
+  }
+
+  .registration-container {
+    margin-top: 20px;
+  }
+
+  .form-section {
+    padding: 22px 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .course-options {
+    grid-template-columns: 1fr;
+  }
+
+  .form-intro h2 {
+    font-size: 28px;
+  }
+
+}
