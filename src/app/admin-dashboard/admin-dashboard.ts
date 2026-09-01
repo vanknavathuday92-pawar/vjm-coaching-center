@@ -3,13 +3,14 @@ import {
   OnInit,
   ChangeDetectorRef
 } from '@angular/core';
+
 import { Router } from '@angular/router';
+
 import { FormsModule } from '@angular/forms';
+
 import {
   collection,
   getDocs,
-  query,
-  orderBy,
   deleteDoc,
   doc,
   updateDoc
@@ -20,69 +21,168 @@ import {
   signOut
 } from 'firebase/auth';
 
-import { db, app } from '../firebase';
+import {
+  db,
+  app
+} from '../firebase';
 
+
+// ======================================================
+// STUDENT INTERFACE
+// ======================================================
 
 interface Student {
 
   id: string;
 
+  // ====================================================
+  // REGISTRATION
+  // ====================================================
+
+  registrationNumber?: string;
+
+  registrationStatus?:
+    | 'Pending'
+    | 'Approved'
+    | 'Rejected';
+
+
+  // ====================================================
+  // STUDENT DETAILS
+  // ====================================================
+
   studentName: string;
+
   dateOfBirth: string;
+
   gender: string;
+
   class: string;
+
   schoolName: string;
+
   course: string;
 
+
+  // ====================================================
+  // PARENT DETAILS
+  // ====================================================
+
   parentName: string;
+
   relationship: string;
 
+
+  // ====================================================
+  // CONTACT DETAILS
+  // ====================================================
+
   mobile: string;
+
   whatsapp: string;
+
   email: string;
 
+
+  // ====================================================
+  // ADDRESS
+  // ====================================================
+
   address: string;
+
   village: string;
+
   district: string;
 
+
+  // ====================================================
+  // ADDITIONAL INFORMATION
+  // ====================================================
+
   performance: string;
+
   reference: string;
+
+
+  // ====================================================
+  // PAYMENT
+  // ====================================================
+
+  courseFee?: number;
+
+  paymentStatus?:
+    | 'Pending'
+    | 'Paid'
+    | 'Rejected';
+
+  paymentId?: string;
+
+  paymentDate?: any;
+
+
+  // ====================================================
+  // VIDEO ACCESS
+  // ====================================================
+
+  videoAccess?: boolean;
+
+
+  // ====================================================
+  // CREATED DATE
+  // ====================================================
 
   createdAt?: any;
 
 }
 
 
+
+// ======================================================
+// COMPONENT
+// ======================================================
+
 @Component({
+
   selector: 'app-admin-dashboard',
-  imports: [FormsModule],
+
+  imports: [
+    FormsModule
+  ],
+
   templateUrl: './admin-dashboard.html',
+
   styleUrl: './admin-dashboard.scss'
+
 })
 
 
-export class AdminDashboard implements OnInit {
+// ======================================================
+// ADMIN DASHBOARD CLASS
+// ======================================================
+
+export class AdminDashboard
+  implements OnInit {
 
 
-  // ==========================================
+  // ====================================================
   // STUDENTS
-  // ==========================================
+  // ====================================================
 
   students: Student[] = [];
 
 
-  // ==========================================
+  // ====================================================
   // LOADING / ERROR
-  // ==========================================
+  // ====================================================
 
   isLoading = true;
 
   errorMessage = '';
 
 
-  // ==========================================
-  // STATISTICS
-  // ==========================================
+  // ====================================================
+  // COURSE STATISTICS
+  // ====================================================
 
   totalStudents = 0;
 
@@ -95,35 +195,58 @@ export class AdminDashboard implements OnInit {
   tuitionStudents = 0;
 
 
-  // ==========================================
-  // VIEW STUDENT POPUP
-  // ==========================================
+  // ====================================================
+  // PAYMENT STATISTICS
+  // ====================================================
 
-  selectedStudent: Student | null = null;
+  paidStudents = 0;
+
+  pendingPayments = 0;
+
+  rejectedPayments = 0;
+
+
+  // ====================================================
+  // STUDENT MODAL
+  // ====================================================
+
+  selectedStudent:
+    Student | null = null;
 
   showStudentModal = false;
 
-// Edit student status
-isEditingStudent = false;
-  // ==========================================
+
+  // ====================================================
+  // EDIT MODE
+  // ====================================================
+
+  isEditingStudent = false;
+
+
+  // ====================================================
   // FIREBASE AUTH
-  // ==========================================
+  // ====================================================
 
-  private auth = getAuth(app);
+  private auth =
+    getAuth(app);
 
 
-  // ==========================================
+  // ====================================================
   // CONSTRUCTOR
-  // ==========================================
+  // ====================================================
 
   constructor(
-  private router: Router,
-  private cdr: ChangeDetectorRef
-) {}
 
-  // ==========================================
+    private router: Router,
+
+    private cdr: ChangeDetectorRef
+
+  ) {}
+
+
+  // ====================================================
   // INITIALIZE
-  // ==========================================
+  // ====================================================
 
   ngOnInit(): void {
 
@@ -136,9 +259,9 @@ isEditingStudent = false;
   }
 
 
-  // ==========================================
+  // ====================================================
   // LOAD STUDENTS
-  // ==========================================
+  // ====================================================
 
   async loadStudents(): Promise<void> {
 
@@ -154,7 +277,10 @@ isEditingStudent = false;
       );
 
 
-      // Get students collection
+      // ------------------------------------------------
+      // STUDENTS COLLECTION
+      // ------------------------------------------------
+
       const studentsRef =
         collection(
           db,
@@ -162,7 +288,10 @@ isEditingStudent = false;
         );
 
 
-      // Get all students
+      // ------------------------------------------------
+      // GET DOCUMENTS
+      // ------------------------------------------------
+
       const snapshot =
         await getDocs(
           studentsRef
@@ -180,7 +309,10 @@ isEditingStudent = false;
       );
 
 
-      // Convert Firestore documents
+      // ------------------------------------------------
+      // CONVERT FIRESTORE DOCUMENTS
+      // ------------------------------------------------
+
       this.students =
         snapshot.docs.map(
           studentDoc => {
@@ -191,7 +323,8 @@ isEditingStudent = false;
 
             return {
 
-              id: studentDoc.id,
+              id:
+                studentDoc.id,
 
               ...data
 
@@ -201,7 +334,10 @@ isEditingStudent = false;
         );
 
 
-      // Sort newest registrations first
+      // ------------------------------------------------
+      // SORT NEWEST FIRST
+      // ------------------------------------------------
+
       this.students.sort(
         (a, b) => {
 
@@ -210,10 +346,12 @@ isEditingStudent = false;
               a.createdAt
             );
 
+
           const timeB =
             this.getCreatedTime(
               b.createdAt
             );
+
 
           return timeB - timeA;
 
@@ -221,18 +359,16 @@ isEditingStudent = false;
       );
 
 
-      console.log(
-        'Students:',
-        this.students
-      );
+      // ------------------------------------------------
+      // CALCULATE STATISTICS
+      // ------------------------------------------------
 
-
-      // Calculate statistics
       this.calculateStatistics();
 
 
       console.log(
-        'Statistics calculated'
+        'Students:',
+        this.students
       );
 
 
@@ -248,7 +384,6 @@ isEditingStudent = false;
         'Unable to load student registrations. Please check Firebase permissions.';
 
 
-      // Clear students if loading fails
       this.students = [];
 
 
@@ -259,20 +394,22 @@ isEditingStudent = false;
 
       this.isLoading = false;
 
-  this.cdr.detectChanges();
 
-  console.log(
-    'FINISHED loading students'
-  );
+      this.cdr.detectChanges();
+
+
+      console.log(
+        'FINISHED loading students'
+      );
 
     }
 
   }
 
 
-  // ==========================================
+  // ====================================================
   // GET CREATED TIME
-  // ==========================================
+  // ====================================================
 
   private getCreatedTime(
     createdAt: any
@@ -285,7 +422,10 @@ isEditingStudent = false;
     }
 
 
-    // Firestore Timestamp
+    // ------------------------------------------------
+    // FIRESTORE TIMESTAMP
+    // ------------------------------------------------
+
     if (
       typeof createdAt.toMillis ===
       'function'
@@ -296,7 +436,25 @@ isEditingStudent = false;
     }
 
 
-    // JavaScript Date
+    // ------------------------------------------------
+    // FIREBASE TIMESTAMP-LIKE OBJECT
+    // ------------------------------------------------
+
+    if (
+      createdAt.seconds !== undefined
+    ) {
+
+      return (
+        createdAt.seconds * 1000
+      );
+
+    }
+
+
+    // ------------------------------------------------
+    // JAVASCRIPT DATE
+    // ------------------------------------------------
+
     if (
       createdAt instanceof Date
     ) {
@@ -306,7 +464,10 @@ isEditingStudent = false;
     }
 
 
-    // Number
+    // ------------------------------------------------
+    // NUMBER
+    // ------------------------------------------------
+
     if (
       typeof createdAt === 'number'
     ) {
@@ -316,14 +477,35 @@ isEditingStudent = false;
     }
 
 
+    // ------------------------------------------------
+    // STRING DATE
+    // ------------------------------------------------
+
+    if (
+      typeof createdAt === 'string'
+    ) {
+
+      const parsed =
+        new Date(
+          createdAt
+        ).getTime();
+
+
+      return isNaN(parsed)
+        ? 0
+        : parsed;
+
+    }
+
+
     return 0;
 
   }
 
 
-  // ==========================================
+  // ====================================================
   // REFRESH STUDENTS
-  // ==========================================
+  // ====================================================
 
   async refreshStudents(): Promise<void> {
 
@@ -331,64 +513,190 @@ isEditingStudent = false;
       'REFRESH BUTTON CLICKED'
     );
 
+
     await this.loadStudents();
 
   }
 
 
-  // ==========================================
-  // STATISTICS
-  // ==========================================
+  // ====================================================
+  // CALCULATE STATISTICS
+  // ====================================================
 
   calculateStatistics(): void {
 
+    // ------------------------------------------------
+    // TOTAL
+    // ------------------------------------------------
 
     this.totalStudents =
       this.students.length;
 
 
+    // ------------------------------------------------
+    // NAVODAYA
+    // ------------------------------------------------
+
     this.navodayaStudents =
       this.students.filter(
-        student =>
-          this.normalizeCourse(
-            student.course
-          ) === 'navodaya'
+        student => {
+
+          const course =
+            this.normalizeCourse(
+              student.course
+            );
+
+
+          return (
+
+            course ===
+            'navodaya'
+
+            ||
+
+            course ===
+            'navodaya entrance coaching'
+
+          );
+
+        }
       ).length;
 
+
+    // ------------------------------------------------
+    // SAINIK SCHOOL
+    // ------------------------------------------------
 
     this.sainikStudents =
       this.students.filter(
-        student =>
-          this.normalizeCourse(
-            student.course
-          ) === 'sainik school'
+        student => {
+
+          const course =
+            this.normalizeCourse(
+              student.course
+            );
+
+
+          return (
+
+            course ===
+            'sainik school'
+
+            ||
+
+            course ===
+            'sainik school entrance coaching'
+
+          );
+
+        }
       ).length;
 
+
+    // ------------------------------------------------
+    // GURUKULA
+    // ------------------------------------------------
 
     this.gurukulaStudents =
       this.students.filter(
-        student =>
-          this.normalizeCourse(
-            student.course
-          ) === 'gurukula'
+        student => {
+
+          const course =
+            this.normalizeCourse(
+              student.course
+            );
+
+
+          return (
+
+            course ===
+            'gurukula'
+
+            ||
+
+            course ===
+            'gurukula entrance coaching'
+
+          );
+
+        }
       ).length;
 
+
+    // ------------------------------------------------
+    // SCHOOL TUITION
+    // ------------------------------------------------
 
     this.tuitionStudents =
       this.students.filter(
-        student =>
-          this.normalizeCourse(
-            student.course
-          ) === 'school tuition'
+        student => {
+
+          const course =
+            this.normalizeCourse(
+              student.course
+            );
+
+
+          return (
+            course ===
+            'school tuition'
+          );
+
+        }
       ).length;
 
+
+    // ==================================================
+    // PAYMENT STATISTICS
+    // ==================================================
+
+    // ------------------------------------------------
+    // PAID
+    // ------------------------------------------------
+
+    this.paidStudents =
+      this.students.filter(
+        student =>
+          student.paymentStatus ===
+          'Paid'
+      ).length;
+
+
+    // ------------------------------------------------
+    // PENDING
+    // ------------------------------------------------
+
+    this.pendingPayments =
+      this.students.filter(
+        student =>
+
+          !student.paymentStatus
+
+          ||
+
+          student.paymentStatus ===
+          'Pending'
+
+      ).length;
+
+
+    // ------------------------------------------------
+    // REJECTED
+    // ------------------------------------------------
+
+    this.rejectedPayments =
+      this.students.filter(
+        student =>
+          student.paymentStatus ===
+          'Rejected'
+      ).length;
 
   }
 
 
-  // ==========================================
+  // ====================================================
   // NORMALIZE COURSE NAME
-  // ==========================================
+  // ====================================================
 
   private normalizeCourse(
     course: string
@@ -403,158 +711,618 @@ isEditingStudent = false;
   }
 
 
-  // ==========================================
+  // ====================================================
   // VIEW STUDENT
-  // ==========================================
+  // ====================================================
 
- viewStudent(student: Student): void {
-  this.selectedStudent = student;
-  this.showStudentModal = true;
-  this.isEditingStudent = false;
-}
-// ==========================================
-// EDIT STUDENT
-// ==========================================
+  viewStudent(
+    student: Student
+  ): void {
 
-editStudent(): void {
+    this.selectedStudent =
+      student;
 
-  if (!this.selectedStudent) {
-    return;
+
+    this.showStudentModal =
+      true;
+
+
+    this.isEditingStudent =
+      false;
+
   }
 
-  // Create a copy so editing does not immediately change
-  // the student displayed in the table
-  this.selectedStudent = {
-    ...this.selectedStudent
-  };
 
-  this.isEditingStudent = true;
+  // ====================================================
+  // EDIT STUDENT
+  // ====================================================
 
-}
-// ==========================================
-// SAVE STUDENT CHANGES
-// ==========================================
+  editStudent(): void {
 
-// ==========================================
-// SAVE STUDENT CHANGES
-// ==========================================
+    if (
+      !this.selectedStudent
+    ) {
 
-async saveStudentChanges(): Promise<void> {
+      return;
 
-  if (!this.selectedStudent) {
-    return;
-  }
-
-  try {
-
-    const student = this.selectedStudent;
-
-    await updateDoc(
-      doc(
-        db,
-        'students',
-        student.id
-      ),
-      {
-        studentName: student.studentName,
-        dateOfBirth: student.dateOfBirth,
-        gender: student.gender,
-        class: student.class,
-        schoolName: student.schoolName,
-        course: student.course,
-
-        parentName: student.parentName,
-        relationship: student.relationship,
-
-        mobile: student.mobile,
-        whatsapp: student.whatsapp,
-        email: student.email,
-
-        address: student.address,
-        village: student.village,
-        district: student.district,
-
-        performance: student.performance,
-        reference: student.reference
-      }
-    );
-
-    alert('Student information updated successfully.');
-
-    this.isEditingStudent = false;
-
-    // Reload from Firebase
-    await this.loadStudents();
-
-    // Find the updated student again
-    const updatedStudent =
-      this.students.find(
-        s => s.id === student.id
-      );
-
-    if (updatedStudent) {
-      this.selectedStudent = updatedStudent;
     }
 
-  } catch (error) {
 
-    console.error(
-      'Error updating student:',
-      error
-    );
+    // ------------------------------------------------
+    // CREATE COPY
+    // ------------------------------------------------
 
-    alert(
-      'Unable to update student. Please try again.'
-    );
+    this.selectedStudent = {
+
+      ...this.selectedStudent
+
+    };
+
+
+    this.isEditingStudent =
+      true;
 
   }
 
-}
-// ==========================================
-// START EDIT STUDENT
-// ==========================================
 
-startEditStudent(): void {
+  // ====================================================
+  // START EDIT
+  // ====================================================
 
-  this.editStudent();
+  startEditStudent(): void {
 
-}
+    this.editStudent();
 
-// ==========================================
-// CANCEL EDIT
-// ==========================================
-
-// ==========================================
-// CANCEL EDIT
-// ==========================================
-
-cancelEditStudent(): void {
-
-  if (!this.selectedStudent) {
-    return;
   }
 
-  this.isEditingStudent = false;
 
-}
-  // ==========================================
-  // CLOSE STUDENT POPUP
-  // ==========================================
+  // ====================================================
+  // CANCEL EDIT
+  // ====================================================
 
-  closeStudentModal(): void {
+  cancelEditStudent(): void {
 
-  this.showStudentModal = false;
+    this.isEditingStudent =
+      false;
 
-  this.selectedStudent = null;
-
-  this.isEditingStudent = false;
-
-}
+  }
 
 
-  // ==========================================
+  // ====================================================
+  // SAVE STUDENT CHANGES
+  // ====================================================
+
+  async saveStudentChanges(): Promise<void> {
+
+    if (
+      !this.selectedStudent
+    ) {
+
+      return;
+
+    }
+
+
+    try {
+
+      const student =
+        this.selectedStudent;
+
+
+      // ------------------------------------------------
+      // UPDATE FIREBASE
+      // ------------------------------------------------
+
+      await updateDoc(
+
+        doc(
+          db,
+          'students',
+          student.id
+        ),
+
+        {
+
+          studentName:
+            student.studentName,
+
+          dateOfBirth:
+            student.dateOfBirth,
+
+          gender:
+            student.gender,
+
+          class:
+            student.class,
+
+          schoolName:
+            student.schoolName,
+
+          course:
+            student.course,
+
+
+          parentName:
+            student.parentName,
+
+          relationship:
+            student.relationship,
+
+
+          mobile:
+            student.mobile,
+
+          whatsapp:
+            student.whatsapp,
+
+          email:
+            student.email,
+
+
+          address:
+            student.address,
+
+          village:
+            student.village,
+
+          district:
+            student.district,
+
+
+          performance:
+            student.performance,
+
+          reference:
+            student.reference
+
+        }
+
+      );
+
+
+      // ------------------------------------------------
+      // SUCCESS
+      // ------------------------------------------------
+
+      alert(
+        'Student information updated successfully.'
+      );
+
+
+      this.isEditingStudent =
+        false;
+
+
+      // ------------------------------------------------
+      // RELOAD
+      // ------------------------------------------------
+
+      await this.loadStudents();
+
+
+      // ------------------------------------------------
+      // FIND UPDATED STUDENT
+      // ------------------------------------------------
+
+      const updatedStudent =
+        this.students.find(
+          s =>
+            s.id ===
+            student.id
+        );
+
+
+      if (
+        updatedStudent
+      ) {
+
+        this.selectedStudent =
+          updatedStudent;
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        'Error updating student:',
+        error
+      );
+
+
+      alert(
+        'Unable to update student. Please try again.'
+      );
+
+    }
+
+  }
+
+
+  // ====================================================
+  // VERIFY PAYMENT
+  // ====================================================
+
+  async verifyPayment(
+    student: Student
+  ): Promise<void> {
+
+    if (
+      !student.id
+    ) {
+
+      return;
+
+    }
+
+
+    // ------------------------------------------------
+    // CONFIRM PAYMENT
+    // ------------------------------------------------
+
+    const confirmed =
+      confirm(
+        `Verify ₹6,000 payment for ${student.studentName}?`
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      // ------------------------------------------------
+      // UPDATE FIREBASE
+      // ------------------------------------------------
+
+      await updateDoc(
+
+        doc(
+          db,
+          'students',
+          student.id
+        ),
+
+        {
+
+          courseFee:
+            6000,
+
+          paymentStatus:
+            'Paid',
+
+          paymentDate:
+            new Date(),
+
+          videoAccess:
+            true
+
+        }
+
+      );
+
+
+      // ------------------------------------------------
+      // UPDATE LOCAL DATA
+      // ------------------------------------------------
+
+      student.courseFee =
+        6000;
+
+
+      student.paymentStatus =
+        'Paid';
+
+
+      student.paymentDate =
+        new Date();
+
+
+      student.videoAccess =
+        true;
+
+
+      // ------------------------------------------------
+      // RECALCULATE
+      // ------------------------------------------------
+
+      this.calculateStatistics();
+
+
+      this.cdr.detectChanges();
+
+
+      // ------------------------------------------------
+      // SUCCESS
+      // ------------------------------------------------
+
+      alert(
+        `Payment verified successfully.\n\n${student.studentName} can now access the videos.`
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        'Payment verification error:',
+        error
+      );
+
+
+      alert(
+        'Unable to verify payment. Please try again.'
+      );
+
+    }
+
+  }
+
+
+  // ====================================================
+  // REJECT PAYMENT
+  // ====================================================
+
+  async rejectPayment(
+    student: Student
+  ): Promise<void> {
+
+    if (
+      !student.id
+    ) {
+
+      return;
+
+    }
+
+
+    // ------------------------------------------------
+    // CONFIRM
+    // ------------------------------------------------
+
+    const confirmed =
+      confirm(
+        `Reject payment for ${student.studentName}?`
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      await updateDoc(
+
+        doc(
+          db,
+          'students',
+          student.id
+        ),
+
+        {
+
+          paymentStatus:
+            'Rejected',
+
+          videoAccess:
+            false
+
+        }
+
+      );
+
+
+      // ------------------------------------------------
+      // UPDATE LOCAL
+      // ------------------------------------------------
+
+      student.paymentStatus =
+        'Rejected';
+
+
+      student.videoAccess =
+        false;
+
+
+      // ------------------------------------------------
+      // RECALCULATE
+      // ------------------------------------------------
+
+      this.calculateStatistics();
+
+
+      this.cdr.detectChanges();
+
+
+      alert(
+        'Payment marked as rejected.'
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        'Payment rejection error:',
+        error
+      );
+
+
+      alert(
+        'Unable to reject payment.'
+      );
+
+    }
+
+  }
+
+
+  // ====================================================
+  // LOCK VIDEO ACCESS
+  // ====================================================
+
+  async lockVideoAccess(
+    student: Student
+  ): Promise<void> {
+
+    if (
+      !student.id
+    ) {
+
+      return;
+
+    }
+
+
+    const confirmed =
+      confirm(
+        `Remove video access from ${student.studentName}?`
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      await updateDoc(
+
+        doc(
+          db,
+          'students',
+          student.id
+        ),
+
+        {
+
+          videoAccess:
+            false
+
+        }
+
+      );
+
+
+      student.videoAccess =
+        false;
+
+
+      this.cdr.detectChanges();
+
+
+      alert(
+        'Video access has been locked.'
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        'Error locking video access:',
+        error
+      );
+
+
+      alert(
+        'Unable to lock video access.'
+      );
+
+    }
+
+  }
+
+
+  // ====================================================
+  // UNLOCK VIDEO ACCESS
+  // ====================================================
+
+  async unlockVideoAccess(
+    student: Student
+  ): Promise<void> {
+
+    if (
+      !student.id
+    ) {
+
+      return;
+
+    }
+
+
+    const confirmed =
+      confirm(
+        `Give video access to ${student.studentName}?`
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      await updateDoc(
+
+        doc(
+          db,
+          'students',
+          student.id
+        ),
+
+        {
+
+          videoAccess:
+            true
+
+        }
+
+      );
+
+
+      student.videoAccess =
+        true;
+
+
+      this.cdr.detectChanges();
+
+
+      alert(
+        'Video access unlocked.'
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        'Error unlocking video access:',
+        error
+      );
+
+
+      alert(
+        'Unable to unlock video access.'
+      );
+
+    }
+
+  }
+
+
+  // ====================================================
   // CALL STUDENT / PARENT
-  // ==========================================
+  // ====================================================
 
   callStudent(
     mobile: string
@@ -573,9 +1341,9 @@ cancelEditStudent(): void {
   }
 
 
-  // ==========================================
+  // ====================================================
   // WHATSAPP
-  // ==========================================
+  // ====================================================
 
   openWhatsApp(
     number: string
@@ -588,6 +1356,10 @@ cancelEditStudent(): void {
     }
 
 
+    // ------------------------------------------------
+    // REMOVE NON-NUMERIC CHARACTERS
+    // ------------------------------------------------
+
     const cleanNumber =
       number.replace(
         /\D/g,
@@ -595,11 +1367,19 @@ cancelEditStudent(): void {
       );
 
 
+    // ------------------------------------------------
+    // ADD INDIA COUNTRY CODE
+    // ------------------------------------------------
+
     const whatsappNumber =
       cleanNumber.length === 10
         ? `91${cleanNumber}`
         : cleanNumber;
 
+
+    // ------------------------------------------------
+    // OPEN WHATSAPP
+    // ------------------------------------------------
 
     window.open(
       `https://wa.me/${whatsappNumber}`,
@@ -609,14 +1389,17 @@ cancelEditStudent(): void {
   }
 
 
-  // ==========================================
+  // ====================================================
   // DELETE STUDENT
-  // ==========================================
+  // ====================================================
 
   async deleteStudent(
     student: Student
   ): Promise<void> {
 
+    // ------------------------------------------------
+    // CONFIRM DELETE
+    // ------------------------------------------------
 
     const confirmed =
       confirm(
@@ -633,37 +1416,51 @@ cancelEditStudent(): void {
 
     try {
 
-
       console.log(
         'Deleting student:',
         student.id
       );
 
 
+      // ------------------------------------------------
+      // DELETE FROM FIREBASE
+      // ------------------------------------------------
+
       await deleteDoc(
+
         doc(
           db,
           'students',
           student.id
         )
+
       );
 
+
+      // ------------------------------------------------
+      // SUCCESS
+      // ------------------------------------------------
 
       alert(
         'Student deleted successfully.'
       );
 
 
-      // Close popup
+      // ------------------------------------------------
+      // CLOSE MODAL
+      // ------------------------------------------------
+
       this.closeStudentModal();
 
 
-      // Reload students
+      // ------------------------------------------------
+      // RELOAD
+      // ------------------------------------------------
+
       await this.loadStudents();
 
 
     } catch (error) {
-
 
       console.error(
         'Error deleting student:',
@@ -680,14 +1477,33 @@ cancelEditStudent(): void {
   }
 
 
-  // ==========================================
+  // ====================================================
+  // CLOSE STUDENT MODAL
+  // ====================================================
+
+  closeStudentModal(): void {
+
+    this.showStudentModal =
+      false;
+
+
+    this.selectedStudent =
+      null;
+
+
+    this.isEditingStudent =
+      false;
+
+  }
+
+
+  // ====================================================
   // LOGOUT
-  // ==========================================
+  // ====================================================
 
   async logout(): Promise<void> {
 
     try {
-
 
       await signOut(
         this.auth
@@ -700,7 +1516,6 @@ cancelEditStudent(): void {
 
 
     } catch (error) {
-
 
       console.error(
         'Logout error:',

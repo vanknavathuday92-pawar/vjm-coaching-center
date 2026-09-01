@@ -24,7 +24,21 @@ export const routes: Routes = [
       import('./admin-login/admin-login')
         .then(m => m.AdminLogin)
   },
-
+{
+    path: 'syllabus',
+    loadComponent: () =>
+      import('./syllabus/syllabus').then(m => m.Syllabus)
+  },
+  {
+  path: 'payment',
+  loadComponent: () =>
+    import('./payment/payment').then(m => m.Payment)
+},
+ {
+    path: 'video',
+    loadComponent: () =>
+      import('./video/video').then(m => m.Video)
+  },
   {
     path: 'admin-dashboard',
     loadComponent: () =>
@@ -32,6 +46,10 @@ export const routes: Routes = [
         .then(m => m.AdminDashboard),
 
     canActivate: [authGuard]
+  },
+   {
+    path: '**',
+    redirectTo: ''
   }
 
 ];

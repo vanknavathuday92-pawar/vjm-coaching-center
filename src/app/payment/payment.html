@@ -1,0 +1,265 @@
+<div class="payment-page">
+
+  <!-- NAVBAR -->
+
+  <header class="payment-navbar">
+
+    <div class="payment-brand">
+
+      <div class="brand-icon">
+        🎓
+      </div>
+
+      <div>
+        <h1>VJM COACHING CENTER</h1>
+
+        <span>
+          Learn • Practice • Succeed
+        </span>
+      </div>
+
+    </div>
+
+    <a
+      routerLink="/syllabus"
+      class="back-button">
+
+      ← Back to Syllabus
+
+    </a>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <main class="payment-content">
+
+    <section class="payment-heading">
+
+      <span>VJM COACHING CENTER</span>
+
+      <h2>Course Payment</h2>
+
+      <p>
+        Complete your payment to continue with your coaching program.
+      </p>
+
+    </section>
+
+
+    <!-- PAYMENT CARD -->
+
+    <div class="payment-card">
+
+      <!-- COURSE -->
+
+      <div class="course-summary">
+
+        <div class="course-icon">
+          🎓
+        </div>
+
+        <div>
+
+          <span>SELECTED COURSE</span>
+
+          <h3>
+            Entrance Coaching Program
+          </h3>
+
+          <p>
+            Navodaya • Sainik School • Gurukula
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- AMOUNT -->
+
+      <div class="amount-section">
+
+        <span>COURSE FEE</span>
+
+        <h2>
+          ₹{{ amount }}
+        </h2>
+
+        <p>
+          One-time payment
+        </p>
+
+      </div>
+
+
+      <!-- PAYMENT METHODS -->
+
+      <div class="payment-method-section">
+
+        <h3>
+          Select Payment Method
+        </h3>
+
+        <p>
+          Choose how you would like to pay.
+        </p>
+
+
+        <div class="payment-methods">
+
+
+          <!-- DEBIT CARD -->
+
+          <button
+            type="button"
+            class="payment-method"
+            [class.selected]="selectedMethod === 'Debit Card'"
+            (click)="selectPaymentMethod('Debit Card')">
+
+            <div class="method-icon">
+              💳
+            </div>
+
+            <div class="method-details">
+
+              <strong>
+                Debit Card
+              </strong>
+
+              <span>
+                Pay using your debit card
+              </span>
+
+            </div>
+
+            <div class="radio">
+              {{ selectedMethod === 'Debit Card' ? '●' : '○' }}
+            </div>
+
+          </button>
+
+
+          <!-- CREDIT CARD -->
+
+          <button
+            type="button"
+            class="payment-method"
+            [class.selected]="selectedMethod === 'Credit Card'"
+            (click)="selectPaymentMethod('Credit Card')">
+
+            <div class="method-icon">
+              💳
+            </div>
+
+            <div class="method-details">
+
+              <strong>
+                Credit Card
+              </strong>
+
+              <span>
+                Pay using your credit card
+              </span>
+
+            </div>
+
+            <div class="radio">
+              {{ selectedMethod === 'Credit Card' ? '●' : '○' }}
+            </div>
+
+          </button>
+
+
+          <!-- PHONEPE -->
+
+          <button
+            type="button"
+            class="payment-method"
+            [class.selected]="selectedMethod === 'PhonePe'"
+            (click)="selectPaymentMethod('PhonePe')">
+
+            <div class="method-icon">
+              📱
+            </div>
+
+            <div class="method-details">
+
+              <strong>
+                PhonePe
+              </strong>
+
+              <span>
+                Pay using PhonePe / UPI
+              </span>
+
+            </div>
+
+            <div class="radio">
+              {{ selectedMethod === 'PhonePe' ? '●' : '○' }}
+            </div>
+
+          </button>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- PAY BUTTON -->
+
+      <button
+        type="button"
+        class="pay-button"
+        (click)="proceedToPayment()">
+
+        🔒 Pay ₹{{ amount }}
+
+      </button>
+
+
+      <p class="secure-note">
+        🔐 Your payment information is securely processed.
+      </p>
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <div class="bottom-navigation">
+
+      <a
+        routerLink="/syllabus"
+        class="back-syllabus">
+
+        ← Back to Learning Center
+
+      </a>
+
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <h2>
+      VJM COACHING CENTER
+    </h2>
+
+    <p>
+      Navodaya • Sainik School • Gurukula • School Tuition
+    </p>
+
+    <p class="copyright">
+      © 2026 VJM Coaching Center. All Rights Reserved.
+    </p>
+
+  </footer>
+
+</div>

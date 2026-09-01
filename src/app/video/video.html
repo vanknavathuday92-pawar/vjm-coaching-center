@@ -1,0 +1,332 @@
+<div class="video-page">
+
+  <!-- =====================================================
+       TOP NAVIGATION
+  ====================================================== -->
+
+  <header class="video-navbar">
+
+    <div class="video-brand">
+
+      <div class="brand-icon">
+        🎓
+      </div>
+
+      <div class="brand-text">
+
+        <h1>
+          VJM COACHING CENTER
+        </h1>
+
+        <span>
+          Learn • Practice • Succeed
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- BACK TO SYLLABUS -->
+
+    <a
+      routerLink="/syllabus"
+      class="back-syllabus"
+    >
+      ← Back to Syllabus
+    </a>
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN CONTENT
+  ====================================================== -->
+
+  <main class="video-content">
+
+
+    <!-- =====================================================
+         PAGE HEADING
+    ====================================================== -->
+
+    <section class="video-heading">
+
+      <span class="heading-label">
+        VJM LEARNING VIDEO
+      </span>
+
+      <h2>
+        {{ videoTitle }}
+      </h2>
+
+      <p>
+        Watch the complete lesson and strengthen your concepts.
+      </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         VIDEO CARD
+    ====================================================== -->
+
+    <section class="video-card">
+
+
+      <!-- =================================================
+           VIDEO AVAILABLE
+      ================================================== -->
+
+      @if (videoUrl) {
+
+        <div class="video-wrapper">
+
+          <video
+            controls
+            autoplay
+            playsinline
+            preload="metadata"
+            controlsList="nodownload"
+            oncontextmenu="return false"
+          >
+
+            <source
+              [src]="videoUrl"
+              type="video/mp4"
+            >
+
+            Your browser does not support video playback.
+
+          </video>
+
+        </div>
+
+      }
+
+
+
+      <!-- =================================================
+           VIDEO NOT AVAILABLE
+      ================================================== -->
+
+      @if (!videoUrl) {
+
+        <div class="video-unavailable">
+
+          <div class="video-icon">
+            🎥
+          </div>
+
+          <h2>
+            Video Not Available
+          </h2>
+
+          <p>
+            This lesson does not have a video yet.
+          </p>
+
+          <a
+            routerLink="/syllabus"
+            class="return-syllabus-btn"
+          >
+            ← Return to Syllabus
+          </a>
+
+        </div>
+
+      }
+
+
+
+      <!-- =================================================
+           VIDEO INFORMATION
+      ================================================== -->
+
+      @if (videoUrl) {
+
+        <div class="video-info">
+
+
+          <!-- COURSE -->
+
+          <div class="video-info-item">
+
+            <span class="video-label">
+              COURSE
+            </span>
+
+            <h3>
+              {{ course || 'VJM Coaching Center' }}
+            </h3>
+
+          </div>
+
+
+
+          <!-- SUBJECT -->
+
+          <div class="video-info-item">
+
+            <span class="video-label">
+              SUBJECT
+            </span>
+
+            <h3>
+              {{ subject || 'Learning Video' }}
+            </h3>
+
+          </div>
+
+
+
+          <!-- TOPIC -->
+
+          <div class="video-info-item">
+
+            <span class="video-label">
+              TOPIC
+            </span>
+
+            <h3>
+              {{ topic || videoTitle }}
+            </h3>
+
+          </div>
+
+
+        </div>
+
+      }
+
+
+
+      <!-- =================================================
+           LESSON INFORMATION
+      ================================================== -->
+
+      @if (videoUrl) {
+
+        <div class="lesson-information">
+
+          <div class="lesson-icon">
+            📚
+          </div>
+
+          <div>
+
+            <h3>
+              About This Lesson
+            </h3>
+
+            <p>
+              This video is part of the
+              <strong>
+                {{ course || 'VJM Coaching Center' }}
+              </strong>
+              learning program.
+            </p>
+
+            @if (topic) {
+
+              <p>
+                <strong>Topic:</strong>
+                {{ topic }}
+              </p>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+
+
+      <!-- =================================================
+           STUDY TIP
+      ================================================== -->
+
+      @if (videoUrl) {
+
+        <div class="study-tip">
+
+          <div class="tip-icon">
+            💡
+          </div>
+
+          <div>
+
+            <h3>
+              Study Tip
+            </h3>
+
+            <p>
+              Watch the lesson carefully, make notes of
+              important points, and practice the questions
+              related to this topic.
+            </p>
+
+          </div>
+
+        </div>
+
+      }
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         BOTTOM NAVIGATION
+    ====================================================== -->
+
+    <div class="bottom-navigation">
+
+      <a
+        routerLink="/syllabus"
+        class="syllabus-button"
+      >
+        ← Back to Syllabus
+      </a>
+
+    </div>
+
+
+  </main>
+
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <footer class="video-footer">
+
+    <div class="footer-content">
+
+      <h2>
+        VJM COACHING CENTER
+      </h2>
+
+      <p>
+        Navodaya • Sainik School • Gurukula • School Tuition
+      </p>
+
+      <p class="footer-tagline">
+        Learn • Practice • Succeed
+      </p>
+
+      <p class="copyright">
+        © 2026 VJM Coaching Center.
+        All Rights Reserved.
+      </p>
+
+    </div>
+
+  </footer>
+
+</div>

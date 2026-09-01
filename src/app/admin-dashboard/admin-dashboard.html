@@ -270,7 +270,9 @@
         </div>
 
 
+        <!-- ========================================= -->
         <!-- TABLE -->
+        <!-- ========================================= -->
 
         <div class="table-container">
 
@@ -294,6 +296,10 @@
 
                 <th>District</th>
 
+                <!-- NEW -->
+
+                <th>Payment Status</th>
+
                 <th>Action</th>
 
               </tr>
@@ -311,10 +317,14 @@
 
                 <tr>
 
+                  <!-- NUMBER -->
+
                   <td>
                     {{ i + 1 }}
                   </td>
 
+
+                  <!-- STUDENT NAME -->
 
                   <td class="student-name">
 
@@ -323,12 +333,16 @@
                   </td>
 
 
+                  <!-- CLASS -->
+
                   <td>
 
                     {{ student.class }}
 
                   </td>
 
+
+                  <!-- COURSE -->
 
                   <td>
 
@@ -341,12 +355,16 @@
                   </td>
 
 
+                  <!-- PARENT -->
+
                   <td>
 
                     {{ student.parentName }}
 
                   </td>
 
+
+                  <!-- MOBILE -->
 
                   <td>
 
@@ -360,6 +378,8 @@
                   </td>
 
 
+                  <!-- DISTRICT -->
+
                   <td>
 
                     {{ student.district }}
@@ -367,15 +387,69 @@
                   </td>
 
 
+                  <!-- ================================= -->
+                  <!-- PAYMENT STATUS -->
+                  <!-- ================================= -->
+
                   <td>
 
-                    <button
-                      type="button"
-                      class="view-btn"
-                      (click)="viewStudent(student)"
-                    >
-                      View
-                    </button>
+                    @if (student.paymentStatus === 'Paid') {
+
+                      <span class="payment-paid">
+                        ✓ Paid
+                      </span>
+
+                    } @else if (student.paymentStatus === 'Rejected') {
+
+                      <span class="payment-rejected">
+                        ✕ Rejected
+                      </span>
+
+                    } @else {
+
+                      <span class="payment-pending">
+                        ⏳ Pending
+                      </span>
+
+                    }
+
+                  </td>
+
+
+                  <!-- ================================= -->
+                  <!-- ACTION -->
+                  <!-- ================================= -->
+
+                  <td>
+
+                    <div class="student-actions">
+
+                      <!-- VIEW -->
+
+                      <button
+                        type="button"
+                        class="view-btn"
+                        (click)="viewStudent(student)"
+                      >
+                        View
+                      </button>
+
+
+                      <!-- VERIFY PAYMENT -->
+
+                      @if (student.paymentStatus !== 'Paid') {
+
+                        <button
+                          type="button"
+                          class="verify-payment-btn"
+                          (click)="verifyPayment(student)"
+                        >
+                          ✓ Verify ₹6,000
+                        </button>
+
+                      }
+
+                    </div>
 
                   </td>
 
@@ -835,6 +909,50 @@
 
               </div>
 
+
+              <!-- PAYMENT INFORMATION -->
+
+              <div class="edit-section-heading">
+
+                <span>
+                  💳
+                </span>
+
+                Payment Information
+
+              </div>
+
+
+              <div class="edit-grid">
+
+                <div class="edit-field">
+
+                  <label>
+                    Payment Status
+                  </label>
+
+                  <select
+                    [(ngModel)]="selectedStudent.paymentStatus"
+                  >
+
+                    <option value="Pending">
+                      Pending
+                    </option>
+
+                    <option value="Paid">
+                      Paid
+                    </option>
+
+                    <option value="Rejected">
+                      Rejected
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
             </section>
 
           } @else {
@@ -1197,6 +1315,93 @@
                 </div>
 
               </div>
+
+            </section>
+
+
+            <!-- ========================================= -->
+            <!-- PAYMENT INFORMATION -->
+            <!-- ========================================= -->
+
+            <section class="detail-section">
+
+              <div class="detail-section-title">
+
+                <span class="section-icon">
+                  💳
+                </span>
+
+                <h3>
+                  Payment Information
+                </h3>
+
+              </div>
+
+
+              <div class="details-grid">
+
+                <div class="detail-item">
+
+                  <span>
+                    Course Fee
+                  </span>
+
+                  <strong>
+                    ₹6,000
+                  </strong>
+
+                </div>
+
+
+                <div class="detail-item">
+
+                  <span>
+                    Payment Status
+                  </span>
+
+
+                  @if (selectedStudent.paymentStatus === 'Paid') {
+
+                    <strong class="payment-paid">
+                      ✓ Paid
+                    </strong>
+
+                  } @else if (selectedStudent.paymentStatus === 'Rejected') {
+
+                    <strong class="payment-rejected">
+                      ✕ Rejected
+                    </strong>
+
+                  } @else {
+
+                    <strong class="payment-pending">
+                      ⏳ Pending
+                    </strong>
+
+                  }
+
+                </div>
+
+              </div>
+
+
+              <!-- VERIFY PAYMENT BUTTON -->
+
+              @if (selectedStudent.paymentStatus !== 'Paid') {
+
+                <div class="payment-verification-actions">
+
+                  <button
+                    type="button"
+                    class="verify-payment-btn"
+                    (click)="verifyPayment(selectedStudent)"
+                  >
+                    ✓ Verify ₹6,000 Payment
+                  </button>
+
+                </div>
+
+              }
 
             </section>
 

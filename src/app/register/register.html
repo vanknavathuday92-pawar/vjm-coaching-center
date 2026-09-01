@@ -1,464 +1,719 @@
 <div class="registration-page">
 
-  <!-- Header -->
-  <header class="registration-header">
 
-    <a routerLink="/" class="back-home">
-      ← Back to Home
-    </a>
+  <!-- ==========================================
+       TOP NAVIGATION
+  =========================================== -->
 
-    <div class="header-content">
-      <h1>VJM COACHING CENTER</h1>
-      <p>Student Registration</p>
-      <span>Learn Today • Lead Tomorrow</span>
+  <header class="registration-sticky-header">
+
+    <div class="sticky-header-inner">
+
+      <a
+        routerLink="/"
+        class="back-home">
+
+        ← Back to Home
+
+      </a>
+
+      <div class="registration-brand">
+
+        <img
+          src="assets/vjm-logo.png"
+          alt="VJM Coaching Center">
+
+        <div class="registration-brand-text">
+
+          <h1>VJM COACHING CENTER</h1>
+
+          <span>
+            Quality Education • Bright Future
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="registration-title">
+
+        <span>STUDENT REGISTRATION</span>
+
+      </div>
+
     </div>
 
   </header>
 
 
-  <!-- Registration Form -->
 
-  <main class="registration-container">
+  <!-- ==========================================
+       SUCCESS SCREEN
+  =========================================== -->
 
-    <div class="form-intro">
-      <h2>Student Registration Form</h2>
+  @if (registrationSuccess) {
 
-      <p>
-        Please provide the correct details of the student.
-        Our team will contact you after receiving the registration.
+    <div class="success-container">
+
+
+      <div class="success-icon">
+        ✓
+      </div>
+
+
+      <h1>
+        Registration Successful!
+      </h1>
+
+
+      <p class="success-message">
+
+        Thank you for registering with
+
+        <strong>
+          VJM Coaching Center
+        </strong>.
+
       </p>
 
-      <div class="required-note">
-        * Required fields
+
+      <!-- REGISTRATION NUMBER -->
+
+      <div class="registration-number-box">
+
+        <span>
+          Your Registration Number
+        </span>
+
+        <strong>
+          {{ registrationNumber }}
+        </strong>
+
       </div>
+
+
+      <p class="success-info">
+
+        Your registration has been successfully submitted.
+
+        <br>
+
+        Please save your registration number
+        for future reference.
+
+      </p>
+
+
+      <!-- SUCCESS BUTTONS -->
+
+      <div class="success-actions">
+
+
+        <button
+          type="button"
+          class="download-button"
+          (click)="downloadRegistrationPdf()">
+
+          📄 Download Registration PDF
+
+        </button>
+
+
+        <a
+          routerLink="/"
+          class="home-button">
+
+          🏠 Back to Home
+
+        </a>
+
+
+      </div>
+
     </div>
 
-
-    <form [formGroup]="registrationForm"
-          (ngSubmit)="submitForm()">
+  }
 
 
-      <!-- STUDENT DETAILS -->
 
-      <section class="form-section">
+  <!-- ==========================================
+       REGISTRATION FORM
+  =========================================== -->
 
-        <div class="section-title">
-          <span>01</span>
-          <div>
-            <h3>Student Details</h3>
-            <p>Basic information about the student</p>
-          </div>
+  @if (!registrationSuccess) {
+
+    <div class="registration-container">
+
+
+      <!-- HEADER -->
+
+      <div class="registration-header">
+
+        <div class="header-icon">
+          🎓
         </div>
 
+        <h1>
+          VJM COACHING CENTER
+        </h1>
 
-        <div class="form-grid">
+        <p>
+          Student Registration Form
+        </p>
 
-          <!-- Student Name -->
+        <span>
+          Navodaya • Sainik School • Gurukula • School Tuition
+        </span>
 
-          <div class="form-group full-width">
-
-            <label>
-              Student Full Name
-              <span>*</span>
-            </label>
-
-            <input
-              type="text"
-              formControlName="studentName"
-              placeholder="Enter student's full name">
-
-            @if (registrationForm.get('studentName')?.touched &&
-                 registrationForm.get('studentName')?.invalid) {
-
-              <small class="error">
-                Please enter the student's name.
-              </small>
-
-            }
-
-          </div>
+      </div>
 
 
-          <!-- Date of Birth -->
 
-          <div class="form-group">
+      <!-- FORM -->
 
-            <label>
-              Date of Birth
-              <span>*</span>
-            </label>
+      <form
+        [formGroup]="registrationForm"
+        (ngSubmit)="submitForm()">
 
-            <input
-              type="date"
-              formControlName="dateOfBirth">
 
-            @if (registrationForm.get('dateOfBirth')?.touched &&
-                 registrationForm.get('dateOfBirth')?.invalid) {
+        <!-- ==================================
+             STUDENT DETAILS
+        =================================== -->
 
-              <small class="error">
-                Date of birth is required.
-              </small>
+        <section class="form-section">
 
-            }
+          <div class="section-heading">
+
+            <span class="section-number">
+              01
+            </span>
+
+            <div>
+
+              <h2>
+                Student Details
+              </h2>
+
+              <p>
+                Enter the student's basic information
+              </p>
+
+            </div>
 
           </div>
 
 
-          <!-- Gender -->
+          <div class="form-grid">
+
+
+            <!-- STUDENT NAME -->
+
+            <div class="form-group">
+
+              <label>
+                Student Name
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                formControlName="studentName"
+                placeholder="Enter student's full name"
+              >
+
+
+              @if (
+                registrationForm.get('studentName')?.touched &&
+                registrationForm.get('studentName')?.invalid
+              ) {
+
+                <small>
+                  Please enter at least 3 characters.
+                </small>
+
+              }
+
+            </div>
+
+
+
+            <!-- DATE OF BIRTH -->
+
+            <div class="form-group">
+
+              <label>
+                Date of Birth
+                <span>*</span>
+              </label>
+
+              <input
+                type="date"
+                formControlName="dateOfBirth"
+              >
+
+            </div>
+
+
+
+            <!-- GENDER -->
+
+            <div class="form-group">
+
+              <label>
+                Gender
+                <span>*</span>
+              </label>
+
+              <select
+                formControlName="gender">
+
+                <option value="">
+                  Select Gender
+                </option>
+
+                <option value="Male">
+                  Male
+                </option>
+
+                <option value="Female">
+                  Female
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- CLASS -->
+
+            <div class="form-group">
+
+              <label>
+                Class
+                <span>*</span>
+              </label>
+
+              <select
+                formControlName="class">
+
+                <option value="">
+                  Select Class
+                </option>
+
+                <option value="5">
+                  Class 5
+                </option>
+
+                <option value="6">
+                  Class 6
+                </option>
+
+                <option value="7">
+                  Class 7
+                </option>
+
+                <option value="8">
+                  Class 8
+                </option>
+
+                <option value="9">
+                  Class 9
+                </option>
+
+                <option value="10">
+                  Class 10
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- SCHOOL -->
+
+            <div class="form-group full-width">
+
+              <label>
+                Current School Name
+              </label>
+
+              <input
+                type="text"
+                formControlName="schoolName"
+                placeholder="Enter current school name"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             COURSE
+        =================================== -->
+
+        <section class="form-section">
+
+          <div class="section-heading">
+
+            <span class="section-number">
+              02
+            </span>
+
+            <div>
+
+              <h2>
+                Select Course
+              </h2>
+
+              <p>
+                Choose the coaching program
+              </p>
+
+            </div>
+
+          </div>
+
 
           <div class="form-group">
 
             <label>
-              Gender
+              Coaching Course
               <span>*</span>
             </label>
 
-            <select formControlName="gender">
+
+            <select
+              formControlName="course">
 
               <option value="">
-                Select Gender
+                Select Course
               </option>
 
-              <option value="Male">
-                Male
+              <option value="Navodaya Entrance Coaching">
+                Navodaya Entrance Coaching
               </option>
 
-              <option value="Female">
-                Female
+              <option value="Sainik School Entrance Coaching">
+                Sainik School Entrance Coaching
               </option>
 
-              <option value="Other">
-                Other
+              <option value="Gurukula Entrance Coaching">
+                Gurukula Entrance Coaching
+              </option>
+
+              <option value="School Tuition">
+                School Tuition
               </option>
 
             </select>
 
           </div>
 
-
-          <!-- Current Class -->
-
-          <div class="form-group">
-
-            <label>
-              Current Class
-              <span>*</span>
-            </label>
-
-            <select formControlName="class">
-
-              <option value="">
-                Select Class
-              </option>
-
-              <option value="1st">1st Class</option>
-              <option value="2nd">2nd Class</option>
-              <option value="3rd">3rd Class</option>
-              <option value="4th">4th Class</option>
-              <option value="5th">5th Class</option>
-              <option value="6th">6th Class</option>
-              <option value="7th">7th Class</option>
-              <option value="8th">8th Class</option>
-              <option value="9th">9th Class</option>
-              <option value="10th">10th Class</option>
-
-            </select>
-
-          </div>
+        </section>
 
 
-          <!-- School -->
 
-          <div class="form-group">
+        <!-- ==================================
+             PARENT DETAILS
+        =================================== -->
 
-            <label>
-              School Name
-            </label>
+        <section class="form-section">
 
-            <input
-              type="text"
-              formControlName="schoolName"
-              placeholder="Enter school name">
+          <div class="section-heading">
 
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- COURSE DETAILS -->
-
-      <section class="form-section">
-
-        <div class="section-title">
-          <span>02</span>
-
-          <div>
-            <h3>Course Selection</h3>
-            <p>Select the coaching program</p>
-          </div>
-
-        </div>
-
-
-        <div class="course-options">
-
-          <label class="course-option">
-
-            <input
-              type="radio"
-              value="Navodaya"
-              formControlName="course">
+            <span class="section-number">
+              03
+            </span>
 
             <div>
-              <strong>Navodaya</strong>
-              <small>Entrance Exam Coaching</small>
+
+              <h2>
+                Parent / Guardian Details
+              </h2>
+
+              <p>
+                Enter parent or guardian information
+              </p>
+
             </div>
 
-          </label>
+          </div>
 
 
-          <label class="course-option">
+          <div class="form-grid">
 
-            <input
-              type="radio"
-              value="Sainik School"
-              formControlName="course">
+
+            <div class="form-group">
+
+              <label>
+                Parent / Guardian Name
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                formControlName="parentName"
+                placeholder="Enter parent / guardian name"
+              >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+              <label>
+                Relationship
+                <span>*</span>
+              </label>
+
+              <select
+                formControlName="relationship">
+
+                <option value="">
+                  Select Relationship
+                </option>
+
+                <option value="Father">
+                  Father
+                </option>
+
+                <option value="Mother">
+                  Mother
+                </option>
+
+                <option value="Guardian">
+                  Guardian
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             CONTACT DETAILS
+        =================================== -->
+
+        <section class="form-section">
+
+          <div class="section-heading">
+
+            <span class="section-number">
+              04
+            </span>
 
             <div>
-              <strong>Sainik School</strong>
-              <small>Entrance Exam Coaching</small>
+
+              <h2>
+                Contact Details
+              </h2>
+
+              <p>
+                Provide contact information
+              </p>
+
             </div>
 
-          </label>
+          </div>
 
 
-          <label class="course-option">
+          <div class="form-grid">
 
-            <input
-              type="radio"
-              value="Gurukula"
-              formControlName="course">
+
+            <div class="form-group">
+
+              <label>
+                Mobile Number
+                <span>*</span>
+              </label>
+
+              <input
+                type="tel"
+                formControlName="mobile"
+                maxlength="10"
+                inputmode="numeric"
+                placeholder="10 digit mobile number"
+              >
+
+
+              @if (
+                registrationForm.get('mobile')?.touched &&
+                registrationForm.get('mobile')?.invalid
+              ) {
+
+                <small>
+                  Enter a valid 10-digit mobile number.
+                </small>
+
+              }
+
+            </div>
+
+
+
+            <div class="form-group">
+
+              <label>
+                WhatsApp Number
+              </label>
+
+              <input
+                type="tel"
+                formControlName="whatsapp"
+                maxlength="10"
+                inputmode="numeric"
+                placeholder="WhatsApp number"
+              >
+
+            </div>
+
+
+
+            <div class="form-group full-width">
+
+              <label>
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Enter email address"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             ADDRESS
+        =================================== -->
+
+        <section class="form-section">
+
+          <div class="section-heading">
+
+            <span class="section-number">
+              05
+            </span>
 
             <div>
-              <strong>Gurukula</strong>
-              <small>Entrance Exam Coaching</small>
+
+              <h2>
+                Address
+              </h2>
+
+              <p>
+                Enter student's address details
+              </p>
+
             </div>
 
-          </label>
+          </div>
 
 
-          <label class="course-option">
+          <div class="form-grid">
 
-            <input
-              type="radio"
-              value="School Tuition"
-              formControlName="course">
+
+            <div class="form-group full-width">
+
+              <label>
+                Complete Address
+                <span>*</span>
+              </label>
+
+              <textarea
+                formControlName="address"
+                rows="3"
+                placeholder="Enter complete address">
+              </textarea>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+              <label>
+                Village
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                formControlName="village"
+                placeholder="Enter village"
+              >
+
+            </div>
+
+
+
+            <div class="form-group">
+
+              <label>
+                District
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                formControlName="district"
+                placeholder="Enter district"
+              >
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             ADDITIONAL INFORMATION
+        =================================== -->
+
+        <section class="form-section">
+
+          <div class="section-heading">
+
+            <span class="section-number">
+              06
+            </span>
 
             <div>
-              <strong>School Tuition</strong>
-              <small>Classes 1st to 10th</small>
+
+              <h2>
+                Additional Information
+              </h2>
+
+              <p>
+                Optional information about the student
+              </p>
+
             </div>
 
-          </label>
-
-        </div>
-
-      </section>
-
-
-      <!-- PARENT DETAILS -->
-
-      <section class="form-section">
-
-        <div class="section-title">
-
-          <span>03</span>
-
-          <div>
-            <h3>Parent / Guardian Details</h3>
-            <p>Contact information</p>
-          </div>
-
-        </div>
-
-
-        <div class="form-grid">
-
-          <div class="form-group">
-
-            <label>
-              Parent / Guardian Name
-              <span>*</span>
-            </label>
-
-            <input
-              type="text"
-              formControlName="parentName"
-              placeholder="Enter parent/guardian name">
-
           </div>
 
 
           <div class="form-group">
-
-            <label>
-              Relationship
-              <span>*</span>
-            </label>
-
-            <select formControlName="relationship">
-
-              <option value="">
-                Select Relationship
-              </option>
-
-              <option value="Father">Father</option>
-              <option value="Mother">Mother</option>
-              <option value="Guardian">Guardian</option>
-
-            </select>
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              Mobile Number
-              <span>*</span>
-            </label>
-
-            <input
-              type="tel"
-              formControlName="mobile"
-              maxlength="10"
-              placeholder="10-digit mobile number">
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              WhatsApp Number
-            </label>
-
-            <input
-              type="tel"
-              formControlName="whatsapp"
-              maxlength="10"
-              placeholder="WhatsApp number">
-
-          </div>
-
-
-          <div class="form-group full-width">
-
-            <label>
-              Email Address
-            </label>
-
-            <input
-              type="email"
-              formControlName="email"
-              placeholder="Enter email address">
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ADDRESS -->
-
-      <section class="form-section">
-
-        <div class="section-title">
-
-          <span>04</span>
-
-          <div>
-            <h3>Address Details</h3>
-            <p>Where does the student live?</p>
-          </div>
-
-        </div>
-
-
-        <div class="form-grid">
-
-          <div class="form-group full-width">
-
-            <label>
-              Address
-              <span>*</span>
-            </label>
-
-            <textarea
-              formControlName="address"
-              rows="3"
-              placeholder="Enter complete address">
-            </textarea>
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              Village / Town
-              <span>*</span>
-            </label>
-
-            <input
-              type="text"
-              formControlName="village"
-              placeholder="Village / Town">
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              District
-              <span>*</span>
-            </label>
-
-            <input
-              type="text"
-              formControlName="district"
-              placeholder="District">
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ADDITIONAL INFORMATION -->
-
-      <section class="form-section">
-
-        <div class="section-title">
-
-          <span>05</span>
-
-          <div>
-            <h3>Additional Information</h3>
-            <p>Help us understand the student's needs</p>
-          </div>
-
-        </div>
-
-
-        <div class="form-grid">
-
-          <div class="form-group full-width">
 
             <label>
               Previous Academic Performance
@@ -466,39 +721,44 @@
 
             <textarea
               formControlName="performance"
-              rows="3"
-              placeholder="Optional - Enter previous exam marks or performance">
+              rows="4"
+              placeholder="Enter previous marks, grades or academic performance">
             </textarea>
 
           </div>
 
 
-          <div class="form-group full-width">
+          <div class="form-group">
 
             <label>
-              How did you hear about VJM?
+              How did you hear about VJM Coaching Center?
             </label>
 
-            <select formControlName="reference">
+            <select
+              formControlName="reference">
 
               <option value="">
                 Select an option
-              </option>
-
-              <option value="Friend">
-                Friend / Relative
-              </option>
-
-              <option value="WhatsApp">
-                WhatsApp
               </option>
 
               <option value="Google">
                 Google
               </option>
 
-              <option value="Poster">
-                Poster / Banner
+              <option value="YouTube">
+                YouTube
+              </option>
+
+              <option value="WhatsApp">
+                WhatsApp
+              </option>
+
+              <option value="Friend / Relative">
+                Friend / Relative
+              </option>
+
+              <option value="School">
+                School
               </option>
 
               <option value="Other">
@@ -509,32 +769,60 @@
 
           </div>
 
+        </section>
+
+
+
+        <!-- ==================================
+             SUBMIT SECTION
+        =================================== -->
+
+        <div class="submit-section">
+
+          <div class="submit-note">
+
+            <span>
+              🔒
+            </span>
+
+            <p>
+              Please verify all information before submitting.
+            </p>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="submit-button"
+            [disabled]="
+              registrationForm.invalid ||
+              isSubmitting
+            ">
+
+            @if (isSubmitting) {
+
+              <span>
+                Submitting...
+              </span>
+
+            } @else {
+
+              <span>
+                Submit Registration
+              </span>
+
+            }
+
+          </button>
+
         </div>
 
-      </section>
 
+      </form>
 
-      <!-- SUBMIT -->
+    </div>
 
-      <div class="submit-area">
-
-        <p>
-          By submitting this form, you confirm that the information
-          provided is correct.
-        </p>
-
-        <button
-  type="submit"
-  [disabled]="registrationForm.invalid || isSubmitting">
-
-  {{ isSubmitting ? 'Submitting...' : 'Submit Registration' }}
-
-</button>
-
-      </div>
-
-    </form>
-
-  </main>
+  }
 
 </div>

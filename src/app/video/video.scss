@@ -1,0 +1,564 @@
+/* =========================================
+   VIDEO PAGE
+========================================= */
+
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.video-page {
+  min-height: 100vh;
+
+  background: #f5f7fb;
+
+  color: #07143d;
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.video-navbar {
+  position: sticky;
+
+  top: 0;
+
+  z-index: 1000;
+
+  min-height: 78px;
+
+  padding: 12px 5%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  background: #07143d;
+
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+
+/* BRAND */
+
+.video-brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  color: white;
+}
+
+.brand-icon {
+  width: 45px;
+
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #ffc400;
+
+  border-radius: 10px;
+
+  font-size: 24px;
+}
+
+.video-brand h1 {
+  margin: 0;
+
+  font-size: 19px;
+
+  font-weight: 800;
+}
+
+.video-brand span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #ffc400;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+
+/* BACK BUTTON */
+
+.back-syllabus {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 11px 18px;
+
+  border: 1px solid rgba(255,255,255,.5);
+
+  border-radius: 8px;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition: .2s;
+}
+
+.back-syllabus:hover {
+  background: white;
+
+  color: #07143d;
+}
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+
+.video-content {
+  width: min(100% - 30px, 1100px);
+
+  margin: auto;
+
+  padding: 65px 0 80px;
+}
+
+
+/* =========================================
+   HEADING
+========================================= */
+
+.video-heading {
+  text-align: center;
+
+  max-width: 750px;
+
+  margin: 0 auto 35px;
+}
+
+.video-heading > span {
+  color: #d69e00;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+}
+
+.video-heading h2 {
+  margin: 10px 0;
+
+  color: #07143d;
+
+  font-size: clamp(28px, 4vw, 42px);
+
+  line-height: 1.2;
+}
+
+.video-heading p {
+  margin: 0;
+
+  color: #707070;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================
+   VIDEO CARD
+========================================= */
+
+.video-card {
+  overflow: hidden;
+
+  background: white;
+
+  border-radius: 20px;
+
+  border: 1px solid #e2e6ed;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.10);
+}
+
+
+/* =========================================
+   VIDEO PLAYER
+========================================= */
+
+.video-wrapper {
+  width: 100%;
+
+  background: #000;
+}
+
+.video-wrapper video {
+  display: block;
+
+  width: 100%;
+
+  max-height: 620px;
+
+  background: #000;
+}
+
+
+/* =========================================
+   VIDEO INFORMATION
+========================================= */
+
+.video-info {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+
+  padding: 25px 30px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+.video-info > div {
+  padding-right: 20px;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.video-info > div:last-child {
+  border-right: none;
+}
+
+.video-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #d69e00;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.video-info h3 {
+  margin: 0;
+
+  color: #07143d;
+
+  font-size: 15px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================
+   BOTTOM BUTTON
+========================================= */
+
+.bottom-navigation {
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 35px;
+}
+
+.syllabus-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 13px 25px;
+
+  border-radius: 9px;
+
+  background: #07143d;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  transition: .2s;
+}
+
+.syllabus-button:hover {
+  background: #ffc400;
+
+  color: #07143d;
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+  padding: 40px 20px;
+
+  text-align: center;
+
+  background: #07143d;
+
+  color: white;
+}
+
+footer h2 {
+  margin: 0 0 10px;
+
+  font-size: 22px;
+}
+
+footer p {
+  margin: 6px 0;
+
+  color: #c8d0e3;
+}
+
+footer .copyright {
+  margin-top: 22px;
+
+  color: #9da8c0;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 750px) {
+
+  .video-info {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .video-info > div {
+    padding-right: 0;
+
+    padding-bottom: 15px;
+
+    border-right: none;
+
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .video-info > div:last-child {
+    padding-bottom: 0;
+
+    border-bottom: none;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+  .video-navbar {
+    min-height: auto;
+
+    padding: 12px 15px;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 10px;
+  }
+
+  .video-brand {
+    justify-content: center;
+  }
+
+  .video-brand h1 {
+    font-size: 16px;
+  }
+
+  .video-brand span {
+    font-size: 10px;
+  }
+
+  .back-syllabus {
+    width: 100%;
+  }
+
+  .video-content {
+    width: calc(100% - 20px);
+
+    padding: 40px 0 60px;
+  }
+
+  .video-heading h2 {
+    font-size: 27px;
+  }
+
+  .video-heading p {
+    font-size: 14px;
+  }
+
+  .video-card {
+    border-radius: 14px;
+  }
+
+  .video-info {
+    padding: 20px;
+  }
+
+}
+/* =========================================
+   NO VIDEO
+========================================= */
+
+.no-video {
+  padding: 60px 20px;
+
+  text-align: center;
+
+  background: white;
+
+  border: 1px solid #e2e6ed;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.08);
+}
+
+.no-video-icon {
+  font-size: 50px;
+
+  margin-bottom: 15px;
+}
+
+.no-video h2 {
+  margin: 0 0 10px;
+
+  color: #07143d;
+}
+
+.no-video p {
+  margin: 0;
+
+  color: #707070;
+}
+.video-unavailable {
+  min-height: 400px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+
+  background: white;
+
+  color: #07143d;
+}
+
+.video-icon {
+  font-size: 55px;
+
+  margin-bottom: 15px;
+}
+
+.video-unavailable h2 {
+  margin: 0 0 10px;
+
+  font-size: 26px;
+}
+
+.video-unavailable p {
+  margin: 0;
+
+  color: #707070;
+
+  font-size: 15px;
+}
+.video-unavailable {
+  min-height: 400px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+
+  background: white;
+}
+
+.video-icon {
+  font-size: 55px;
+
+  margin-bottom: 15px;
+}
+
+.video-unavailable h2 {
+  margin: 0 0 10px;
+
+  color: #07143d;
+
+  font-size: 26px;
+}
+
+.video-unavailable p {
+  margin: 0;
+
+  color: #707070;
+
+  font-size: 15px;
+}
