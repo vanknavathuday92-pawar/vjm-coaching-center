@@ -165,12 +165,22 @@ export class Register {
 
       whatsapp: [
         '',
-        Validators.pattern(/^[6-9]\d{9}$/)
+        [
+          Validators.pattern(/^[6-9]\d{9}$/)
+        ]
       ],
+
+      // =================================================
+      // EMAIL
+      // EMAIL IS NOW COMPULSORY
+      // =================================================
 
       email: [
         '',
-        Validators.email
+        [
+          Validators.required,
+          Validators.email
+        ]
       ],
 
 
@@ -225,35 +235,6 @@ export class Register {
 
 
   // =====================================================
-  // CREATE INTERNAL FIREBASE LOGIN EMAIL
-  // =====================================================
-
-  private createLoginEmail(
-    mobile: string
-  ): string {
-
-    /*
-      Student enters:
-
-      Mobile:
-      9876543210
-
-      Firebase internally uses:
-
-      9876543210@vjmstudent.com
-
-      Student DOES NOT need to know this email.
-      Student logs in using:
-
-      Mobile Number + Password
-    */
-
-    return `${mobile}@vjmstudent.com`;
-
-  }
-
-
-  // =====================================================
   // TOGGLE PASSWORD
   // =====================================================
 
@@ -276,6 +257,13 @@ export class Register {
     // ---------------------------------------------------
 
     this.registrationSuccess = false;
+
+
+    // ---------------------------------------------------
+    // CLEAR OLD PDF DATA
+    // ---------------------------------------------------
+
+    this.studentDataForPdf = null;
 
 
     // ---------------------------------------------------
@@ -329,7 +317,20 @@ export class Register {
       const mobile =
         String(
           formData.mobile
-        ).trim();
+        )
+          .trim();
+
+
+      // =================================================
+      // CLEAN EMAIL
+      // =================================================
+
+      const email =
+        String(
+          formData.email
+        )
+          .trim()
+          .toLowerCase();
 
 
       // =================================================
@@ -340,6 +341,23 @@ export class Register {
         String(
           formData.password
         );
+
+
+      // =================================================
+      // EMAIL VALIDATION
+      // =================================================
+
+      if (!email) {
+
+        alert(
+          'Email address is required.'
+        );
+
+        this.isSubmitting = false;
+
+        return;
+
+      }
 
 
       // =================================================
@@ -363,17 +381,31 @@ export class Register {
 
 
       // =================================================
-      // CREATE INTERNAL LOGIN EMAIL
+      // EMAIL FORMAT VALIDATION
       // =================================================
 
-      const loginEmail =
-        this.createLoginEmail(
-          mobile
+      const emailPattern =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+      if (
+        !emailPattern.test(email)
+      ) {
+
+        alert(
+          'Please enter a valid email address.'
         );
+
+        this.isSubmitting = false;
+
+        return;
+
+      }
 
 
       console.log(
-        'Creating Firebase student account...'
+        'Creating Firebase student account with:',
+        email
       );
 
 
@@ -387,12 +419,24 @@ export class Register {
 
       // =================================================
       // CREATE STUDENT AUTH ACCOUNT
+      //
+      // IMPORTANT:
+      //
+      // Firebase now uses the REAL STUDENT EMAIL.
+      //
+      // Example:
+      //
+      // udaypawar160521@gmail.com
+      //
+      // NOT:
+      //
+      // 7893029517@vjmstudent.com
       // =================================================
 
       const userCredential =
         await createUserWithEmailAndPassword(
           auth,
-          loginEmail,
+          email,
           password
         );
 
@@ -469,8 +513,10 @@ export class Register {
         uid:
           firebaseUser.uid,
 
+        // Real email used for Firebase login
+
         loginEmail:
-          loginEmail,
+          email,
 
 
         // -------------------------------------------------
@@ -506,15 +552,9 @@ export class Register {
         // -------------------------------------------------
 
         /*
-          IMPORTANT:
-
-          Every newly registered student starts with:
-
-          videoAccess = false
-
-          Admin can later change this to:
-
-          videoAccess = true
+          New students cannot access
+          online coaching videos until
+          payment/admin verification is completed.
         */
 
         videoAccess:
@@ -570,8 +610,10 @@ export class Register {
         whatsapp:
           formData.whatsapp || '',
 
+        // Real student email
+
         email:
-          formData.email || '',
+          email,
 
 
         // -------------------------------------------------
@@ -695,7 +737,7 @@ export class Register {
 
 
       // =================================================
-      // FIREBASE AUTH ERROR
+      // EMAIL ALREADY REGISTERED
       // =================================================
 
       if (
@@ -704,10 +746,31 @@ export class Register {
       ) {
 
         alert(
-          'This mobile number is already registered. Please use Student Login.'
+          'This email address is already registered. Please use Student Login or Forgot Password.'
         );
 
       }
+
+
+      // =================================================
+      // INVALID EMAIL
+      // =================================================
+
+      else if (
+        error?.code ===
+        'auth/invalid-email'
+      ) {
+
+        alert(
+          'Please enter a valid email address.'
+        );
+
+      }
+
+
+      // =================================================
+      // WEAK PASSWORD
+      // =================================================
 
       else if (
         error?.code ===
@@ -720,16 +783,10 @@ export class Register {
 
       }
 
-      else if (
-        error?.code ===
-        'auth/invalid-email'
-      ) {
 
-        alert(
-          'Unable to create student account. Please check the mobile number.'
-        );
-
-      }
+      // =================================================
+      // NETWORK ERROR
+      // =================================================
 
       else if (
         error?.code ===
@@ -742,12 +799,49 @@ export class Register {
 
       }
 
+
+      // =================================================
+      // OPERATION NOT ALLOWED
+      // =================================================
+
+      else if (
+        error?.code ===
+        'auth/operation-not-allowed'
+      ) {
+
+        alert(
+          'Email/password authentication is not enabled in Firebase.'
+        );
+
+      }
+
+
+      // =================================================
+      // FIREBASE TOO MANY REQUESTS
+      // =================================================
+
+      else if (
+        error?.code ===
+        'auth/too-many-requests'
+      ) {
+
+        alert(
+          'Too many requests. Please wait and try again later.'
+        );
+
+      }
+
+
+      // =================================================
+      // OTHER ERROR
+      // =================================================
+
       else {
 
         /*
-          If Firebase Authentication account was
-          successfully created but Firestore failed,
-          remove the newly created Auth account.
+          If Firebase Authentication succeeded
+          but Firestore failed, remove the newly
+          created Firebase account.
 
           This prevents an incomplete registration.
         */
@@ -1271,7 +1365,7 @@ export class Register {
 
 
     // =================================================
-    // DOWNLOAD
+    // DOWNLOAD PDF
     // =================================================
 
     pdf.save(

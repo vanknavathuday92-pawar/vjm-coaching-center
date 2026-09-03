@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { PaymentGuard } from './payment-guard';
 export const routes: Routes = [
 
   {
@@ -14,11 +14,12 @@ export const routes: Routes = [
       import('./student-login/student-login').then(m => m.StudentLogin)
   },
 
-  {
-    path: 'payment',
-    loadComponent: () =>
-      import('./payment/payment').then(m => m.Payment)
-  },
+ {
+  path: 'payment',
+  canActivate: [PaymentGuard],
+  loadComponent: () =>
+    import('./payment/payment').then(m => m.Payment)
+},
 
   {
     path: 'syllabus',
@@ -30,6 +31,12 @@ export const routes: Routes = [
   loadComponent: () =>
     import('./register/register')
       .then(m => m.Register)
+},
+{
+  path: 'reset-password',
+  loadComponent: () =>
+    import('./reset-password/reset-password')
+      .then(m => m.ResetPassword)
 },
   {
     path: 'video',

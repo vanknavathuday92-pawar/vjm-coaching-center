@@ -1,106 +1,82 @@
-<div class="registration-page">
-
+<div class="register-page">
 
   <!-- =====================================================
-       STICKY HEADER
-  ====================================================== -->
+       HEADER
+       ===================================================== -->
 
-  <header class="registration-sticky-header">
+  <header class="register-header">
 
-    <div class="sticky-header-inner">
+    <div class="header-content">
 
+      <div class="brand">
 
-      <!-- BACK HOME -->
+        <div class="brand-logo">
+          <img
+            src="vjm-logo.png"
+            alt="VJM Coaching Center Logo"
+          >
+        </div>
 
-      <a
-        routerLink="/"
-        class="back-home">
-
-        ← Back to Home
-
-      </a>
-
-
-      <!-- BRAND -->
-
-      <div class="registration-brand">
-
-        <img
-          src="assets/vjm-logo.png"
-          alt="VJM Coaching Center Logo"
-        >
-
-        <div class="registration-brand-text">
-
-          <h1>
-            VJM COACHING CENTER
-          </h1>
-
-          <span>
-            Quality Education • Bright Future
-          </span>
-
+        <div class="brand-text">
+          <h1>VJM COACHING CENTER</h1>
+          <p>Student Registration</p>
         </div>
 
       </div>
 
 
-      <!-- PAGE TITLE -->
-
-      <div class="registration-title">
-
-        <span>
-          STUDENT REGISTRATION
-        </span>
-
-      </div>
+      <a
+        routerLink="/"
+        class="home-btn"
+      >
+        🏠 Home
+      </a>
 
     </div>
 
   </header>
 
 
-
   <!-- =====================================================
-       SUCCESS SCREEN
-  ====================================================== -->
+       MAIN CONTENT
+       ===================================================== -->
 
-  @if (registrationSuccess) {
-
-    <div class="success-wrapper">
-
-      <div class="success-container">
+  <main class="register-container">
 
 
-        <!-- SUCCESS ICON -->
+    <!-- ===================================================
+         SUCCESS SCREEN
+         =================================================== -->
+
+    @if (registrationSuccess) {
+
+      <section class="success-card">
 
         <div class="success-icon">
           ✓
         </div>
 
-
-        <h1>
+        <h2>
           Registration Successful!
-        </h1>
-
+        </h2>
 
         <p class="success-message">
 
-          Thank you for registering with
+          Welcome to
+          <strong>VJM Coaching Center</strong>.
 
-          <strong>
-            VJM Coaching Center
-          </strong>.
+          Your student registration has been
+          successfully completed.
 
         </p>
 
 
-        <!-- REGISTRATION NUMBER -->
+        <!-- Registration Number -->
 
         <div class="registration-number-box">
 
           <span>
-            Your Registration Number
+            Registration Number
           </span>
 
           <strong>
@@ -110,180 +86,139 @@
         </div>
 
 
-        <!-- ACCOUNT INFORMATION -->
+        <!-- Student Email -->
 
-        <div class="account-created-box">
+        @if (studentDataForPdf?.email) {
 
-          <div class="account-icon">
-            🔐
-          </div>
+          <div class="registered-email">
 
-          <div>
+            <span>
+              Registered Email
+            </span>
 
             <strong>
-              Student Account Created
+              {{ studentDataForPdf.email }}
             </strong>
 
-            <p>
-              Your mobile number and password can now be
-              used to access the Student Portal.
-            </p>
-
           </div>
+
+        }
+
+
+        <!-- Important message -->
+
+        <div class="success-info">
+
+          <p>
+            📧 Please remember your registered email
+            and password.
+          </p>
+
+          <p>
+            🔑 You can use your email and password
+            to access Student Login.
+          </p>
+
+          <p>
+            🔄 If you forget your password later,
+            use the <strong>Forgot Password</strong>
+            option on the Student Login page.
+          </p>
 
         </div>
 
 
-        <!-- VIDEO ACCESS INFORMATION -->
-
-        <div class="access-info-box">
-
-          <div class="access-info-icon">
-            🎓
-          </div>
-
-          <div>
-
-            <strong>
-              Course Access
-            </strong>
-
-            <p>
-              Your registration is currently pending.
-              Video lessons will be available after
-              payment approval by VJM Coaching Center.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <p class="success-info">
-
-          Please save your registration number
-          for future reference.
-
-        </p>
-
-
-        <!-- SUCCESS BUTTONS -->
+        <!-- Buttons -->
 
         <div class="success-actions">
 
-
           <button
             type="button"
-            class="download-button"
-            (click)="downloadRegistrationPdf()">
+            class="download-btn"
+            (click)="downloadRegistrationPdf()"
+          >
 
-            📄
-            Download Registration PDF
+            📄 Download Registration PDF
 
           </button>
 
 
           <a
             routerLink="/student-login"
-            class="student-login-btn">
+            class="login-btn"
+          >
 
-            🎓
-            Student Login
+            🔑 Student Login
 
           </a>
 
 
           <a
             routerLink="/"
-            class="home-button">
+            class="success-home-btn"
+          >
 
-            🏠
-            Back to Home
+            🏠 Back to Home
 
           </a>
 
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         REGISTRATION FORM
+         =================================================== -->
+
+    @if (!registrationSuccess) {
+
+      <section class="registration-card">
+
+
+        <!-- Form Heading -->
+
+        <div class="form-heading">
+
+          <h2>
+            Student Registration
+          </h2>
+
+          <p>
+            Please enter the student's details
+            carefully.
+          </p>
+
+          <div class="required-note">
+            <span>*</span>
+            Required fields
+          </div>
 
         </div>
 
-      </div>
 
-    </div>
-
-  }
-
-
-
-  <!-- =====================================================
-       REGISTRATION FORM
-  ====================================================== -->
-
-  @if (!registrationSuccess) {
-
-    <main class="registration-container">
+        <form
+          [formGroup]="registrationForm"
+          (ngSubmit)="submitForm()"
+          novalidate
+        >
 
 
-      <!-- =================================================
-           FORM HEADER
-      ================================================== -->
+          <!-- =================================================
+               STUDENT DETAILS
+               ================================================= -->
 
-      <div class="registration-header">
+          <div class="section-title">
 
-
-        <div class="header-icon">
-          🎓
-        </div>
-
-
-        <h1>
-          VJM COACHING CENTER
-        </h1>
-
-
-        <p>
-          Student Registration Form
-        </p>
-
-
-        <span>
-          Navodaya • Sainik School • Gurukula • School Tuition
-        </span>
-
-      </div>
-
-
-
-      <!-- =================================================
-           FORM
-      ================================================== -->
-
-      <form
-        [formGroup]="registrationForm"
-        (ngSubmit)="submitForm()">
-
-
-        <!-- =================================================
-             SECTION 01 - STUDENT DETAILS
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              01
+            <span class="section-icon">
+              👨‍🎓
             </span>
 
             <div>
-
-              <h2>
-                Student Details
-              </h2>
-
-              <p>
-                Enter the student's basic information
-              </p>
-
+              <h3>Student Details</h3>
+              <p>Basic information about the student</p>
             </div>
 
           </div>
@@ -292,31 +227,42 @@
           <div class="form-grid">
 
 
-            <!-- STUDENT NAME -->
+            <!-- Student Name -->
 
-            <div class="form-group">
+            <div class="form-group full-width">
 
-              <label>
+              <label for="studentName">
                 Student Name
                 <span>*</span>
               </label>
 
-
               <input
+                id="studentName"
                 type="text"
                 formControlName="studentName"
                 placeholder="Enter student's full name"
                 autocomplete="name"
               >
 
-
               @if (
                 registrationForm.get('studentName')?.touched &&
                 registrationForm.get('studentName')?.invalid
               ) {
 
-                <small class="error-message">
-                  Please enter at least 3 characters.
+                <small class="field-error">
+
+                  @if (
+                    registrationForm.get('studentName')?.errors?.['required']
+                  ) {
+                    Student name is required.
+                  }
+
+                  @if (
+                    registrationForm.get('studentName')?.errors?.['minlength']
+                  ) {
+                    Student name must contain at least 3 characters.
+                  }
+
                 </small>
 
               }
@@ -324,29 +270,27 @@
             </div>
 
 
-
-            <!-- DATE OF BIRTH -->
+            <!-- Date of Birth -->
 
             <div class="form-group">
 
-              <label>
+              <label for="dateOfBirth">
                 Date of Birth
                 <span>*</span>
               </label>
 
-
               <input
+                id="dateOfBirth"
                 type="date"
                 formControlName="dateOfBirth"
               >
-
 
               @if (
                 registrationForm.get('dateOfBirth')?.touched &&
                 registrationForm.get('dateOfBirth')?.invalid
               ) {
 
-                <small class="error-message">
+                <small class="field-error">
                   Date of birth is required.
                 </small>
 
@@ -355,19 +299,19 @@
             </div>
 
 
-
-            <!-- GENDER -->
+            <!-- Gender -->
 
             <div class="form-group">
 
-              <label>
+              <label for="gender">
                 Gender
                 <span>*</span>
               </label>
 
-
               <select
-                formControlName="gender">
+                id="gender"
+                formControlName="gender"
+              >
 
                 <option value="">
                   Select Gender
@@ -381,173 +325,121 @@
                   Female
                 </option>
 
+                <option value="Other">
+                  Other
+                </option>
+
               </select>
 
+              @if (
+                registrationForm.get('gender')?.touched &&
+                registrationForm.get('gender')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Please select gender.
+                </small>
+
+              }
 
             </div>
 
 
-
-            <!-- CLASS -->
+            <!-- Class -->
 
             <div class="form-group">
 
-              <label>
+              <label for="class">
                 Class
                 <span>*</span>
               </label>
 
-
               <select
-                formControlName="class">
+                id="class"
+                formControlName="class"
+              >
 
                 <option value="">
                   Select Class
                 </option>
 
-                <option value="5">
-                  Class 5
+                <option value="5th Class">
+                  5th Class
                 </option>
 
-                <option value="6">
-                  Class 6
+                <option value="6th Class">
+                  6th Class
                 </option>
 
-                <option value="7">
-                  Class 7
+                <option value="7th Class">
+                  7th Class
                 </option>
 
-                <option value="8">
-                  Class 8
+                <option value="8th Class">
+                  8th Class
                 </option>
 
-                <option value="9">
-                  Class 9
+                <option value="9th Class">
+                  9th Class
                 </option>
 
-                <option value="10">
-                  Class 10
+                <option value="10th Class">
+                  10th Class
+                </option>
+
+                <option value="Intermediate">
+                  Intermediate
                 </option>
 
               </select>
 
+              @if (
+                registrationForm.get('class')?.touched &&
+                registrationForm.get('class')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Please select class.
+                </small>
+
+              }
+
             </div>
 
 
+            <!-- School -->
 
-            <!-- SCHOOL -->
+            <div class="form-group">
 
-            <div class="form-group full-width">
-
-              <label>
-                Current School Name
+              <label for="schoolName">
+                School Name
               </label>
 
-
               <input
+                id="schoolName"
                 type="text"
                 formControlName="schoolName"
-                placeholder="Enter current school name"
+                placeholder="Enter school name"
               >
 
             </div>
 
           </div>
 
-        </section>
 
+          <!-- =================================================
+               COURSE DETAILS
+               ================================================= -->
 
+          <div class="section-title">
 
-        <!-- =================================================
-             SECTION 02 - COURSE
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              02
+            <span class="section-icon">
+              📚
             </span>
 
             <div>
-
-              <h2>
-                Select Course
-              </h2>
-
-              <p>
-                Choose the coaching program
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              Coaching Course
-              <span>*</span>
-            </label>
-
-
-            <select
-              formControlName="course">
-
-              <option value="">
-                Select Course
-              </option>
-
-              <option value="Navodaya Entrance Coaching">
-                Navodaya Entrance Coaching
-              </option>
-
-              <option value="Sainik School Entrance Coaching">
-                Sainik School Entrance Coaching
-              </option>
-
-              <option value="Gurukula Entrance Coaching">
-                Gurukula Entrance Coaching
-              </option>
-
-              <option value="School Tuition">
-                School Tuition
-              </option>
-
-            </select>
-
-          </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             SECTION 03 - PARENT DETAILS
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              03
-            </span>
-
-            <div>
-
-              <h2>
-                Parent / Guardian Details
-              </h2>
-
-              <p>
-                Enter parent or guardian information
-              </p>
-
+              <h3>Course Details</h3>
+              <p>Select the course you want to join</p>
             </div>
 
           </div>
@@ -556,38 +448,126 @@
           <div class="form-grid">
 
 
-            <!-- PARENT NAME -->
+            <!-- Course -->
+
+            <div class="form-group full-width">
+
+              <label for="course">
+                Select Course
+                <span>*</span>
+              </label>
+
+              <select
+                id="course"
+                formControlName="course"
+              >
+
+                <option value="">
+                  Select Course
+                </option>
+
+                <option value="Navodaya Coaching">
+                  Navodaya Coaching
+                </option>
+
+                <option value="Sainik School Coaching">
+                  Sainik School Coaching
+                </option>
+
+                <option value="Gurukula Coaching">
+                  Gurukula Coaching
+                </option>
+
+                <option value="School Tuition">
+                  School Tuition
+                </option>
+
+                <option value="Online Coaching">
+                  Online Coaching
+                </option>
+
+              </select>
+
+              @if (
+                registrationForm.get('course')?.touched &&
+                registrationForm.get('course')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Please select a course.
+                </small>
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               PARENT DETAILS
+               ================================================= -->
+
+          <div class="section-title">
+
+            <span class="section-icon">
+              👨‍👩‍👦
+            </span>
+
+            <div>
+              <h3>Parent / Guardian Details</h3>
+              <p>Parent or guardian information</p>
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+
+            <!-- Parent Name -->
 
             <div class="form-group">
 
-              <label>
+              <label for="parentName">
                 Parent / Guardian Name
                 <span>*</span>
               </label>
 
-
               <input
+                id="parentName"
                 type="text"
                 formControlName="parentName"
-                placeholder="Enter parent / guardian name"
+                placeholder="Enter parent name"
               >
+
+              @if (
+                registrationForm.get('parentName')?.touched &&
+                registrationForm.get('parentName')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Parent / guardian name is required.
+                </small>
+
+              }
 
             </div>
 
 
-
-            <!-- RELATIONSHIP -->
+            <!-- Relationship -->
 
             <div class="form-group">
 
-              <label>
+              <label for="relationship">
                 Relationship
                 <span>*</span>
               </label>
 
-
               <select
-                formControlName="relationship">
+                id="relationship"
+                formControlName="relationship"
+              >
 
                 <option value="">
                   Select Relationship
@@ -605,39 +585,41 @@
                   Guardian
                 </option>
 
+                <option value="Other">
+                  Other
+                </option>
+
               </select>
+
+              @if (
+                registrationForm.get('relationship')?.touched &&
+                registrationForm.get('relationship')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Please select relationship.
+                </small>
+
+              }
 
             </div>
 
           </div>
 
-        </section>
 
+          <!-- =================================================
+               CONTACT DETAILS
+               ================================================= -->
 
+          <div class="section-title">
 
-        <!-- =================================================
-             SECTION 04 - CONTACT DETAILS
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              04
+            <span class="section-icon">
+              📱
             </span>
 
             <div>
-
-              <h2>
-                Contact Details
-              </h2>
-
-              <p>
-                Provide contact information
-              </p>
-
+              <h3>Contact Details</h3>
+              <p>Enter your contact information</p>
             </div>
 
           </div>
@@ -646,42 +628,44 @@
           <div class="form-grid">
 
 
-            <!-- MOBILE -->
+            <!-- Mobile -->
 
             <div class="form-group">
 
-              <label>
+              <label for="mobile">
                 Mobile Number
                 <span>*</span>
               </label>
 
-
-              <div class="mobile-input">
-
-                <span class="country-code">
-                  +91
-                </span>
-
-
-                <input
-                  type="tel"
-                  formControlName="mobile"
-                  maxlength="10"
-                  inputmode="numeric"
-                  placeholder="10 digit mobile number"
-                  autocomplete="tel"
-                >
-
-              </div>
-
+              <input
+                id="mobile"
+                type="tel"
+                formControlName="mobile"
+                placeholder="10-digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+              >
 
               @if (
                 registrationForm.get('mobile')?.touched &&
                 registrationForm.get('mobile')?.invalid
               ) {
 
-                <small class="error-message">
-                  Enter a valid 10-digit Indian mobile number.
+                <small class="field-error">
+
+                  @if (
+                    registrationForm.get('mobile')?.errors?.['required']
+                  ) {
+                    Mobile number is required.
+                  }
+
+                  @if (
+                    registrationForm.get('mobile')?.errors?.['pattern']
+                  ) {
+                    Enter a valid 10-digit mobile number.
+                  }
+
                 </small>
 
               }
@@ -689,64 +673,81 @@
             </div>
 
 
-
-            <!-- WHATSAPP -->
+            <!-- WhatsApp -->
 
             <div class="form-group">
 
-              <label>
+              <label for="whatsapp">
                 WhatsApp Number
               </label>
 
-
               <input
+                id="whatsapp"
                 type="tel"
                 formControlName="whatsapp"
+                placeholder="10-digit WhatsApp number"
                 maxlength="10"
                 inputmode="numeric"
-                placeholder="WhatsApp number"
               >
-
 
               @if (
                 registrationForm.get('whatsapp')?.touched &&
                 registrationForm.get('whatsapp')?.invalid
               ) {
 
-                <small class="error-message">
-                  Enter a valid 10-digit mobile number.
+                <small class="field-error">
+                  Enter a valid 10-digit WhatsApp number.
                 </small>
 
               }
 
             </div>
-
 
 
             <!-- EMAIL -->
 
             <div class="form-group full-width">
 
-              <label>
+              <label for="email">
+
                 Email Address
+
+                <span>*</span>
+
               </label>
 
-
               <input
+                id="email"
                 type="email"
                 formControlName="email"
-                placeholder="Enter email address"
+                placeholder="Enter your email address"
                 autocomplete="email"
               >
 
+              <small class="field-help">
+                This email will be used for Student Login
+                and Forgot Password.
+              </small>
 
               @if (
                 registrationForm.get('email')?.touched &&
                 registrationForm.get('email')?.invalid
               ) {
 
-                <small class="error-message">
-                  Enter a valid email address.
+                <small class="field-error">
+
+                  @if (
+                    registrationForm.get('email')?.errors?.['required']
+                  ) {
+                    Email address is required.
+                  }
+
+                  @if (
+                    registrationForm.get('email')?.errors?.['email']
+                  ) {
+                    Please enter a valid email address.
+                  }
+
                 </small>
 
               }
@@ -755,166 +756,20 @@
 
           </div>
 
-        </section>
 
+          <!-- =================================================
+               PASSWORD
+               ================================================= -->
 
+          <div class="section-title">
 
-        <!-- =================================================
-             SECTION 05 - PASSWORD
-        ================================================== -->
-
-        <section class="form-section password-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              05
-            </span>
-
-            <div>
-
-              <h2>
-                Create Student Password
-              </h2>
-
-              <p>
-                Create a password for Student Portal login
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <!-- PASSWORD INFORMATION -->
-
-          <div class="password-info">
-
-            <span class="password-info-icon">
+            <span class="section-icon">
               🔐
             </span>
 
             <div>
-
-              <strong>
-                Password is compulsory
-              </strong>
-
-              <p>
-                You will use your registered mobile number
-                and this password to log in to the Student Portal.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <!-- PASSWORD FIELD -->
-
-          <div class="form-group">
-
-            <label>
-              Create Password
-              <span>*</span>
-            </label>
-
-
-            <div class="password-input-wrapper">
-
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                formControlName="password"
-                placeholder="Create your password"
-                autocomplete="new-password"
-              >
-
-
-              <button
-                type="button"
-                class="password-toggle"
-                (click)="togglePassword()"
-                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
-
-                @if (showPassword) {
-                  👁️
-                } @else {
-                  👁️‍🗨️
-                }
-
-              </button>
-
-            </div>
-
-
-            <div class="password-hint">
-
-              <span>
-                ✓
-              </span>
-
-              Minimum 6 characters
-
-            </div>
-
-
-            @if (
-              registrationForm.get('password')?.touched &&
-              registrationForm.get('password')?.invalid
-            ) {
-
-              <small class="error-message">
-
-                @if (
-                  registrationForm.get('password')?.errors?.['required']
-                ) {
-
-                  Password is required.
-
-                }
-
-                @if (
-                  registrationForm.get('password')?.errors?.['minlength']
-                ) {
-
-                  Password must contain at least 6 characters.
-
-                }
-
-              </small>
-
-            }
-
-          </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             SECTION 06 - ADDRESS
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              06
-            </span>
-
-            <div>
-
-              <h2>
-                Address
-              </h2>
-
-              <p>
-                Enter student's address details
-              </p>
-
+              <h3>Login Password</h3>
+              <p>Create a password for Student Login</p>
             </div>
 
           </div>
@@ -923,187 +778,273 @@
           <div class="form-grid">
 
 
-            <!-- ADDRESS -->
+            <div class="form-group full-width">
+
+              <label for="password">
+                Password
+                <span>*</span>
+              </label>
+
+
+              <div class="password-wrapper">
+
+                <input
+                  id="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  placeholder="Create password"
+                  autocomplete="new-password"
+                >
+
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  (click)="togglePassword()"
+                  [attr.aria-label]="
+                    showPassword
+                      ? 'Hide password'
+                      : 'Show password'
+                  "
+                >
+
+                  {{ showPassword ? '🙈' : '👁️' }}
+
+                </button>
+
+              </div>
+
+
+              <small class="field-help">
+                Password must contain at least 6 characters.
+              </small>
+
+
+              @if (
+                registrationForm.get('password')?.touched &&
+                registrationForm.get('password')?.invalid
+              ) {
+
+                <small class="field-error">
+
+                  @if (
+                    registrationForm.get('password')?.errors?.['required']
+                  ) {
+                    Password is required.
+                  }
+
+                  @if (
+                    registrationForm.get('password')?.errors?.['minlength']
+                  ) {
+                    Password must contain at least 6 characters.
+                  }
+
+                </small>
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               ADDRESS
+               ================================================= -->
+
+          <div class="section-title">
+
+            <span class="section-icon">
+              📍
+            </span>
+
+            <div>
+              <h3>Address</h3>
+              <p>Enter your residential details</p>
+            </div>
+
+          </div>
+
+
+          <div class="form-grid">
+
+
+            <!-- Address -->
 
             <div class="form-group full-width">
 
-              <label>
-                Complete Address
+              <label for="address">
+                Address
                 <span>*</span>
               </label>
-
 
               <textarea
+                id="address"
                 formControlName="address"
                 rows="3"
-                placeholder="Enter complete address">
-              </textarea>
+                placeholder="Enter complete address"
+              ></textarea>
+
+              @if (
+                registrationForm.get('address')?.touched &&
+                registrationForm.get('address')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Address is required.
+                </small>
+
+              }
 
             </div>
 
 
-
-            <!-- VILLAGE -->
+            <!-- Village -->
 
             <div class="form-group">
 
-              <label>
-                Village
+              <label for="village">
+                Village / Town
                 <span>*</span>
               </label>
 
-
               <input
+                id="village"
                 type="text"
                 formControlName="village"
-                placeholder="Enter village"
+                placeholder="Enter village or town"
               >
+
+              @if (
+                registrationForm.get('village')?.touched &&
+                registrationForm.get('village')?.invalid
+              ) {
+
+                <small class="field-error">
+                  Village / town is required.
+                </small>
+
+              }
 
             </div>
 
 
-
-            <!-- DISTRICT -->
+            <!-- District -->
 
             <div class="form-group">
 
-              <label>
+              <label for="district">
                 District
                 <span>*</span>
               </label>
 
-
               <input
+                id="district"
                 type="text"
                 formControlName="district"
                 placeholder="Enter district"
               >
 
+              @if (
+                registrationForm.get('district')?.touched &&
+                registrationForm.get('district')?.invalid
+              ) {
+
+                <small class="field-error">
+                  District is required.
+                </small>
+
+              }
+
             </div>
 
           </div>
 
-        </section>
 
+          <!-- =================================================
+               ADDITIONAL INFORMATION
+               ================================================= -->
 
+          <div class="section-title">
 
-        <!-- =================================================
-             SECTION 07 - ADDITIONAL INFORMATION
-        ================================================== -->
-
-        <section class="form-section">
-
-
-          <div class="section-heading">
-
-            <span class="section-number">
-              07
+            <span class="section-icon">
+              📝
             </span>
 
             <div>
+              <h3>Additional Information</h3>
+              <p>Optional information</p>
+            </div>
 
-              <h2>
-                Additional Information
-              </h2>
+          </div>
 
-              <p>
-                Optional information about the student
-              </p>
+
+          <div class="form-grid">
+
+
+            <!-- Performance -->
+
+            <div class="form-group">
+
+              <label for="performance">
+                Previous Performance
+              </label>
+
+              <input
+                id="performance"
+                type="text"
+                formControlName="performance"
+                placeholder="Previous marks / performance"
+              >
+
+            </div>
+
+
+            <!-- Reference -->
+
+            <div class="form-group">
+
+              <label for="reference">
+                Reference
+              </label>
+
+              <input
+                id="reference"
+                type="text"
+                formControlName="reference"
+                placeholder="How did you hear about us?"
+              >
 
             </div>
 
           </div>
 
 
-          <!-- PERFORMANCE -->
+          <!-- =================================================
+               IMPORTANT INFORMATION
+               ================================================= -->
 
-          <div class="form-group">
+          <div class="important-box">
 
-            <label>
-              Previous Academic Performance
-            </label>
-
-
-            <textarea
-              formControlName="performance"
-              rows="4"
-              placeholder="Enter previous marks, grades or academic performance">
-            </textarea>
-
-          </div>
-
-
-          <!-- REFERENCE -->
-
-          <div class="form-group">
-
-            <label>
-              How did you hear about VJM Coaching Center?
-            </label>
-
-
-            <select
-              formControlName="reference">
-
-              <option value="">
-                Select an option
-              </option>
-
-              <option value="Google">
-                Google
-              </option>
-
-              <option value="YouTube">
-                YouTube
-              </option>
-
-              <option value="WhatsApp">
-                WhatsApp
-              </option>
-
-              <option value="Friend / Relative">
-                Friend / Relative
-              </option>
-
-              <option value="School">
-                School
-              </option>
-
-              <option value="Other">
-                Other
-              </option>
-
-            </select>
-
-          </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             SUBMIT SECTION
-        ================================================== -->
-
-        <div class="submit-section">
-
-
-          <div class="submit-note">
-
-            <span>
+            <div class="important-icon">
               🔒
-            </span>
+            </div>
 
             <div>
 
-              <strong>
-                Your information is secure
-              </strong>
+              <h4>
+                Important
+              </h4>
 
               <p>
-                Your password is securely handled by
+                Your password is securely managed by
                 Firebase Authentication and is not stored
-                in the student database.
+                in the student registration details.
+              </p>
+
+              <p>
+                Please remember your email and password
+                for Student Login.
               </p>
 
             </div>
@@ -1111,48 +1052,75 @@
           </div>
 
 
-          <button
-            type="submit"
-            class="submit-button"
-            [disabled]="
-              registrationForm.invalid ||
-              isSubmitting
-            ">
+          <!-- =================================================
+               SUBMIT BUTTON
+               ================================================= -->
+
+          <div class="submit-section">
+
+            <button
+              type="submit"
+              class="submit-btn"
+              [disabled]="isSubmitting"
+            >
+
+              @if (isSubmitting) {
+
+                <span class="loading-spinner"></span>
+
+                Registering...
+
+              }
+
+              @else {
+
+                <span>
+                  📝
+                </span>
+
+                Complete Registration
+
+              }
+
+            </button>
 
 
-            @if (isSubmitting) {
+            <p class="login-text">
 
-              <span class="button-loading">
+              Already registered?
 
-                <span class="spinner"></span>
+              <a routerLink="/student-login">
+                Student Login
+              </a>
 
-                Creating Student Account...
+            </p>
 
-              </span>
+          </div>
 
-            } @else {
+        </form>
 
-              <span>
-                🎓 Create Student Account & Register
-              </span>
+      </section>
 
-            }
+    }
 
-
-          </button>
-
-
-          <p class="required-note">
-            * Required fields
-          </p>
-
-        </div>
+  </main>
 
 
-      </form>
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
 
-    </main>
+  <footer class="register-footer">
 
-  }
+    <p>
+      © 2026 VJM Coaching Center.
+      All Rights Reserved.
+    </p>
+
+    <p>
+      Quality Education • Better Future
+    </p>
+
+  </footer>
 
 </div>

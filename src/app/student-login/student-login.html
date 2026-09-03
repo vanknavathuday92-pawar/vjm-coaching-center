@@ -1,311 +1,209 @@
-<div class="student-login-page">
+<div class="login-page">
 
-  <!-- ==========================================
-       TOP HEADER
-  =========================================== -->
+  <div class="login-card">
 
-  <header class="login-header">
+    <!-- ============================= -->
+    <!-- LOGO -->
+    <!-- ============================= -->
 
-    <div class="login-header-inner">
-
-      <!-- BACK TO HOME -->
-
-      <a
-        routerLink="/"
-        class="back-home">
-
-        ← Back to Home
-
-      </a>
+    <div class="logo-container">
+      <img
+        src="assets/vjm-logo.png"
+        alt="VJM Coaching Center Logo"
+        class="logo"
+      >
+    </div>
 
 
-      <!-- BRAND -->
+    <!-- ============================= -->
+    <!-- TITLE -->
+    <!-- ============================= -->
 
-      <div class="brand">
+    <h1>Student Login</h1>
 
-        <img
-          src="assets/vjm-logo.png"
-          alt="VJM Coaching Center Logo"
-          class="brand-logo"
-        >
+    <p class="subtitle">
+      Login to access your VJM Coaching Center account.
+    </p>
 
-        <div class="brand-text">
 
-          <h1>
-            VJM COACHING CENTER
-          </h1>
+    <!-- ============================= -->
+    <!-- SUCCESS MESSAGE -->
+    <!-- ============================= -->
 
-          <span>
-            Quality Education • Bright Future
-          </span>
+    <div
+      class="success-message"
+      *ngIf="loginSuccess"
+    >
 
-        </div>
-
+      <div class="success-icon">
+        ✓
       </div>
+
+      <h2>
+        Login Successful
+      </h2>
+
+      <p>
+        Welcome to VJM Coaching Center.
+      </p>
 
     </div>
 
-  </header>
+
+    <!-- ============================= -->
+    <!-- LOGIN FORM -->
+    <!-- ============================= -->
+
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+      *ngIf="!loginSuccess"
+    >
 
 
+      <!-- =========================== -->
+      <!-- EMAIL -->
+      <!-- =========================== -->
 
-  <!-- ==========================================
-       LOGIN MAIN AREA
-  =========================================== -->
+      <div class="form-group">
 
-  <main class="login-main">
+        <label for="email">
+          Registered Email
+        </label>
 
-    <div class="login-card">
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your registered email"
+          autocomplete="email"
+        >
 
+        <div
+          class="error"
+          *ngIf="
+            loginForm.get('email')?.touched &&
+            loginForm.get('email')?.invalid
+          "
+        >
 
-      <!-- ========================================
-           LOGIN ICON
-      ========================================= -->
+          <span
+            *ngIf="loginForm.get('email')?.errors?.['required']"
+          >
+            Email address is required.
+          </span>
 
-      <div class="login-icon">
-        🎓
+          <span
+            *ngIf="loginForm.get('email')?.errors?.['email']"
+          >
+            Please enter a valid email address.
+          </span>
+
+        </div>
+
       </div>
 
 
+      <!-- =========================== -->
+      <!-- PASSWORD -->
+      <!-- =========================== -->
 
-      <!-- ========================================
-           LOGIN HEADER
-      ========================================= -->
+      <div class="form-group">
 
-      <div class="login-title">
+        <label for="password">
+          Password
+        </label>
 
-        <h2>
-          Student Login
-        </h2>
+        <div class="password-wrapper">
 
-        <p>
-          Login to access your VJM Coaching Center
-          learning portal.
-        </p>
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            (click)="togglePassword()"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+
+        </div>
+
+
+        <div
+          class="error"
+          *ngIf="
+            loginForm.get('password')?.touched &&
+            loginForm.get('password')?.invalid
+          "
+        >
+
+          <span
+            *ngIf="loginForm.get('password')?.errors?.['required']"
+          >
+            Password is required.
+          </span>
+
+          <span
+            *ngIf="loginForm.get('password')?.errors?.['minlength']"
+          >
+            Password must contain at least 6 characters.
+          </span>
+
+        </div>
 
       </div>
 
 
+      <!-- =========================== -->
+      <!-- FORGOT PASSWORD -->
+      <!-- =========================== -->
 
-      <!-- ========================================
-           ERROR MESSAGE
-      ========================================= -->
+      <div class="forgot-password">
 
-      @if (errorMessage) {
+        <a routerLink="/reset-password">
+          Forgot Password?
+        </a>
 
-        <div class="message error-message">
+      </div>
 
-          <span class="message-icon">
-            ⚠️
-          </span>
 
-          <div>
+      <!-- =========================== -->
+      <!-- LOGIN BUTTON -->
+      <!-- =========================== -->
 
-            <strong>
-              Login Failed
-            </strong>
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isSubmitting"
+      >
 
-            <p>
-              {{ errorMessage }}
-            </p>
+        <span *ngIf="!isSubmitting">
+          Login
+        </span>
 
-          </div>
+        <span *ngIf="isSubmitting">
+          Logging in...
+        </span>
 
-        </div>
+      </button>
 
-      }
 
-
-
-      <!-- ========================================
-           SUCCESS MESSAGE
-      ========================================= -->
-
-      @if (successMessage) {
-
-        <div class="message success-message">
-
-          <span class="message-icon">
-            ✓
-          </span>
-
-          <div>
-
-            <strong>
-              Success
-            </strong>
-
-            <p>
-              {{ successMessage }}
-            </p>
-
-          </div>
-
-        </div>
-
-      }
-
-
-
-      <!-- ========================================
-           LOGIN FORM
-      ========================================= -->
-
-      <form
-        class="login-form"
-        autocomplete="off"
-        (ngSubmit)="login()">
-
-
-        <!-- ======================================
-             MOBILE NUMBER
-        ======================================= -->
-
-        <div class="form-group">
-
-          <label
-            for="mobile">
-
-            Mobile Number
-            <span>*</span>
-
-          </label>
-
-
-          <div class="input-wrapper">
-
-            <span class="input-icon">
-              📱
-            </span>
-
-
-            <span class="country-code">
-              +91
-            </span>
-
-
-            <input
-              id="mobile"
-              type="tel"
-              name="mobile"
-              [(ngModel)]="mobile"
-              maxlength="10"
-              inputmode="numeric"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="Enter registered mobile number"
-              (input)="clearMessages()"
-            >
-
-          </div>
-
-
-          <small class="input-help">
-
-            Enter the mobile number used during registration.
-
-          </small>
-
-        </div>
-
-
-
-        <!-- ======================================
-             PASSWORD
-        ======================================= -->
-
-        <div class="form-group">
-
-          <label
-            for="password">
-
-            Password
-            <span>*</span>
-
-          </label>
-
-
-          <div class="input-wrapper">
-
-            <span class="input-icon">
-              🔒
-            </span>
-
-
-            <input
-              id="password"
-              type="password"
-              name="password"
-              [(ngModel)]="password"
-              autocomplete="new-password"
-              placeholder="Enter your password"
-              (input)="clearMessages()"
-            >
-
-          </div>
-
-
-          <small class="input-help">
-
-            Enter the password you created during registration.
-
-          </small>
-
-        </div>
-
-
-
-        <!-- ======================================
-             LOGIN BUTTON
-        ======================================= -->
-
-        <button
-          type="submit"
-          class="login-button"
-          [disabled]="isLoading">
-
-
-          @if (isLoading) {
-
-            <span class="button-content">
-
-              <span class="spinner"></span>
-
-              Logging in...
-
-            </span>
-
-          }
-
-          @else {
-
-            <span class="button-content">
-
-              🔐 Login to Student Portal
-
-            </span>
-
-          }
-
-        </button>
-
-
-      </form>
-
-
-
-      <!-- ========================================
-           DIVIDER
-      ========================================= -->
+      <!-- =========================== -->
+      <!-- DIVIDER -->
+      <!-- =========================== -->
 
       <div class="divider"></div>
 
 
-
-      <!-- ========================================
-           REGISTER LINK
-      ========================================= -->
+      <!-- =========================== -->
+      <!-- REGISTRATION -->
+      <!-- =========================== -->
 
       <div class="register-section">
 
@@ -313,58 +211,32 @@
           Don't have a student account?
         </p>
 
-
         <a
           routerLink="/register"
-          class="register-link">
-
-          Create Student Account
-
+          class="register-button"
+        >
+          Student Registration
         </a>
 
       </div>
 
 
-
-      <!-- ========================================
-           SECURITY INFORMATION
-      ========================================= -->
-
-      <div class="security-box">
-
-        <span class="security-icon">
-          🔒
-        </span>
+    </form>
 
 
-        <p>
+    <!-- ============================= -->
+    <!-- BACK TO HOME -->
+    <!-- ============================= -->
 
-          Your student portal is protected.
-          Use your registered mobile number
-          and password to login.
+    <div class="back-home">
 
-        </p>
-
-      </div>
-
+      <a routerLink="/">
+        ← Back to Home
+      </a>
 
     </div>
 
-  </main>
 
-
-
-  <!-- ==========================================
-       FOOTER
-  =========================================== -->
-
-  <footer class="login-footer">
-
-    <p>
-      © 2026 VJM COACHING CENTER.
-      All Rights Reserved.
-    </p>
-
-  </footer>
+  </div>
 
 </div>

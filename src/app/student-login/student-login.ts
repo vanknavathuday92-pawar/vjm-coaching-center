@@ -1,11 +1,19 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
 import { Router, RouterLink } from '@angular/router';
 
 import {
   getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from 'firebase/auth';
 
 import { app } from '../firebase';
@@ -18,7 +26,7 @@ import { app } from '../firebase';
 
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     RouterLink
   ],
 
@@ -28,27 +36,33 @@ import { app } from '../firebase';
 })
 
 
-export class StudentLogin implements OnInit {
-
+export class StudentLogin {
 
   // =====================================================
-  // LOGIN FIELDS
+  // LOGIN FORM
   // =====================================================
 
-  mobile: string = '';
-
-  password: string = '';
+  loginForm: FormGroup;
 
 
   // =====================================================
   // STATUS
   // =====================================================
 
-  isLoading: boolean = false;
+  isSubmitting = false;
 
-  errorMessage: string = '';
+  loginSuccess = false;
 
-  successMessage: string = '';
+  errorMessage = '';
+
+  successMessage = '';
+
+
+  // =====================================================
+  // PASSWORD VISIBILITY
+  // =====================================================
+
+  showPassword = false;
 
 
   // =====================================================
@@ -56,29 +70,64 @@ export class StudentLogin implements OnInit {
   // =====================================================
 
   constructor(
-    private router: Router,
-    private ngZone: NgZone
-  ) {}
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+
+    this.loginForm = this.fb.group({
+
+      // -------------------------------------------------
+      // EMAIL
+      // -------------------------------------------------
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      // -------------------------------------------------
+      // PASSWORD
+      // -------------------------------------------------
+
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ]
+
+    });
+
+  }
 
 
   // =====================================================
-  // INITIALIZE
+  // TOGGLE PASSWORD
   // =====================================================
 
-  ngOnInit(): void {
+  togglePassword(): void {
 
-    // Always keep fields empty
-    // when student login page opens
+    this.showPassword =
+      !this.showPassword;
 
-    this.mobile = '';
+  }
 
-    this.password = '';
+
+  // =====================================================
+  // CLEAR MESSAGES
+  // =====================================================
+
+  clearMessages(): void {
 
     this.errorMessage = '';
 
     this.successMessage = '';
 
-    this.isLoading = false;
+    this.loginSuccess = false;
 
   }
 
@@ -89,118 +138,67 @@ export class StudentLogin implements OnInit {
 
   async login(): Promise<void> {
 
-
-    // ===================================================
+    // ---------------------------------------------------
     // CLEAR PREVIOUS MESSAGES
-    // ===================================================
+    // ---------------------------------------------------
 
-    this.errorMessage = '';
-
-    this.successMessage = '';
+    this.clearMessages();
 
 
-    // ===================================================
-    // MOBILE VALIDATION
-    // ===================================================
+    // ---------------------------------------------------
+    // VALIDATE FORM
+    // ---------------------------------------------------
 
-    const cleanMobile =
-      String(this.mobile || '').trim();
+    if (
+      this.loginForm.invalid
+    ) {
 
-
-    if (!cleanMobile) {
-
-      this.errorMessage =
-        'Please enter your registered mobile number.';
+      this.loginForm.markAllAsTouched();
 
       return;
 
     }
 
 
-    // ===================================================
-    // VALIDATE INDIAN MOBILE NUMBER
-    // ===================================================
+    // ---------------------------------------------------
+    // PREVENT DOUBLE CLICK
+    // ---------------------------------------------------
 
-    if (!/^[6-9]\d{9}$/.test(cleanMobile)) {
-
-      this.errorMessage =
-        'Please enter a valid 10-digit mobile number.';
-
-      return;
-
-    }
-
-
-    // ===================================================
-    // PASSWORD VALIDATION
-    // ===================================================
-
-    if (!this.password || this.password.length === 0) {
-
-      this.errorMessage =
-        'Please enter your password.';
+    if (
+      this.isSubmitting
+    ) {
 
       return;
 
     }
 
 
-    // ===================================================
-    // PASSWORD MINIMUM LENGTH
-    // ===================================================
-
-    if (this.password.length < 6) {
-
-      this.errorMessage =
-        'Password must contain at least 6 characters.';
-
-      return;
-
-    }
-
-
-    // ===================================================
-    // PREVENT DOUBLE LOGIN
-    // ===================================================
-
-    if (this.isLoading) {
-
-      return;
-
-    }
-
-
-    this.isLoading = true;
+    this.isSubmitting = true;
 
 
     try {
 
-
-      console.log(
-        'Student login attempt:',
-        cleanMobile
-      );
-
-
       // =================================================
-      // IMPORTANT
-      //
-      // THIS MUST BE EXACTLY THE SAME EMAIL FORMAT
-      // USED IN register.ts
-      //
-      // register.ts:
-      //
-      // mobile@vjmstudent.com
-      //
+      // GET FORM VALUES
       // =================================================
 
-      const studentEmail =
-  `${cleanMobile}@vjmstudent.com`;
+      const email =
+        String(
+          this.loginForm.value.email
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const password =
+        String(
+          this.loginForm.value.password
+        );
 
 
       console.log(
-        'Firebase login email:',
-        studentEmail
+        'Student login started:',
+        email
       );
 
 
@@ -213,20 +211,16 @@ export class StudentLogin implements OnInit {
 
 
       // =================================================
-      // SIGN IN WITH EMAIL + PASSWORD
+      // FIREBASE LOGIN
       // =================================================
 
       const userCredential =
         await signInWithEmailAndPassword(
           auth,
-          studentEmail,
-          this.password
+          email,
+          password
         );
 
-
-      // =================================================
-      // GET LOGGED-IN USER
-      // =================================================
 
       const user =
         userCredential.user;
@@ -239,7 +233,7 @@ export class StudentLogin implements OnInit {
 
 
       // =================================================
-      // SAVE STUDENT LOGIN STATUS
+      // SAVE LOGIN INFORMATION
       // =================================================
 
       localStorage.setItem(
@@ -249,51 +243,44 @@ export class StudentLogin implements OnInit {
 
 
       localStorage.setItem(
-        'studentMobile',
-        cleanMobile
-      );
-
-
-      localStorage.setItem(
         'studentUid',
         user.uid
       );
 
 
-      // =================================================
-      // SUCCESS MESSAGE
-      // =================================================
-
-      this.ngZone.run(() => {
-
-        this.successMessage =
-          'Login successful! Redirecting to syllabus...';
-
-        this.errorMessage = '';
-
-        this.isLoading = false;
-
-      });
+      localStorage.setItem(
+        'studentEmail',
+        user.email || email
+      );
 
 
       // =================================================
-      // REDIRECT TO SYLLABUS
+      // SUCCESS
       // =================================================
 
-     
-setTimeout(() => {
+      this.loginSuccess = true;
 
-  this.router.navigateByUrl('/payment');
-
-}, 700);
+      this.successMessage =
+        'Login successful. Redirecting to payment...';
 
 
-    } catch (error: any) {
+      console.log(
+        'Redirecting student to payment page...'
+      );
 
 
       // =================================================
-      // LOG FIREBASE ERROR
+      // GO TO PAYMENT PAGE
       // =================================================
+
+      await this.router.navigate(
+        ['/payment']
+      );
+
+
+    }
+
+    catch (error: any) {
 
       console.error(
         'Student login error:',
@@ -302,144 +289,152 @@ setTimeout(() => {
 
 
       // =================================================
-      // HANDLE ERROR
+      // INVALID EMAIL
       // =================================================
 
-      this.ngZone.run(() => {
+      if (
+        error?.code ===
+        'auth/invalid-email'
+      ) {
+
+        this.errorMessage =
+          'Please enter a valid email address.';
+
+      }
 
 
-        this.isLoading = false;
+      // =================================================
+      // INVALID CREDENTIALS
+      // =================================================
 
-        this.successMessage = '';
+      else if (
+        error?.code ===
+        'auth/invalid-credential'
+      ) {
 
+        this.errorMessage =
+          'Incorrect email or password. Please try again.';
 
-        // ===============================================
-        // WRONG PASSWORD / INVALID CREDENTIAL
-        // ===============================================
-
-        if (
-          error?.code === 'auth/wrong-password'
-        ) {
-
-          this.errorMessage =
-            'Wrong password. Please enter the correct password.';
-
-        }
+      }
 
 
-        // ===============================================
-        // FIREBASE NEWER VERSION
-        //
-        // Firebase often returns invalid-credential
-        // instead of wrong-password.
-        // ===============================================
+      // =================================================
+      // WRONG PASSWORD
+      // =================================================
 
-        else if (
-          error?.code === 'auth/invalid-credential'
-        ) {
+      else if (
+        error?.code ===
+        'auth/wrong-password'
+      ) {
 
-          this.errorMessage =
-            'Incorrect mobile number or password. Please check your details and try again.';
+        this.errorMessage =
+          'Incorrect password. Please try again.';
 
-        }
+      }
 
 
-        // ===============================================
-        // USER NOT FOUND
-        // ===============================================
+      // =================================================
+      // USER NOT FOUND
+      // =================================================
 
-        else if (
-          error?.code === 'auth/user-not-found'
-        ) {
+      else if (
+        error?.code ===
+        'auth/user-not-found'
+      ) {
 
-          this.errorMessage =
-            'No student account found with this mobile number. Please register first.';
+        this.errorMessage =
+          'No student account was found with this email address.';
 
-        }
-
-
-        // ===============================================
-        // INVALID EMAIL
-        // ===============================================
-
-        else if (
-          error?.code === 'auth/invalid-email'
-        ) {
-
-          this.errorMessage =
-            'Invalid mobile number. Please check your mobile number.';
-
-        }
+      }
 
 
-        // ===============================================
-        // TOO MANY LOGIN ATTEMPTS
-        // ===============================================
+      // =================================================
+      // USER DISABLED
+      // =================================================
 
-        else if (
-          error?.code === 'auth/too-many-requests'
-        ) {
+      else if (
+        error?.code ===
+        'auth/user-disabled'
+      ) {
 
-          this.errorMessage =
-            'Too many unsuccessful login attempts. Please try again later.';
+        this.errorMessage =
+          'This student account has been disabled. Please contact VJM Coaching Center.';
 
-        }
-
-
-        // ===============================================
-        // ACCOUNT DISABLED
-        // ===============================================
-
-        else if (
-          error?.code === 'auth/user-disabled'
-        ) {
-
-          this.errorMessage =
-            'This student account has been disabled. Please contact VJM Coaching Center.';
-
-        }
+      }
 
 
-        // ===============================================
-        // NETWORK ERROR
-        // ===============================================
+      // =================================================
+      // TOO MANY REQUESTS
+      // =================================================
 
-        else if (
-          error?.code === 'auth/network-request-failed'
-        ) {
+      else if (
+        error?.code ===
+        'auth/too-many-requests'
+      ) {
 
-          this.errorMessage =
-            'Network error. Please check your internet connection and try again.';
+        this.errorMessage =
+          'Too many login attempts. Please wait and try again later.';
 
-        }
-
-
-        // ===============================================
-        // OPERATION NOT ALLOWED
-        // ===============================================
-
-        else if (
-          error?.code === 'auth/operation-not-allowed'
-        ) {
-
-          this.errorMessage =
-            'Student login is not enabled in Firebase Authentication. Please contact the administrator.';
-
-        }
+      }
 
 
-        // ===============================================
-        // DEFAULT ERROR
-        // ===============================================
+      // =================================================
+      // NETWORK ERROR
+      // =================================================
 
-        else {
+      else if (
+        error?.code ===
+        'auth/network-request-failed'
+      ) {
 
-          this.errorMessage =
-            'Unable to login. Please check your mobile number and password.';
+        this.errorMessage =
+          'Network error. Please check your internet connection.';
 
-        }
+      }
 
-      });
+
+      // =================================================
+      // GENERAL ERROR
+      // =================================================
+
+      else {
+
+        this.errorMessage =
+          'Unable to login. Please check your email and password and try again.';
+
+      }
+
+
+      // ---------------------------------------------------
+      // REMOVE LOGIN STATE IF LOGIN FAILED
+      // ---------------------------------------------------
+
+      localStorage.removeItem(
+        'studentLoggedIn'
+      );
+
+      localStorage.removeItem(
+        'studentUid'
+      );
+
+      localStorage.removeItem(
+        'studentEmail'
+      );
+
+    }
+
+    finally {
+
+      // =================================================
+      // VERY IMPORTANT
+      // =================================================
+      //
+      // This guarantees that the button does not remain
+      // stuck on "Logging in..."
+      //
+      // =================================================
+
+      this.isSubmitting = false;
 
     }
 
@@ -447,37 +442,47 @@ setTimeout(() => {
 
 
   // =====================================================
-  // CLEAR ERROR / SUCCESS MESSAGES
-  //
-  // YOUR HTML USES:
-  //
-  // (input)="clearMessages()"
-  //
-  // This method fixes the Angular TS2339 error.
+  // LOGOUT
   // =====================================================
 
-  clearMessages(): void {
+  async logout(): Promise<void> {
 
-    this.errorMessage = '';
+    try {
 
-    this.successMessage = '';
+      const auth =
+        getAuth(app);
 
-  }
+
+      await signOut(auth);
 
 
-  // =====================================================
-  // CLEAR LOGIN FORM
-  // =====================================================
+      localStorage.removeItem(
+        'studentLoggedIn'
+      );
 
-  clearForm(): void {
+      localStorage.removeItem(
+        'studentUid'
+      );
 
-    this.mobile = '';
+      localStorage.removeItem(
+        'studentEmail'
+      );
 
-    this.password = '';
 
-    this.errorMessage = '';
+      await this.router.navigate(
+        ['/student-login']
+      );
 
-    this.successMessage = '';
+    }
+
+    catch (error) {
+
+      console.error(
+        'Logout error:',
+        error
+      );
+
+    }
 
   }
 
