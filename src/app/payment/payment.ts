@@ -1,303 +1,231 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 declare var Razorpay: any;
 
 @Component({
   selector: 'app-payment',
-  imports: [
-    RouterLink,
-    HttpClientModule
-  ],
+  standalone: true,
   templateUrl: './payment.html',
   styleUrl: './payment.scss'
 })
 export class Payment {
 
-  // ============================================
-  // PAYMENT AMOUNT
-  // ============================================
-
-  amount = 6000;
-
-  selectedMethod = '';
-
-  isProcessing = false;
-
-
-  // ============================================
-  // CONSTRUCTOR
-  // ============================================
+  loading = false;
 
   constructor(
     private http: HttpClient
   ) {}
 
+  payNow(): void {
 
-  // ============================================
-  // SELECT PAYMENT METHOD
-  // ============================================
-
-  selectPaymentMethod(method: string): void {
-
-    this.selectedMethod = method;
-
-  }
-
-
-  // ============================================
-  // PROCEED TO RAZORPAY PAYMENT
-  // ============================================
-
-  proceedToPayment(): void {
-
-    if (!this.selectedMethod) {
-
-      alert(
-        'Please select a payment method.'
-      );
-
+    if (this.loading) {
       return;
-
     }
 
+    this.loading = true;
 
-    if (this.isProcessing) {
+    const studentId =
+      localStorage.getItem('studentId') || '';
 
-      return;
+    this.http
+      .post<any>(
+        'http://localhost:3000/api/payment/create-order',
+        {
+          studentId: studentId
+        }
+      )
+      .subscribe({
 
-    }
+        next: (order) => {
 
+          this.loading = false;
 
-    this.isProcessing = true;
+          if (!order.success) {
 
+            alert('Unable to create payment.');
 
-    // ============================================
-    // CREATE RAZORPAY ORDER
-    // ============================================
-
-    this.http.post<any>(
-      'http://localhost:3000/create-order',
-      {
-        amount: this.amount
-      }
-    )
-    .subscribe({
-
-      next: (response) => {
-
-        console.log(
-          'Razorpay order created:',
-          response
-        );
+            return;
+          }
 
 
-        this.openRazorpayCheckout(
-          response
-        );
+          const options = {
 
-      },
+            key: 'rzp_live_TWVKfQsfgWQro1',
 
+            amount: order.amount,
 
-      error: (error) => {
+            currency: 'INR',
 
-        console.error(
-          'Unable to create Razorpay order:',
-          error
-        );
+            name: 'VJM COACHING CENTER',
 
+            description:
+              'Online Coaching - Complete Course',
 
-        this.isProcessing = false;
+            image:
+              'assets/vjm-logo.png',
 
+            order_id:
+              order.orderId,
 
-        alert(
-          'Unable to start payment. Please try again.'
-        );
+            prefill: {
 
-      }
+              name:
+                localStorage.getItem('studentName') || '',
 
-    });
+              email:
+                localStorage.getItem('studentEmail') || '',
 
-  }
+              contact:
+                localStorage.getItem('studentMobile') || ''
 
+            },
 
-  // ============================================
-  // OPEN RAZORPAY CHECKOUT
-  // ============================================
+            notes: {
 
-  private openRazorpayCheckout(
-    order: any
-  ): void {
+              course:
+                'VJM Online Coaching',
 
-    const options = {
+              studentId:
+                studentId
 
-      // ==========================================
-      // RAZORPAY KEY
-      // ==========================================
+            },
 
-      key: 'rzp_live_TWVKfQsfgWQro1',
+            theme: {
 
-      amount: order.amount,
+              color: '#10245c'
 
-      currency: 'INR',
-
-      name: 'VJM COACHING CENTER',
-
-      description:
-        'Coaching Course Fee',
+            },
 
 
-      order_id:
-        order.id,
+            handler: (response: any) => {
+
+              this.verifyPayment(response);
+
+            },
 
 
-      // ==========================================
-      // PAYMENT HANDLER
-      // ==========================================
+            modal: {
 
-      handler: (response: any) => {
+              ondismiss: () => {
 
-        console.log(
-          'Payment successful:',
-          response
-        );
+                this.loading = false;
 
+              }
 
-        this.verifyPayment(
-          response
-        );
+            }
 
-      },
+          };
 
 
-      // ==========================================
-      // PREFILL
-      // ==========================================
-
-      prefill: {
-
-        name: '',
-
-        email: '',
-
-        contact: ''
-
-      },
+          const razorpay =
+            new Razorpay(options);
 
 
-      // ==========================================
-      // THEME
-      // ==========================================
+          razorpay.on(
+            'payment.failed',
+            (response: any) => {
 
-      theme: {
+              console.error(
+                'Payment failed:',
+                response
+              );
 
-        color: '#1d4ed8'
+              this.loading = false;
 
-      },
+              alert(
+                'Payment failed. Please try again.'
+              );
 
-
-      // ==========================================
-      // MODAL
-      // ==========================================
-
-      modal: {
-
-        ondismiss: () => {
-
-          console.log(
-            'Razorpay checkout closed.'
+            }
           );
 
-          this.isProcessing = false;
+
+          razorpay.open();
+
+        },
+
+
+        error: (error) => {
+
+          console.error(error);
+
+          this.loading = false;
+
+          alert(
+            'Unable to connect to payment server.'
+          );
 
         }
 
-      }
-
-    };
-
-
-    const razorpay =
-      new Razorpay(options);
-
-
-    razorpay.open();
+      });
 
   }
 
-
-  // ============================================
-  // VERIFY PAYMENT WITH SERVER
-  // ============================================
 
   private verifyPayment(
     response: any
   ): void {
 
-    this.http.post<any>(
-      'http://localhost:3000/verify-payment',
-      {
-
-        razorpay_order_id:
-          response.razorpay_order_id,
-
-        razorpay_payment_id:
-          response.razorpay_payment_id,
-
-        razorpay_signature:
-          response.razorpay_signature
-
-      }
-    )
-    .subscribe({
-
-      next: (result) => {
-
-        console.log(
-          'Payment verification result:',
-          result
-        );
+    const studentId =
+      localStorage.getItem('studentId') || '';
 
 
-        this.isProcessing = false;
+    this.http
+      .post<any>(
+        'http://localhost:3000/api/payment/verify',
+        {
 
+          razorpay_order_id:
+            response.razorpay_order_id,
 
-        if (result.success) {
+          razorpay_payment_id:
+            response.razorpay_payment_id,
+
+          razorpay_signature:
+            response.razorpay_signature,
+
+          studentId:
+            studentId
+
+        }
+      )
+      .subscribe({
+
+        next: (result) => {
+
+          if (result.success) {
+
+            alert(
+              'Payment successful! Your payment is being verified.'
+            );
+
+            /*
+              Later we will navigate to
+              the student dashboard.
+            */
+
+          } else {
+
+            alert(
+              'Payment verification failed.'
+            );
+
+          }
+
+        },
+
+        error: (error) => {
+
+          console.error(error);
 
           alert(
-            'Payment successful! Thank you for registering with VJM Coaching Center.'
-          );
-
-        } else {
-
-          alert(
-            'Payment verification failed.'
+            'Payment completed but verification failed. Please contact VJM Coaching Center.'
           );
 
         }
 
-      },
-
-
-      error: (error) => {
-
-        console.error(
-          'Payment verification error:',
-          error
-        );
-
-
-        this.isProcessing = false;
-
-
-        alert(
-          'Payment was received, but verification failed. Please contact VJM Coaching Center.'
-        );
-
-      }
-
-    });
+      });
 
   }
 

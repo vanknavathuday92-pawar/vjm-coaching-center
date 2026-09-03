@@ -16,13 +16,22 @@ import {
   serverTimestamp
 } from 'firebase/firestore';
 
-import { db } from '../firebase';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  deleteUser
+} from 'firebase/auth';
+
+import { db, app } from '../firebase';
 
 import jsPDF from 'jspdf';
 
 
 @Component({
   selector: 'app-register',
+
+  standalone: true,
 
   imports: [
     CommonModule,
@@ -38,187 +47,240 @@ import jsPDF from 'jspdf';
 
 export class Register {
 
-  // ============================================
+  // =====================================================
   // REGISTRATION FORM
-  // ============================================
+  // =====================================================
 
   registrationForm: FormGroup;
 
 
-  // ============================================
+  // =====================================================
   // SUBMISSION STATUS
-  // ============================================
+  // =====================================================
 
   isSubmitting = false;
 
   registrationSuccess = false;
 
 
-  // ============================================
+  // =====================================================
+  // PASSWORD VISIBILITY
+  // =====================================================
+
+  showPassword = false;
+
+
+  // =====================================================
   // REGISTRATION NUMBER
-  // ============================================
+  // =====================================================
 
   registrationNumber = '';
 
 
-  // ============================================
+  // =====================================================
   // DATA FOR PDF
-  // ============================================
+  // =====================================================
 
   studentDataForPdf: any = null;
 
 
-  // ============================================
+  // =====================================================
   // CONSTRUCTOR
-  // ============================================
+  // =====================================================
 
   constructor(
     private fb: FormBuilder
   ) {
 
-    this.registrationForm =
-      this.fb.group({
+    this.registrationForm = this.fb.group({
 
-        // ============================================
-        // STUDENT DETAILS
-        // ============================================
+      // =================================================
+      // STUDENT DETAILS
+      // =================================================
 
-        studentName: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(3)
-          ]
-        ],
-
-
-        dateOfBirth: [
-          '',
-          Validators.required
-        ],
-
-
-        gender: [
-          '',
-          Validators.required
-        ],
-
-
-        class: [
-          '',
-          Validators.required
-        ],
-
-
-        schoolName: [
-          ''
-        ],
-
-
-        // ============================================
-        // COURSE
-        // ============================================
-
-        course: [
-          '',
-          Validators.required
-        ],
-
-
-        // ============================================
-        // PARENT DETAILS
-        // ============================================
-
-        parentName: [
-          '',
-          Validators.required
-        ],
-
-
-        relationship: [
-          '',
-          Validators.required
-        ],
-
-
-        // ============================================
-        // CONTACT DETAILS
-        // ============================================
-
-        mobile: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(
-              /^[6-9]\d{9}$/
-            )
-          ]
-        ],
-
-
-        whatsapp: [
-          '',
-          Validators.pattern(
-            /^[6-9]\d{9}$/
-          )
-        ],
-
-
-        email: [
-          '',
-          Validators.email
-        ],
-
-
-        // ============================================
-        // ADDRESS
-        // ============================================
-
-        address: [
-          '',
-          Validators.required
-        ],
-
-
-        village: [
-          '',
-          Validators.required
-        ],
-
-
-        district: [
-          '',
-          Validators.required
-        ],
-
-
-        // ============================================
-        // ADDITIONAL INFORMATION
-        // ============================================
-
-        performance: [
-          ''
-        ],
-
-
-        reference: [
-          ''
+      studentName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3)
         ]
+      ],
 
-      });
+      dateOfBirth: [
+        '',
+        Validators.required
+      ],
+
+      gender: [
+        '',
+        Validators.required
+      ],
+
+      class: [
+        '',
+        Validators.required
+      ],
+
+      schoolName: [
+        ''
+      ],
+
+
+      // =================================================
+      // COURSE
+      // =================================================
+
+      course: [
+        '',
+        Validators.required
+      ],
+
+
+      // =================================================
+      // PARENT DETAILS
+      // =================================================
+
+      parentName: [
+        '',
+        Validators.required
+      ],
+
+      relationship: [
+        '',
+        Validators.required
+      ],
+
+
+      // =================================================
+      // CONTACT DETAILS
+      // =================================================
+
+      mobile: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[6-9]\d{9}$/)
+        ]
+      ],
+
+      whatsapp: [
+        '',
+        Validators.pattern(/^[6-9]\d{9}$/)
+      ],
+
+      email: [
+        '',
+        Validators.email
+      ],
+
+
+      // =================================================
+      // PASSWORD
+      // =================================================
+
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6)
+        ]
+      ],
+
+
+      // =================================================
+      // ADDRESS
+      // =================================================
+
+      address: [
+        '',
+        Validators.required
+      ],
+
+      village: [
+        '',
+        Validators.required
+      ],
+
+      district: [
+        '',
+        Validators.required
+      ],
+
+
+      // =================================================
+      // ADDITIONAL INFORMATION
+      // =================================================
+
+      performance: [
+        ''
+      ],
+
+      reference: [
+        ''
+      ]
+
+    });
 
   }
 
 
-  // ============================================
+  // =====================================================
+  // CREATE INTERNAL FIREBASE LOGIN EMAIL
+  // =====================================================
+
+  private createLoginEmail(
+    mobile: string
+  ): string {
+
+    /*
+      Student enters:
+
+      Mobile:
+      9876543210
+
+      Firebase internally uses:
+
+      9876543210@vjmstudent.com
+
+      Student DOES NOT need to know this email.
+      Student logs in using:
+
+      Mobile Number + Password
+    */
+
+    return `${mobile}@vjmstudent.com`;
+
+  }
+
+
+  // =====================================================
+  // TOGGLE PASSWORD
+  // =====================================================
+
+  togglePassword(): void {
+
+    this.showPassword =
+      !this.showPassword;
+
+  }
+
+
+  // =====================================================
   // SUBMIT REGISTRATION
-  // ============================================
+  // =====================================================
 
   async submitForm(): Promise<void> {
 
-    // ============================================
+    // ---------------------------------------------------
+    // RESET SUCCESS MESSAGE
+    // ---------------------------------------------------
+
+    this.registrationSuccess = false;
+
+
+    // ---------------------------------------------------
     // VALIDATE FORM
-    // ============================================
+    // ---------------------------------------------------
 
     if (
       this.registrationForm.invalid
@@ -231,9 +293,9 @@ export class Register {
     }
 
 
-    // ============================================
+    // ---------------------------------------------------
     // PREVENT DOUBLE SUBMISSION
-    // ============================================
+    // ---------------------------------------------------
 
     if (
       this.isSubmitting
@@ -247,40 +309,173 @@ export class Register {
     this.isSubmitting = true;
 
 
+    let firebaseUser: any = null;
+
+
     try {
 
-      // ============================================
+      // =================================================
       // GET FORM DATA
-      // ============================================
+      // =================================================
 
       const formData =
         this.registrationForm.value;
 
 
-      // ============================================
+      // =================================================
+      // CLEAN MOBILE NUMBER
+      // =================================================
+
+      const mobile =
+        String(
+          formData.mobile
+        ).trim();
+
+
+      // =================================================
+      // GET PASSWORD
+      // =================================================
+
+      const password =
+        String(
+          formData.password
+        );
+
+
+      // =================================================
+      // PASSWORD VALIDATION
+      // =================================================
+
+      if (
+        !password ||
+        password.length < 6
+      ) {
+
+        alert(
+          'Password must contain at least 6 characters.'
+        );
+
+        this.isSubmitting = false;
+
+        return;
+
+      }
+
+
+      // =================================================
+      // CREATE INTERNAL LOGIN EMAIL
+      // =================================================
+
+      const loginEmail =
+        this.createLoginEmail(
+          mobile
+        );
+
+
+      console.log(
+        'Creating Firebase student account...'
+      );
+
+
+      // =================================================
+      // FIREBASE AUTH
+      // =================================================
+
+      const auth =
+        getAuth(app);
+
+
+      // =================================================
+      // CREATE STUDENT AUTH ACCOUNT
+      // =================================================
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          loginEmail,
+          password
+        );
+
+
+      firebaseUser =
+        userCredential.user;
+
+
+      console.log(
+        'Student Firebase account created:',
+        firebaseUser.uid
+      );
+
+
+      // =================================================
+      // UPDATE FIREBASE DISPLAY NAME
+      // =================================================
+
+      try {
+
+        await updateProfile(
+          firebaseUser,
+          {
+            displayName:
+              formData.studentName
+          }
+        );
+
+      } catch (profileError) {
+
+        console.warn(
+          'Unable to update Firebase profile:',
+          profileError
+        );
+
+      }
+
+
+      // =================================================
       // GENERATE REGISTRATION NUMBER
-      // ============================================
+      // =================================================
 
       this.registrationNumber =
         'VJM-2026-' +
+        Date.now()
+          .toString()
+          .slice(-6) +
         Math.random()
           .toString(36)
-          .substring(2, 8)
+          .substring(2, 5)
           .toUpperCase();
-localStorage.setItem(
-  'vjmRegistrationNumber',
-  this.registrationNumber
-);
 
-      // ============================================
-      // STUDENT DATA
-      // ============================================
+
+      // =================================================
+      // SAVE REGISTRATION NUMBER LOCALLY
+      // =================================================
+
+      localStorage.setItem(
+        'vjmRegistrationNumber',
+        this.registrationNumber
+      );
+
+
+      // =================================================
+      // STUDENT DATA FOR FIRESTORE
+      // =================================================
 
       const studentData = {
 
-        // ============================================
-        // REGISTRATION
-        // ============================================
+        // -------------------------------------------------
+        // FIREBASE AUTH INFORMATION
+        // -------------------------------------------------
+
+        uid:
+          firebaseUser.uid,
+
+        loginEmail:
+          loginEmail,
+
+
+        // -------------------------------------------------
+        // REGISTRATION INFORMATION
+        // -------------------------------------------------
 
         registrationNumber:
           this.registrationNumber,
@@ -289,16 +484,16 @@ localStorage.setItem(
           'Pending',
 
 
-        // ============================================
-        // PAYMENT
-        // ============================================
+        // -------------------------------------------------
+        // PAYMENT INFORMATION
+        // -------------------------------------------------
 
         paymentStatus:
           'Pending',
 
         courseFee:
           6000,
-        videoAccess:false,
+
         paymentId:
           '',
 
@@ -306,15 +501,29 @@ localStorage.setItem(
           null,
 
 
-        // ============================================
+        // -------------------------------------------------
         // VIDEO ACCESS
-        // ============================================
+        // -------------------------------------------------
 
-      
+        /*
+          IMPORTANT:
 
-        // ============================================
+          Every newly registered student starts with:
+
+          videoAccess = false
+
+          Admin can later change this to:
+
+          videoAccess = true
+        */
+
+        videoAccess:
+          false,
+
+
+        // -------------------------------------------------
         // STUDENT DETAILS
-        // ============================================
+        // -------------------------------------------------
 
         studentName:
           formData.studentName,
@@ -329,20 +538,20 @@ localStorage.setItem(
           formData.class,
 
         schoolName:
-          formData.schoolName,
+          formData.schoolName || '',
 
 
-        // ============================================
+        // -------------------------------------------------
         // COURSE
-        // ============================================
+        // -------------------------------------------------
 
         course:
           formData.course,
 
 
-        // ============================================
+        // -------------------------------------------------
         // PARENT DETAILS
-        // ============================================
+        // -------------------------------------------------
 
         parentName:
           formData.parentName,
@@ -351,23 +560,23 @@ localStorage.setItem(
           formData.relationship,
 
 
-        // ============================================
+        // -------------------------------------------------
         // CONTACT DETAILS
-        // ============================================
+        // -------------------------------------------------
 
         mobile:
-          formData.mobile,
+          mobile,
 
         whatsapp:
-          formData.whatsapp,
+          formData.whatsapp || '',
 
         email:
-          formData.email,
+          formData.email || '',
 
 
-        // ============================================
+        // -------------------------------------------------
         // ADDRESS
-        // ============================================
+        // -------------------------------------------------
 
         address:
           formData.address,
@@ -379,20 +588,20 @@ localStorage.setItem(
           formData.district,
 
 
-        // ============================================
+        // -------------------------------------------------
         // ADDITIONAL INFORMATION
-        // ============================================
+        // -------------------------------------------------
 
         performance:
-          formData.performance,
+          formData.performance || '',
 
         reference:
-          formData.reference,
+          formData.reference || '',
 
 
-        // ============================================
+        // -------------------------------------------------
         // CREATED DATE
-        // ============================================
+        // -------------------------------------------------
 
         createdAt:
           serverTimestamp()
@@ -400,19 +609,25 @@ localStorage.setItem(
       };
 
 
-      // ============================================
-      // CONSOLE LOG
-      // ============================================
+      /*
+        IMPORTANT:
+
+        PASSWORD IS NOT SAVED IN FIRESTORE.
+
+        Firebase Authentication securely manages
+        the password.
+      */
+
 
       console.log(
-        'Saving student to Firebase:',
+        'Saving student information to Firestore:',
         studentData
       );
 
 
-      // ============================================
-      // SAVE TO FIREBASE
-      // ============================================
+      // =================================================
+      // SAVE STUDENT TO FIRESTORE
+      // =================================================
 
       const docRef =
         await addDoc(
@@ -425,19 +640,19 @@ localStorage.setItem(
 
 
       console.log(
-        'Student Registration Saved Successfully'
+        'Student registration saved successfully.'
       );
 
 
       console.log(
-        'Firebase Document ID:',
+        'Firestore Document ID:',
         docRef.id
       );
 
 
-      // ============================================
+      // =================================================
       // STORE DATA FOR PDF
-      // ============================================
+      // =================================================
 
       this.studentDataForPdf = {
 
@@ -449,32 +664,125 @@ localStorage.setItem(
       };
 
 
-      // ============================================
+      // =================================================
       // SHOW SUCCESS SCREEN
-      // ============================================
+      // =================================================
 
       this.registrationSuccess =
         true;
 
 
-      // ============================================
+      // =================================================
       // RESET FORM
-      // ============================================
+      // =================================================
 
       this.registrationForm.reset();
 
 
-    } catch (error) {
+      // =================================================
+      // RESET PASSWORD VISIBILITY
+      // =================================================
+
+      this.showPassword = false;
+
+
+    } catch (error: any) {
 
       console.error(
-        'Error saving student registration:',
+        'Registration Error:',
         error
       );
 
 
-      alert(
-        'Unable to submit registration. Please check your internet connection and try again.'
-      );
+      // =================================================
+      // FIREBASE AUTH ERROR
+      // =================================================
+
+      if (
+        error?.code ===
+        'auth/email-already-in-use'
+      ) {
+
+        alert(
+          'This mobile number is already registered. Please use Student Login.'
+        );
+
+      }
+
+      else if (
+        error?.code ===
+        'auth/weak-password'
+      ) {
+
+        alert(
+          'Password is too weak. Please use at least 6 characters.'
+        );
+
+      }
+
+      else if (
+        error?.code ===
+        'auth/invalid-email'
+      ) {
+
+        alert(
+          'Unable to create student account. Please check the mobile number.'
+        );
+
+      }
+
+      else if (
+        error?.code ===
+        'auth/network-request-failed'
+      ) {
+
+        alert(
+          'Network error. Please check your internet connection and try again.'
+        );
+
+      }
+
+      else {
+
+        /*
+          If Firebase Authentication account was
+          successfully created but Firestore failed,
+          remove the newly created Auth account.
+
+          This prevents an incomplete registration.
+        */
+
+        if (
+          firebaseUser
+        ) {
+
+          try {
+
+            await deleteUser(
+              firebaseUser
+            );
+
+            console.log(
+              'Incomplete Firebase account removed.'
+            );
+
+          } catch (deleteError) {
+
+            console.warn(
+              'Unable to remove incomplete Firebase account:',
+              deleteError
+            );
+
+          }
+
+        }
+
+
+        alert(
+          'Unable to complete registration. Please try again.'
+        );
+
+      }
 
 
     } finally {
@@ -487,9 +795,9 @@ localStorage.setItem(
   }
 
 
-  // ============================================
+  // =====================================================
   // DOWNLOAD REGISTRATION PDF
-  // ============================================
+  // =====================================================
 
   downloadRegistrationPdf(): void {
 
@@ -517,9 +825,9 @@ localStorage.setItem(
   }
 
 
-  // ============================================
+  // =====================================================
   // GENERATE REGISTRATION PDF
-  // ============================================
+  // =====================================================
 
   generateRegistrationPDF(
     formData: any,
@@ -530,9 +838,9 @@ localStorage.setItem(
       new jsPDF();
 
 
-    // ============================================
+    // =================================================
     // PAGE SETTINGS
-    // ============================================
+    // =================================================
 
     const pageWidth =
       pdf.internal.pageSize.getWidth();
@@ -543,9 +851,9 @@ localStorage.setItem(
     let y = 20;
 
 
-    // ============================================
+    // =================================================
     // HEADER
-    // ============================================
+    // =================================================
 
     pdf.setFont(
       'helvetica',
@@ -570,13 +878,13 @@ localStorage.setItem(
     y += 9;
 
 
-    pdf.setFontSize(
-      11
-    );
-
     pdf.setFont(
       'helvetica',
       'normal'
+    );
+
+    pdf.setFontSize(
+      11
     );
 
 
@@ -593,9 +901,9 @@ localStorage.setItem(
     y += 10;
 
 
-    // ============================================
-    // HORIZONTAL LINE
-    // ============================================
+    // =================================================
+    // LINE
+    // =================================================
 
     pdf.line(
       15,
@@ -608,9 +916,9 @@ localStorage.setItem(
     y += 12;
 
 
-    // ============================================
+    // =================================================
     // REGISTRATION NUMBER
-    // ============================================
+    // =================================================
 
     pdf.setFont(
       'helvetica',
@@ -632,9 +940,9 @@ localStorage.setItem(
     y += 12;
 
 
-    // ============================================
+    // =================================================
     // STUDENT DETAILS
-    // ============================================
+    // =================================================
 
     y =
       this.addPDFSectionTitle(
@@ -689,9 +997,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
-    // COURSE DETAILS
-    // ============================================
+    // =================================================
+    // COURSE
+    // =================================================
 
     y += 5;
 
@@ -713,15 +1021,11 @@ localStorage.setItem(
       );
 
 
-    // ============================================
-    // COURSE FEE
-    // ============================================
-
     y =
       this.addPDFField(
         pdf,
         'Course Fee',
-        '₹6,000',
+        'INR 6,000',
         y
       );
 
@@ -735,9 +1039,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
+    // =================================================
     // PARENT DETAILS
-    // ============================================
+    // =================================================
 
     y += 5;
 
@@ -768,9 +1072,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
+    // =================================================
     // CONTACT DETAILS
-    // ============================================
+    // =================================================
 
     y += 5;
 
@@ -810,9 +1114,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
+    // =================================================
     // ADDRESS
-    // ============================================
+    // =================================================
 
     y += 5;
 
@@ -852,9 +1156,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
+    // =================================================
     // ADDITIONAL INFORMATION
-    // ============================================
+    // =================================================
 
     y += 5;
 
@@ -885,9 +1189,9 @@ localStorage.setItem(
       );
 
 
-    // ============================================
+    // =================================================
     // REGISTRATION DATE
-    // ============================================
+    // =================================================
 
     y += 7;
 
@@ -915,9 +1219,9 @@ localStorage.setItem(
     );
 
 
-    // ============================================
+    // =================================================
     // FOOTER
-    // ============================================
+    // =================================================
 
     y += 15;
 
@@ -966,9 +1270,9 @@ localStorage.setItem(
     );
 
 
-    // ============================================
-    // DOWNLOAD PDF
-    // ============================================
+    // =================================================
+    // DOWNLOAD
+    // =================================================
 
     pdf.save(
       `VJM-Registration-${registrationNumber}.pdf`
@@ -977,9 +1281,9 @@ localStorage.setItem(
   }
 
 
-  // ============================================
+  // =====================================================
   // PDF SECTION TITLE
-  // ============================================
+  // =====================================================
 
   addPDFSectionTitle(
     pdf: jsPDF,
@@ -1021,9 +1325,9 @@ localStorage.setItem(
   }
 
 
-  // ============================================
+  // =====================================================
   // PDF FIELD
-  // ============================================
+  // =====================================================
 
   addPDFField(
     pdf: jsPDF,

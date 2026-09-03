@@ -1,332 +1,582 @@
 <div class="video-page">
 
-  <!-- =====================================================
-       TOP NAVIGATION
-  ====================================================== -->
 
-  <header class="video-navbar">
+  <!-- ================================================= -->
+  <!-- HEADER -->
+  <!-- ================================================= -->
 
-    <div class="video-brand">
+  <header class="video-header">
 
-      <div class="brand-icon">
-        🎓
-      </div>
+    <div class="brand">
 
-      <div class="brand-text">
+      <img
+        src="assets/vjm-logo.png"
+        alt="VJM Coaching Center"
+        class="logo"
+      />
+
+      <div>
 
         <h1>
           VJM COACHING CENTER
         </h1>
 
-        <span>
+        <p>
           Learn • Practice • Succeed
-        </span>
+        </p>
 
       </div>
 
     </div>
 
 
-    <!-- BACK TO SYLLABUS -->
-
     <a
-      routerLink="/syllabus"
-      class="back-syllabus"
-    >
-      ← Back to Syllabus
+      routerLink="/"
+      class="home-button">
+
+      ← Home
+
     </a>
 
   </header>
 
 
-  <!-- =====================================================
-       MAIN CONTENT
-  ====================================================== -->
 
-  <main class="video-content">
+  <!-- ================================================= -->
+  <!-- LOADING -->
+  <!-- ================================================= -->
 
+  @if (isLoading) {
 
-    <!-- =====================================================
-         PAGE HEADING
-    ====================================================== -->
+    <main class="loading-container">
 
-    <section class="video-heading">
+      <div class="loading-card">
 
-      <span class="heading-label">
-        VJM LEARNING VIDEO
-      </span>
+        <div class="spinner"></div>
 
-      <h2>
-        {{ videoTitle }}
-      </h2>
+        <h2>
+          Checking Video Access...
+        </h2>
 
-      <p>
-        Watch the complete lesson and strengthen your concepts.
-      </p>
+        <p>
+          Please wait while we verify your student account and payment.
+        </p>
 
-    </section>
+      </div>
 
+    </main>
 
-
-    <!-- =====================================================
-         VIDEO CARD
-    ====================================================== -->
-
-    <section class="video-card">
+  }
 
 
-      <!-- =================================================
-           VIDEO AVAILABLE
-      ================================================== -->
 
-      @if (videoUrl) {
+  <!-- ================================================= -->
+  <!-- ACCESS DENIED -->
+  <!-- ================================================= -->
 
-        <div class="video-wrapper">
+  @if (!isLoading && !hasAccess) {
 
-          <video
-            controls
-            autoplay
-            playsinline
-            preload="metadata"
-            controlsList="nodownload"
-            oncontextmenu="return false"
-          >
+    <main class="access-container">
 
-            <source
-              [src]="videoUrl"
-              type="video/mp4"
-            >
+      <div class="access-card">
 
-            Your browser does not support video playback.
+        <div class="lock-icon">
+          🔒
+        </div>
 
-          </video>
+
+        <h2>
+          Video Access Locked
+        </h2>
+
+
+        <p class="access-message">
+
+          Your online coaching videos are available only
+          after the ₹6,000 course payment has been verified.
+
+        </p>
+
+
+        <div class="payment-info">
+
+          <span>
+            Complete Course Fee
+          </span>
+
+          <strong>
+            ₹6,000
+          </strong>
 
         </div>
 
-      }
 
+        @if (errorMessage) {
 
+          <div class="error-message">
 
-      <!-- =================================================
-           VIDEO NOT AVAILABLE
-      ================================================== -->
+            {{ errorMessage }}
 
-      @if (!videoUrl) {
-
-        <div class="video-unavailable">
-
-          <div class="video-icon">
-            🎥
           </div>
+
+        }
+
+
+        <button
+          type="button"
+          class="payment-button"
+          (click)="goToPayment()">
+
+          💳 Go to Payment
+
+        </button>
+
+
+        <a
+          routerLink="/student-login"
+          class="login-link">
+
+          Login with another student account
+
+        </a>
+
+      </div>
+
+    </main>
+
+  }
+
+
+
+  <!-- ================================================= -->
+  <!-- VIDEO CONTENT -->
+  <!-- ================================================= -->
+
+  @if (!isLoading && hasAccess) {
+
+    <main class="content-container">
+
+
+      <!-- ================================================= -->
+      <!-- WELCOME -->
+      <!-- ================================================= -->
+
+      <section class="welcome-card">
+
+        <div>
+
+          <span class="small-label">
+            ONLINE LEARNING
+          </span>
+
 
           <h2>
-            Video Not Available
+
+            Welcome,
+            {{ studentName }}!
+
           </h2>
 
+
           <p>
-            This lesson does not have a video yet.
+
+            Your payment has been verified.
+            You now have complete access to the
+            VJM Coaching Center online classes.
+
           </p>
 
-          <a
-            routerLink="/syllabus"
-            class="return-syllabus-btn"
-          >
-            ← Return to Syllabus
-          </a>
+        </div>
+
+
+        <div class="access-badge">
+
+          ✓ Video Access Active
 
         </div>
 
-      }
+      </section>
 
 
 
-      <!-- =================================================
-           VIDEO INFORMATION
-      ================================================== -->
+      <!-- ================================================= -->
+      <!-- COURSE SELECTOR -->
+      <!-- ================================================= -->
 
-      @if (videoUrl) {
+      <section class="course-selector">
 
-        <div class="video-info">
+        <button
+          type="button"
+          [class.active]="selectedCourse === 'Navodaya'"
+          (click)="changeCourse('Navodaya')">
 
+          🎓
+          Navodaya
 
-          <!-- COURSE -->
-
-          <div class="video-info-item">
-
-            <span class="video-label">
-              COURSE
-            </span>
-
-            <h3>
-              {{ course || 'VJM Coaching Center' }}
-            </h3>
-
-          </div>
+        </button>
 
 
+        <button
+          type="button"
+          [class.active]="selectedCourse === 'Sainik School'"
+          (click)="changeCourse('Sainik School')">
 
-          <!-- SUBJECT -->
+          🏫
+          Sainik School
 
-          <div class="video-info-item">
-
-            <span class="video-label">
-              SUBJECT
-            </span>
-
-            <h3>
-              {{ subject || 'Learning Video' }}
-            </h3>
-
-          </div>
+        </button>
 
 
+        <button
+          type="button"
+          [class.active]="selectedCourse === 'Gurukula'"
+          (click)="changeCourse('Gurukula')">
 
-          <!-- TOPIC -->
+          📚
+          Gurukula
 
-          <div class="video-info-item">
+        </button>
 
-            <span class="video-label">
-              TOPIC
-            </span>
-
-            <h3>
-              {{ topic || videoTitle }}
-            </h3>
-
-          </div>
-
-
-        </div>
-
-      }
+      </section>
 
 
 
-      <!-- =================================================
-           LESSON INFORMATION
-      ================================================== -->
+      <!-- ================================================= -->
+      <!-- COURSE TITLE -->
+      <!-- ================================================= -->
 
-      @if (videoUrl) {
+      <section class="course-heading">
 
-        <div class="lesson-information">
+        @if (selectedCourse === 'Navodaya') {
 
-          <div class="lesson-icon">
-            📚
-          </div>
+          <span class="course-icon">
+            🎓
+          </span>
 
           <div>
 
-            <h3>
-              About This Lesson
-            </h3>
+            <h2>
+              Navodaya Entrance Coaching
+            </h2>
 
             <p>
-              This video is part of the
-              <strong>
-                {{ course || 'VJM Coaching Center' }}
-              </strong>
-              learning program.
+              Topic-wise video lessons based on the syllabus
             </p>
 
-            @if (topic) {
+          </div>
+
+        }
+
+
+        @if (selectedCourse === 'Sainik School') {
+
+          <span class="course-icon">
+            🏫
+          </span>
+
+          <div>
+
+            <h2>
+              Sainik School Entrance Coaching
+            </h2>
+
+            <p>
+              Topic-wise video lessons
+            </p>
+
+          </div>
+
+        }
+
+
+        @if (selectedCourse === 'Gurukula') {
+
+          <span class="course-icon">
+            📚
+          </span>
+
+          <div>
+
+            <h2>
+              Gurukula Entrance Coaching
+            </h2>
+
+            <p>
+              Topic-wise video lessons based on the syllabus
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+
+
+      <!-- ================================================= -->
+      <!-- VIDEO PLAYER -->
+      <!-- ================================================= -->
+
+      @if (showVideoPlayer) {
+
+        <section
+          class="video-player-card"
+          id="video-player">
+
+
+          <div class="player-header">
+
+            <div>
+
+              <span>
+                {{ selectedSubject }}
+              </span>
+
+              <h2>
+                {{ selectedTopic }}
+              </h2>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="close-player"
+              (click)="closeVideo()">
+
+              ×
+
+            </button>
+
+          </div>
+
+
+          @if (selectedVideoUrl) {
+
+            <div class="player-wrapper">
+
+              <video
+                controls
+                controlsList="nodownload"
+                playsinline
+                preload="metadata"
+                [src]="selectedVideoUrl">
+
+              </video>
+
+            </div>
+
+          }
+
+
+          @if (!selectedVideoUrl) {
+
+            <div class="video-not-ready">
+
+              <div class="video-icon">
+                🎥
+              </div>
+
+
+              <h3>
+                Video Coming Soon
+              </h3>
+
 
               <p>
-                <strong>Topic:</strong>
-                {{ topic }}
+
+                The video for
+                <strong>
+                  {{ selectedTopic }}
+                </strong>
+                has not been uploaded yet.
+
               </p>
 
-            }
 
-          </div>
+              <p class="admin-note">
 
-        </div>
+                Please upload the lesson video and add its
+                URL in <strong>video.ts</strong>.
 
-      }
+              </p>
 
+            </div>
 
+          }
 
-      <!-- =================================================
-           STUDY TIP
-      ================================================== -->
-
-      @if (videoUrl) {
-
-        <div class="study-tip">
-
-          <div class="tip-icon">
-            💡
-          </div>
-
-          <div>
-
-            <h3>
-              Study Tip
-            </h3>
-
-            <p>
-              Watch the lesson carefully, make notes of
-              important points, and practice the questions
-              related to this topic.
-            </p>
-
-          </div>
-
-        </div>
+        </section>
 
       }
 
 
-    </section>
+
+      <!-- ================================================= -->
+      <!-- SUBJECTS -->
+      <!-- ================================================= -->
+
+      <section class="subjects">
+
+
+        @for (
+          subject of subjects;
+          track subject.name
+        ) {
+
+          <article class="subject-card">
+
+
+            <!-- SUBJECT HEADER -->
+
+            <div class="subject-header">
+
+              <div class="subject-icon">
+
+                {{ subject.icon }}
+
+              </div>
+
+
+              <div>
+
+                <h3>
+                  {{ subject.name }}
+                </h3>
+
+                <span>
+
+                  {{ subject.topics.length }}
+
+                  {{
+                    subject.topics.length === 1
+                      ? 'Topic'
+                      : 'Topics'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
 
 
 
-    <!-- =====================================================
-         BOTTOM NAVIGATION
-    ====================================================== -->
+            <!-- TOPICS -->
 
-    <div class="bottom-navigation">
-
-      <a
-        routerLink="/syllabus"
-        class="syllabus-button"
-      >
-        ← Back to Syllabus
-      </a>
-
-    </div>
+            <div class="topic-list">
 
 
-  </main>
+              @for (
+                topic of subject.topics;
+                track topic.title
+              ) {
+
+                <div class="topic">
+
+
+                  <div class="topic-number">
+
+                    {{ $index + 1 }}
+
+                  </div>
+
+
+                  <div class="topic-information">
+
+                    <h4>
+                      {{ topic.title }}
+                    </h4>
+
+                    <p>
+                      {{ topic.description }}
+                    </p>
+
+                  </div>
+
+
+                  <button
+                    type="button"
+                    class="watch-button"
+                    (click)="watchVideo(subject, topic)">
+
+                    ▶ Watch Video
+
+                  </button>
+
+                </div>
+
+              }
+
+
+            </div>
+
+          </article>
+
+        }
+
+
+      </section>
 
 
 
-  <!-- =====================================================
-       FOOTER
-  ====================================================== -->
+      <!-- ================================================= -->
+      <!-- PAYMENT STATUS -->
+      <!-- ================================================= -->
 
-  <footer class="video-footer">
+      <section class="paid-banner">
 
-    <div class="footer-content">
+        <div class="paid-icon">
+          ✓
+        </div>
 
-      <h2>
-        VJM COACHING CENTER
-      </h2>
 
-      <p>
-        Navodaya • Sainik School • Gurukula • School Tuition
-      </p>
+        <div>
 
-      <p class="footer-tagline">
-        Learn • Practice • Succeed
-      </p>
+          <strong>
+            Course Payment Verified
+          </strong>
 
-      <p class="copyright">
-        © 2026 VJM Coaching Center.
-        All Rights Reserved.
-      </p>
+          <p>
 
-    </div>
+            You have complete access to the VJM Coaching Center
+            online video lessons.
+
+          </p>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  }
+
+
+
+  <!-- ================================================= -->
+  <!-- FOOTER -->
+  <!-- ================================================= -->
+
+  <footer class="footer">
+
+    <h2>
+      VJM COACHING CENTER
+    </h2>
+
+    <p>
+      Navodaya • Sainik School • Gurukula • School Tuition
+    </p>
+
+    <p>
+      Learn • Practice • Succeed
+    </p>
+
+    <small>
+      © 2026 VJM Coaching Center. All Rights Reserved.
+    </small>
 
   </footer>
+
 
 </div>

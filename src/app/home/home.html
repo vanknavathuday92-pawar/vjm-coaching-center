@@ -1,164 +1,953 @@
 <div class="home-page">
 
-  <!-- NAVBAR -->
-  <header class="navbar">
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-    <div class="logo-area">
-      <img src="assets/vjm-logo.png" alt="VJM Coaching Center">
+  <header class="main-header">
 
-      <div class="brand-text">
-        <h1>VJM COACHING CENTER</h1>
-        <span>Quality Education • Bright Future</span>
+    <div class="header-container">
+
+      <!-- LOGO / BRAND -->
+      <a routerLink="/" class="brand">
+
+        <img
+          src="assets/vjm-logo.png"
+          alt="VJM Coaching Center"
+          class="logo"
+        />
+
+        <div class="brand-text">
+
+          <h1>VJM COACHING CENTER</h1>
+
+          <span>
+            Learn • Practice • Succeed
+          </span>
+
+        </div>
+
+      </a>
+
+
+      <!-- DESKTOP NAVIGATION -->
+
+      <nav class="desktop-nav">
+
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Home
+        </a>
+
+        <a routerLink="/syllabus">
+          Syllabus
+        </a>
+
+        <a href="#courses">
+          Courses
+        </a>
+
+        <a href="#faculty">
+          Faculty
+        </a>
+
+<!-- Student Login -->
+  <a
+    routerLink="/student-login"
+    class="action-btn">
+
+    🔑 Student Login
+
+  </a>
+
+  <!-- Admin Login -->
+  <a
+    routerLink="/admin-login"
+    class="action-btn">
+
+    🔐 Admin Login
+
+  </a>
+
+
+      </nav>
+
+
+      <!-- HEADER ACTIONS -->
+
+      <div class="header-actions">
+
+        <a
+          routerLink="/register"
+          class="registration-btn"
+        >
+          👤 Student Registration
+        </a>
+
+        <a
+          href="tel:7893029517"
+          class="contact-btn"
+        >
+          📞 Contact Us
+        </a>
+
       </div>
+
+
+      <!-- MOBILE MENU BUTTON -->
+
+      <button
+        type="button"
+        class="menu-button"
+        (click)="toggleMenu()"
+        aria-label="Open navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
     </div>
 
-    <nav>
-      <a routerLink="/">Home</a>
-      <a href="#courses">Courses</a>
-      <a href="#about">About Us</a>
-      <a href="#contact">Contact</a>
-      <a routerLink="/syllabus">Syllabus</a>
-      <a routerLink="/register" class="register-btn">
-        Student Registration
-      </a>
 
-      <a routerLink="/admin-login" class="admin-btn">
-        Admin Login
-      </a>
-    </nav>
+    <!-- MOBILE NAVIGATION -->
+
+    @if (mobileMenuOpen) {
+
+      <nav class="mobile-nav">
+
+        <a
+          routerLink="/"
+          (click)="closeMenu()"
+        >
+          Home
+        </a>
+
+        <a
+          routerLink="/syllabus"
+          (click)="closeMenu()"
+        >
+          Syllabus
+        </a>
+
+        <a
+          href="#courses"
+          (click)="closeMenu()"
+        >
+          Courses
+        </a>
+
+        <a
+          href="#faculty"
+          (click)="closeMenu()"
+        >
+          Faculty
+        </a>
+
+        <a
+          routerLink="/student-login"
+          (click)="closeMenu()"
+        >
+          Student Login
+        </a>
+
+        <a
+          routerLink="/admin-login"
+          (click)="closeMenu()"
+        >
+          Admin Login
+        </a>
+
+        <a
+          routerLink="/register"
+          class="mobile-register"
+          (click)="closeMenu()"
+        >
+          👤 Student Registration
+        </a>
+
+        <a
+          href="tel:7893029517"
+          class="mobile-contact"
+          (click)="closeMenu()"
+        >
+          📞 Contact Us
+        </a>
+
+      </nav>
+
+    }
 
   </header>
 
 
-  <!-- HERO SECTION -->
-  <section class="hero">
 
-    <div class="hero-content">
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
 
-      <span class="hero-tag">
-        🎓 WELCOME TO VJM COACHING CENTER
-      </span>
+  <section class="hero-section">
 
-      <h2>
-        Build Your Future
-        <span>With Quality Education</span>
-      </h2>
+    <div class="hero-container">
 
-      <p>
-        Special coaching for Navodaya, Sainik School,
-        Gurukula and School Tuition students.
-      </p>
+      <div class="hero-content">
 
-      <div class="hero-buttons">
+        <span class="hero-small-title">
+          QUALITY EDUCATION • BRIGHT FUTURE
+        </span>
 
-        <a routerLink="/register" class="primary-btn">
-          Register Now →
-        </a>
+        <h2>
+          Prepare Today.
+          <span>Succeed Tomorrow.</span>
+        </h2>
 
-        <a href="#courses" class="secondary-btn">
-          Explore Courses
-        </a>
+        <p>
+          Expert coaching and structured preparation for
+          Navodaya, Sainik School, Gurukula entrance
+          examinations and school tuition.
+        </p>
+
+
+        <div class="hero-buttons">
+
+          <a
+            routerLink="/register"
+            class="primary-button"
+          >
+            Start Your Registration
+          </a>
+
+          <a
+            routerLink="/syllabus"
+            class="secondary-button"
+          >
+            View Syllabus
+          </a>
+
+        </div>
 
       </div>
 
-    </div>
 
-    <div class="hero-image">
+      <div class="hero-highlight">
 
-      <img
-        src="assets/vjm-poster.png"
-        alt="VJM Coaching Center">
+        <div class="highlight-icon">
+          🎓
+        </div>
+
+        <h3>
+          VJM COACHING CENTER
+        </h3>
+
+        <p>
+          Learn • Practice • Succeed
+        </p>
+
+        <strong>
+          Admissions Open
+        </strong>
+
+      </div>
 
     </div>
 
   </section>
 
 
-  <!-- COURSES -->
-  <section id="courses" class="courses-section">
+
+  <!-- =====================================================
+       PROMOTIONAL POSTERS
+  ====================================================== -->
+
+  <section class="poster-section">
 
     <div class="section-heading">
 
-      <span>OUR PROGRAMS</span>
+      <span>
+        VJM COACHING CENTER
+      </span>
 
-      <h2>Courses We Offer</h2>
+      <h2>
+        Our Programs
+      </h2>
 
       <p>
-        Choose the right coaching program for your child's future.
+        Quality coaching for a bright future
       </p>
 
     </div>
 
 
-    <div class="course-grid">
+    <div class="poster-grid">
 
-      <div class="course-card">
+      <!-- ONLINE COACHING -->
 
-        <div class="course-icon">🎓</div>
+      <div class="poster-card">
 
-        <h3>Navodaya Coaching</h3>
+        <img
+          src="assets/online.png"
+          alt="VJM Online Coaching"
+        />
+
+      </div>
+
+
+      <!-- VJM COACHING POSTER -->
+
+      <div class="poster-card">
+
+        <img
+          src="assets/vjm-poster.png"
+          alt="VJM Coaching Center"
+        />
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       FEATURES
+  ====================================================== -->
+
+  <section class="features-section">
+
+    <div class="section-heading">
+
+      <span>
+        WHY CHOOSE US
+      </span>
+
+      <h2>
+        Learn With Confidence
+      </h2>
+
+      <p>
+        Structured learning and personal attention
+        for every student.
+      </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          👨‍🏫
+        </div>
+
+        <h3>
+          Expert Faculty
+        </h3>
 
         <p>
-          Special preparation for Jawahar Navodaya
-          Vidyalaya entrance examinations.
+          Experienced faculty with strong subject
+          knowledge and student-focused teaching.
         </p>
 
-        <a routerLink="/syllabus">
-          View Syllabus →
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          📚
+        </div>
+
+        <h3>
+          Concept Building
+        </h3>
+
+        <p>
+          Strong fundamentals and clear concepts
+          for competitive examinations.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          📝
+        </div>
+
+        <h3>
+          Regular Tests
+        </h3>
+
+        <p>
+          Regular practice tests and examinations
+          to improve preparation.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          🎯
+        </div>
+
+        <h3>
+          Personal Attention
+        </h3>
+
+        <p>
+          Individual guidance and mentoring to help
+          students achieve their goals.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       COURSES
+  ====================================================== -->
+
+  <section
+    id="courses"
+    class="courses-section"
+  >
+
+    <div class="section-heading">
+
+      <span>
+        OUR COURSES
+      </span>
+
+      <h2>
+        Choose Your Course
+      </h2>
+
+      <p>
+        Focused preparation for every student's goal.
+      </p>
+
+    </div>
+
+
+    <div class="courses-grid">
+
+
+      <!-- NAVODAYA -->
+
+      <article class="course-card navodaya">
+
+        <div class="course-icon">
+          🏫
+        </div>
+
+        <div class="course-content">
+
+          <h3>
+            Navodaya
+          </h3>
+
+          <h4>
+            Entrance Coaching
+          </h4>
+
+          <p>
+            Focused preparation for Jawahar Navodaya
+            Vidyalaya entrance examination.
+          </p>
+
+          <strong>
+            Class 5th / 6th
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- SAINIK SCHOOL -->
+
+      <article class="course-card sainik">
+
+        <div class="course-icon">
+          🎖️
+        </div>
+
+        <div class="course-content">
+
+          <h3>
+            Sainik School
+          </h3>
+
+          <h4>
+            Entrance Coaching
+          </h4>
+
+          <p>
+            Complete preparation for Sainik School
+            entrance examinations.
+          </p>
+
+          <strong>
+            Class 6th / 9th
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- GURUKULA -->
+
+      <article class="course-card gurukula">
+
+        <div class="course-icon">
+          📖
+        </div>
+
+        <div class="course-content">
+
+          <h3>
+            Gurukula
+          </h3>
+
+          <h4>
+            Entrance Coaching
+          </h4>
+
+          <p>
+            Structured preparation for Telangana
+            Gurukula entrance examinations.
+          </p>
+
+          <strong>
+            Class 5th / 6th / 7th / 8th
+          </strong>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- SCHOOL TUITION -->
+
+      <article class="course-card tuition">
+
+        <div class="course-icon">
+          🎓
+        </div>
+
+        <div class="course-content">
+
+          <h3>
+            School Tuition
+          </h3>
+
+          <h4>
+            All Subjects
+          </h4>
+
+          <p>
+            Regular academic support and subject-wise
+            coaching for school students.
+          </p>
+
+          <strong>
+            CBSE / SSC / State
+          </strong>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       ONLINE COACHING
+  ====================================================== -->
+
+  <section class="online-section">
+
+    <div class="online-container">
+
+      <div class="online-content">
+
+        <span class="section-label">
+          ONLINE COACHING
+        </span>
+
+        <h2>
+          Complete Online Coaching
+        </h2>
+
+        <p>
+          Learn from anywhere with recorded classes,
+          structured lessons, practice tests and
+          expert guidance.
+        </p>
+
+
+        <div class="online-price">
+
+          <small>
+            Complete Course Fee
+          </small>
+
+          <strong>
+            ₹6,000
+          </strong>
+
+        </div>
+
+
+        <a
+          routerLink="/student-login"
+          class="online-button"
+        >
+          Student Login →
         </a>
 
       </div>
 
 
-      <div class="course-card">
+      <div class="online-features">
 
-        <div class="course-icon">🏫</div>
+        <div>
+          <span>✓</span>
+          Recorded Classes
+        </div>
 
-        <h3>Sainik School</h3>
+        <div>
+          <span>✓</span>
+          Practice Tests
+        </div>
+
+        <div>
+          <span>✓</span>
+          Syllabus Based Lessons
+        </div>
+
+        <div>
+          <span>✓</span>
+          Student Support
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       FACULTY
+  ====================================================== -->
+
+  <section
+    id="faculty"
+    class="faculty-section"
+  >
+
+    <div class="section-heading">
+
+      <span>
+        OUR FACULTY
+      </span>
+
+      <h2>
+        Meet Our Faculty
+      </h2>
+
+      <p>
+        Dedicated educators helping students build
+        strong foundations.
+      </p>
+
+    </div>
+
+
+    <div class="faculty-grid">
+
+
+      <!-- UDAY -->
+
+      <article class="faculty-card">
+
+        <div class="faculty-image">
+
+          <img
+            src="assets/uday.png"
+            alt="Uday Pawar"
+          />
+
+        </div>
+
+
+        <div class="faculty-content">
+
+          <h3>
+            Uday Pawar
+          </h3>
+
+          <h4>
+            M.Tech (IIT Dhanbad)
+          </h4>
+
+          <p class="faculty-department">
+            Electrical Engineering
+          </p>
+
+          <span class="phd-badge">
+            Pursuing PhD
+          </span>
+
+
+          <div class="faculty-divider"></div>
+
+
+          <h5>
+            Teaching Skills
+          </h5>
+
+          <ul>
+
+            <li>
+              Mathematics & Quantitative Aptitude
+            </li>
+
+            <li>
+              Logical Reasoning
+            </li>
+
+            <li>
+              Concept Building
+            </li>
+
+            <li>
+              Problem Solving
+            </li>
+
+            <li>
+              Competitive Exam Preparation
+            </li>
+
+            <li>
+              Analytical Thinking
+            </li>
+
+          </ul>
+
+        </div>
+
+      </article>
+
+
+
+      <!-- KEERTHI -->
+
+      <article class="faculty-card">
+
+        <div class="faculty-image">
+
+          <img
+            src="assets/keerthi.png"
+            alt="V. Keerthi"
+          />
+
+        </div>
+
+
+        <div class="faculty-content">
+
+          <h3>
+            V. Keerthi
+          </h3>
+
+          <h4>
+            M.Tech (JNTUH)
+          </h4>
+
+          <p class="faculty-department">
+            Computer Science Engineering
+          </p>
+
+          <span class="phd-badge">
+            Pursuing PhD
+          </span>
+
+
+          <div class="faculty-divider"></div>
+
+
+          <h5>
+            Teaching Skills
+          </h5>
+
+          <ul>
+
+            <li>
+              Computer Science Fundamentals
+            </li>
+
+            <li>
+              Programming Concepts
+            </li>
+
+            <li>
+              Logical Reasoning
+            </li>
+
+            <li>
+              Problem Solving
+            </li>
+
+            <li>
+              Competitive Exam Preparation
+            </li>
+
+            <li>
+              Student Mentoring
+            </li>
+
+          </ul>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       CALL / CONTACT
+  ====================================================== -->
+
+  <section class="contact-section">
+
+    <div class="section-heading">
+
+      <span>
+        GET IN TOUCH
+      </span>
+
+      <h2>
+        We're Here To Help
+      </h2>
+
+      <p>
+        Contact us for admissions and course details.
+      </p>
+
+    </div>
+
+
+    <div class="contact-grid">
+
+
+      <!-- CALL -->
+
+      <div class="contact-card">
+
+        <div class="contact-icon">
+          📞
+        </div>
+
+        <h3>
+          Call Us
+        </h3>
 
         <p>
-          Complete preparation for Sainik School
-          entrance examinations.
+          Contact us for admission details.
         </p>
 
-        <a routerLink="/syllabus">
-          View Syllabus →
+        <a href="tel:7893029517">
+          7893029517
         </a>
 
       </div>
 
 
-      <div class="course-card">
 
-        <div class="course-icon">📚</div>
+      <!-- WHATSAPP -->
 
-        <h3>Gurukula Coaching</h3>
+      <div class="contact-card">
+
+        <div class="contact-icon">
+          💬
+        </div>
+
+        <h3>
+          WhatsApp Us
+        </h3>
 
         <p>
-          Focused coaching and academic preparation
-          for Gurukula entrance examinations.
+          Chat with us for course information.
         </p>
 
-        <a routerLink="/syllabus">
-          View Syllabus →
+        <a
+          href="https://wa.me/917893029517"
+          target="_blank"
+          rel="noopener"
+        >
+          7893029517
         </a>
 
       </div>
 
 
-      <div class="course-card">
 
-        <div class="course-icon">📖</div>
+      <!-- LOCATION -->
 
-        <h3>School Tuition</h3>
+      <div class="contact-card location-card">
 
-        <p>
-          Regular academic support and tuition for
-          school-going students.
+        <div class="contact-icon">
+          📍
+        </div>
+
+        <h3>
+          Visit Us
+        </h3>
+
+        <p class="location-name">
+          VJM COACHING CENTER
         </p>
 
-        <a routerLink="/register">
-          Join Now →
+        <p>
+          Laxmisai Traders Building,<br>
+          Behind LIC Office,<br>
+          Devarakonda,<br>
+          Nalgonda,<br>
+          Telangana - 508248
+        </p>
+
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=VJM+Coaching+Center+Devarakonda+Nalgonda+Telangana"
+          target="_blank"
+          rel="noopener"
+        >
+          📍 View on Google Maps
         </a>
 
       </div>
@@ -168,232 +957,122 @@
   </section>
 
 
-  <!-- ABOUT -->
-  <section id="about" class="about-section">
 
-    <div class="about-image">
+  <!-- =====================================================
+       REGISTRATION CTA
+  ====================================================== -->
 
-      <img
-        src="assets/vjm-poster1.png"
-        alt="VJM Coaching Center">
+  <section class="cta-section">
 
-    </div>
+    <div class="cta-container">
 
-    <div class="about-content">
+      <div>
 
-      <span>ABOUT VJM</span>
+        <span>
+          ADMISSIONS OPEN
+        </span>
 
-      <h2>
-        Education That Builds
-        <strong>Confidence & Success</strong>
-      </h2>
+        <h2>
+          Take the First Step Towards Your Success!
+        </h2>
 
-      <p>
-        VJM COACHING CENTER is committed to providing
-        quality education and focused preparation for
-        competitive entrance examinations.
-      </p>
+        <p>
+          Register today and start your preparation
+          with VJM Coaching Center.
+        </p>
 
-      <p>
-        Our goal is to help every student develop strong
-        academic foundations, confidence and the skills
-        required to achieve their goals.
-      </p>
+      </div>
 
-      <a routerLink="/register" class="primary-btn">
-        Register Your Child →
+
+      <a
+        routerLink="/register"
+        class="cta-button"
+      >
+        Student Registration →
       </a>
 
     </div>
 
   </section>
-<!-- FACULTY SECTION -->
-<section class="faculty-section" id="faculty">
 
-  <div class="faculty-heading">
-    <span>OUR FACULTY</span>
-    <h2>Meet Our Faculty</h2>
-    <p>
-      Experienced and dedicated educators committed to building
-      strong foundations and guiding students towards success.
-    </p>
-  </div>
 
-  <div class="faculty-container">
 
-    <!-- UDAY PAWAR -->
-    <div class="faculty-card">
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
 
-      <div class="faculty-image">
-        <img src="assets/uday.png" alt="Uday Pawar">
-      </div>
+  <footer class="footer">
 
-      <div class="faculty-info">
+    <div class="footer-container">
 
-        <h3>Uday Pawar</h3>
+      <div class="footer-brand">
 
-        <h4>M.Tech (IIT Dhanbad)</h4>
+        <img
+          src="assets/vjm-logo.png"
+          alt="VJM Coaching Center"
+        />
 
-        <p class="faculty-department">
-          Electrical Engineering
-        </p>
+        <div>
 
-        <span class="phd">
-          Pursuing PhD
-        </span>
+          <h3>
+            VJM COACHING CENTER
+          </h3>
 
-        <hr>
+          <p>
+            Learn • Practice • Succeed
+          </p>
 
-        <h5>Teaching Skills</h5>
-
-        <ul>
-          <li>Mathematics &amp; Quantitative Aptitude</li>
-          <li>Logical Reasoning</li>
-          <li>Concept Building</li>
-          <li>Problem Solving</li>
-          <li>Competitive Exam Preparation</li>
-          <li>Analytical Thinking</li>
-        </ul>
+        </div>
 
       </div>
 
-    </div>
 
+      <div class="footer-links">
 
-    <!-- V. KEERTHI -->
-    <div class="faculty-card">
+        <a routerLink="/">
+          Home
+        </a>
 
-      <div class="faculty-image">
-        <img src="assets/keerthi.png" alt="V. Keerthi">
-      </div>
+        <a routerLink="/student-syllabus">
+          Syllabus
+        </a>
 
-      <div class="faculty-info">
-
-        <h3>V. Keerthi</h3>
-
-        <h4>M.Tech (JNTUH)</h4>
-
-        <p class="faculty-department">
-          Computer Science Engineering
-        </p>
-
-        <span class="phd">
-          Pursuing PhD
-        </span>
-
-        <hr>
-
-        <h5>Teaching Skills</h5>
-
-        <ul>
-          <li>Computer Science Fundamentals</li>
-          <li>Programming Concepts</li>
-          <li>Logical Reasoning</li>
-          <li>Problem Solving</li>
-          <li>Competitive Exam Preparation</li>
-          <li>Student Mentoring</li>
-        </ul>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-  <!-- CONTACT -->
-  <section id="contact" class="contact-section">
-
-    <div class="section-heading">
-
-      <span>GET IN TOUCH</span>
-
-      <h2>Contact VJM Coaching Center</h2>
-
-    </div>
-
-    <div class="contact-grid">
-
-      <div class="contact-card">
-  <div class="contact-icon">📞</div>
-
-  <h3>Call Us</h3>
-
-  <p>Contact us for admission details.</p>
-
-  <a href="tel:7893029517" class="phone-link">
-    7893029517
-  </a>
-
-  <a
-    href="https://wa.me/917893029517"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="whatsapp-link">
-    💬 WhatsApp Us
-  </a>
-</div>
-
-
-      <div class="contact-card">
-  <div class="contact-icon">📍</div>
-
-  <h3>Visit Us</h3>
-
-  <p>
-    <strong>VJM COACHING CENTER</strong>
-  </p>
-
-  <p class="address">
-    Laxmisai Traders Building,<br>
-    Behind LIC Office,<br>
-    Devarakonda,<br>
-    Nalgonda,<br>
-    Telangana,<br>
-    508248
-  </p>
-
-  <a
-    href="https://www.google.com/maps/search/?api=1&query=Laxmisai+Traders+Building+Behind+LIC+Office"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="location-link">
-    📍 View on Google Maps
-  </a>
-</div>
-
-      <div class="contact-card">
-
-        <div>🎓</div>
-
-        <h3>Admissions</h3>
-
-        <p>Register online for our courses.</p>
+        <a routerLink="/student-login">
+          Student Login
+        </a>
 
         <a routerLink="/register">
-          Student Registration
+          Registration
+        </a>
+
+      </div>
+
+
+      <div class="footer-contact">
+
+        <a href="tel:7893029517">
+          📞 7893029517
+        </a>
+
+        <a
+          href="https://wa.me/917893029517"
+          target="_blank"
+          rel="noopener"
+        >
+          💬 WhatsApp
         </a>
 
       </div>
 
     </div>
 
-  </section>
 
+    <div class="footer-bottom">
 
-  <!-- FOOTER -->
-  <footer>
+      © {{ currentYear }} VJM COACHING CENTER.
+      All Rights Reserved.
 
-    <h2>VJM COACHING CENTER</h2>
-
-    <p>
-      Navodaya • Sainik School • Gurukula • School Tuition
-    </p>
-
-    <p class="copyright">
-      © 2026 VJM Coaching Center. All Rights Reserved.
-    </p>
+    </div>
 
   </footer>
 

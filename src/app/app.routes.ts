@@ -1,55 +1,44 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './auth-guard';
-
 export const routes: Routes = [
 
   {
     path: '',
     loadComponent: () =>
-      import('./home/home')
-        .then(m => m.Home)
+      import('./home/home').then(m => m.Home)
   },
 
   {
-    path: 'register',
+    path: 'student-login',
     loadComponent: () =>
-      import('./register/register')
-        .then(m => m.Register)
+      import('./student-login/student-login').then(m => m.StudentLogin)
   },
 
   {
-    path: 'admin-login',
+    path: 'payment',
     loadComponent: () =>
-      import('./admin-login/admin-login')
-        .then(m => m.AdminLogin)
+      import('./payment/payment').then(m => m.Payment)
   },
-{
+
+  {
     path: 'syllabus',
     loadComponent: () =>
       import('./syllabus/syllabus').then(m => m.Syllabus)
   },
-  {
-  path: 'payment',
+{
+  path: 'register',
   loadComponent: () =>
-    import('./payment/payment').then(m => m.Payment)
+    import('./register/register')
+      .then(m => m.Register)
 },
- {
+  {
     path: 'video',
     loadComponent: () =>
       import('./video/video').then(m => m.Video)
   },
-  {
-    path: 'admin-dashboard',
-    loadComponent: () =>
-      import('./admin-dashboard/admin-dashboard')
-        .then(m => m.AdminDashboard),
 
-    canActivate: [authGuard]
-  },
-   {
+  {
     path: '**',
     redirectTo: ''
   }
-
 ];

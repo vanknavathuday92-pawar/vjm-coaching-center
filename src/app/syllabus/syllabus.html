@@ -1,628 +1,568 @@
 <div class="syllabus-page">
 
-  <!-- TOP NAVIGATION -->
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
-  <header class="top-bar">
+  <header class="site-header">
 
-    <a routerLink="/" class="back-home">
-      ← Back to Home
-    </a>
+    <div class="header-inner">
 
-    <h1>VJM COACHING CENTER</h1>
-
-  </header>
-
-
-  <!-- PAGE HEADER -->
-
-  <section class="page-header">
-
-    <span>LEARNING CENTER</span>
-
-    <h2>Syllabus & Learning Videos</h2>
-
-    <p>
-      Select your course and learn topic-by-topic with VJM Coaching Center.
-    </p>
-
-  </section>
-
-
-  <!-- COURSE SELECTOR -->
-
-  <section class="course-selector">
-
-    <button
-      type="button"
-      [class.active]="selectedCourse === 'Navodaya'"
-      (click)="selectCourse('Navodaya')">
-
-      🎓 Navodaya
-
-    </button>
-
-
-    <button
-      type="button"
-      [class.active]="selectedCourse === 'Sainik School'"
-      (click)="selectCourse('Sainik School')">
-
-      🏫 Sainik School
-
-    </button>
-
-
-    <button
-      type="button"
-      [class.active]="selectedCourse === 'Gurukula'"
-      (click)="selectCourse('Gurukula')">
-
-      📚 Gurukula
-
-    </button>
-
-  </section>
-
-
-  <!-- ==============================
-       NAVODAYA
-  =============================== -->
-
-  @if (selectedCourse === 'Navodaya') {
-
-    <section class="course-content">
-
-      <div class="course-title">
-        <span>🎓</span>
-
-        <div>
-          <h2>Navodaya Entrance Coaching</h2>
-          <p>Topic-wise syllabus and learning videos</p>
-        </div>
-      </div>
-
-
-      <!-- MATHEMATICS -->
-
-      <div class="subject-card">
-
-        <h3>📐 Mathematics</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-
-            <div>
-              <h4>Number System</h4>
-              <p>Understanding numbers and basic concepts</p>
-            </div>
-<button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya',
-    'Mathematics',
-    'Number System',
-    'Navodaya Mathematics - Number System',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-
-          </div>
-
-
-          <div class="topic">
-
-            <div>
-              <h4>Fractions</h4>
-              <p>Basic fractions and problem solving</p>
-            </div>
-
-            <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya Mathematics - Fractions',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-          </div>
-
-
-          <div class="topic">
-
-            <div>
-              <h4>Geometry</h4>
-              <p>Lines, angles and basic shapes</p>
-            </div>
-
-          <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya Mathematics - Geometry',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- MENTAL ABILITY -->
-
-      <div class="subject-card">
-
-        <h3>🧠 Mental Ability</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-
-            <div>
-              <h4>Number Series</h4>
-              <p>Find patterns and complete the series</p>
-            </div>
-
-            <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya Mental Ability - Number Series',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-          </div>
-
-
-          <div class="topic">
-
-            <div>
-              <h4>Odd One Out</h4>
-              <p>Logical thinking and classification</p>
-            </div>
-
-           <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya Mental Ability - Odd One Out',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-
-          </div>
-
-
-          <div class="topic">
-
-            <div>
-              <h4>Coding & Decoding</h4>
-              <p>Learn coding and logical patterns</p>
-            </div>
-
-            <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Navodaya Mental Ability - Coding and Decoding',
-    'https://www.w3schools.com/html/mov_bbb.mp4'
-  )">
-
-  ▶ Watch Video
-
-</button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- ENGLISH -->
-
-      <div class="subject-card">
-
-        <h3>📖 English</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-
-            <div>
-              <h4>Grammar</h4>
-              <p>Nouns, verbs, adjectives and basic grammar</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-
-          </div>
-
-
-          <div class="topic">
-
-            <div>
-              <h4>Vocabulary</h4>
-              <p>Synonyms, antonyms and spellings</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  }
-
-
-  <!-- ==============================
-       SAINIK SCHOOL
-  =============================== -->
-
-  @if (selectedCourse === 'Sainik School') {
-
-    <section class="course-content">
-
-      <div class="course-title">
-        <span>🏫</span>
-
-        <div>
-          <h2>Sainik School Entrance Coaching</h2>
-          <p>Topic-wise syllabus and learning videos</p>
-        </div>
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>📐 Mathematics</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Number System</h4>
-              <p>Basic numbers and arithmetic operations</p>
-            </div>
-
-            <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Sainik School Mathematics - Number System',
-    'https://www.w3schools.com/html/mov_bbb.mp4',
-    'Sainik School Entrance Coaching',
-    'Mathematics',
-    'Number System'
-  )">
-
-  ▶ Watch Video
-
-</button>
-          </div>
-
-
-          <div class="topic">
-            <div>
-              <h4>Fractions & Decimals</h4>
-              <p>Concepts and examination problems</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>🧠 Intelligence</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Logical Reasoning</h4>
-              <p>Reasoning and logical thinking</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-
-          <div class="topic">
-            <div>
-              <h4>Series & Patterns</h4>
-              <p>Identify patterns and sequences</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>📖 Language</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>English Grammar</h4>
-              <p>Grammar and vocabulary preparation</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  }
-
-
-  <!-- ==============================
-       GURUKULA
-  =============================== -->
-
-  @if (selectedCourse === 'Gurukula') {
-
-    <section class="course-content">
-
-      <div class="course-title">
-        <span>📚</span>
-
-        <div>
-          <h2>Gurukula Entrance Coaching</h2>
-          <p>Topic-wise syllabus and learning videos</p>
-        </div>
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>📐 Mathematics</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Number System</h4>
-              <p>Numbers and basic arithmetic operations</p>
-            </div>
-
-           
-          </div>
-
-          <div class="topic">
-            <div>
-              <h4>Fractions & Decimals</h4>
-              <p>Fractions, decimals and word problems</p>
-            </div>
-
-            <button
-  type="button"
-  class="watch-button"
-  (click)="watchVideo(
-    'Gurukula Mathematics - Fractions & Decimals',
-    'https://www.w3schools.com/html/mov_bbb.mp4',
-    'Gurukula Entrance Coaching',
-    'Mathematics',
-    'Fractions & Decimals'
-  )">
-
-  ▶ Watch Video
-
-</button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>🌱 General Science / EVS</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Our Body & Health</h4>
-              <p>Basic body systems and health</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-          <div class="topic">
-            <div>
-              <h4>Plants & Animals</h4>
-              <p>Plants, animals and their habitats</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>📖 English</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Basic Grammar</h4>
-              <p>Nouns, pronouns, verbs and adjectives</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-          <div class="topic">
-            <div>
-              <h4>Vocabulary</h4>
-              <p>Synonyms, antonyms and spellings</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="subject-card">
-
-        <h3>🧠 Mental Ability</h3>
-
-        <div class="topic-list">
-
-          <div class="topic">
-            <div>
-              <h4>Series Completion</h4>
-              <p>Logical patterns and sequences</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-          <div class="topic">
-            <div>
-              <h4>Coding & Decoding</h4>
-              <p>Logical reasoning problems</p>
-            </div>
-
-            <button type="button" class="watch-button">
-              ▶ Watch Video
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-
-    </section>
-
-  }
-
-<!-- ==============================
-     COURSE PAYMENT
-================================ -->
-
-<section class="payment-section">
-
-  <div class="payment-content-box">
-
-    <div class="payment-icon">
-      💳
-    </div>
-
-    <div class="payment-text">
-
-      <span>CONTINUE YOUR LEARNING</span>
-
-      <h2>
-        Enroll in VJM Coaching Center
-      </h2>
-
-      <p>
-        Access your complete coaching program after completing
-        the course payment.
-      </p>
-
-    </div>
-
-    <div class="payment-action">
-
-      <strong>
-        ₹6,000
-      </strong>
+      <!-- BACK HOME -->
 
       <a
-        routerLink="/payment"
-        class="payment-button">
+        routerLink="/"
+        class="back-home"
+      >
+        ← <span>Back to Home</span>
+      </a>
 
-        💳 Pay ₹6,000
 
+      <!-- BRAND -->
+
+      <a
+        routerLink="/"
+        class="brand"
+      >
+
+        <img
+          src="assets/vjm-logo.png"
+          alt="VJM Coaching Center Logo"
+          class="brand-logo"
+        >
+
+        <div class="brand-text">
+
+          <h1>
+            VJM COACHING CENTER
+          </h1>
+
+          <p>
+            Learn • Practice • Succeed
+          </p>
+
+        </div>
+
+      </a>
+
+
+      <!-- STUDENT LOGIN -->
+
+      <a
+        routerLink="/student-login"
+        class="student-login"
+      >
+        🎓 Student Login
       </a>
 
     </div>
 
-  </div>
+  </header>
 
-</section>
-  <!-- FOOTER -->
 
-  <footer>
 
-    <h2>VJM COACHING CENTER</h2>
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
 
-    <p>
-      Learn • Practice • Improve • Succeed
-    </p>
+  <main class="main-content">
+
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="hero-section">
+
+      <div class="hero-label">
+        LEARNING CENTER
+      </div>
+
+      <h2>
+        Syllabus &amp; Exam Pattern
+      </h2>
+
+      <p>
+        Explore the complete syllabus and examination pattern
+        for your selected entrance course.
+      </p>
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COURSE SELECTOR
+    ==================================================== -->
+
+    <section class="course-selector">
+
+      @for (course of courses; track course.name) {
+
+        <button
+          type="button"
+          class="course-button"
+          [class.active]="selectedCourse === course.name"
+          (click)="selectCourse(course.name)"
+        >
+
+          <span class="course-button-icon">
+            {{ course.icon }}
+          </span>
+
+          <span>
+            {{ course.name }}
+          </span>
+
+        </button>
+
+      }
+
+    </section>
+
+
+
+    <!-- ===================================================
+         COURSE CONTENT
+    ==================================================== -->
+
+    <section
+      id="course-content"
+      class="course-content"
+    >
+
+
+      <!-- =================================================
+           COURSE HEADER
+      ================================================== -->
+
+      <div class="course-header">
+
+        <div class="course-header-icon">
+          {{ currentCourse.icon }}
+        </div>
+
+        <div>
+
+          <h2>
+            {{ currentCourse.title }}
+          </h2>
+
+          <p>
+            {{ currentCourse.subtitle }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =================================================
+           SYLLABUS SECTION
+      ================================================== -->
+
+      <section class="content-card syllabus-card">
+
+        <div class="section-heading">
+
+          <div class="heading-icon">
+            📚
+          </div>
+
+          <div>
+
+            <h2>
+              Syllabus
+            </h2>
+
+            <p>
+              Subjects and important topics
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- SUBJECTS -->
+
+        <div class="subjects-container">
+
+          @for (
+            subject of currentCourse.subjects;
+            track subject.name
+          ) {
+
+            <article class="subject-card">
+
+
+              <!-- SUBJECT HEADER -->
+
+              <div class="subject-header">
+
+                <div class="subject-icon">
+                  {{ subject.icon }}
+                </div>
+
+                <div>
+
+                  <h3>
+                    {{ subject.name }}
+                  </h3>
+
+                  <span>
+                    {{ subject.topics.length }}
+                    topics
+                  </span>
+
+                </div>
+
+              </div>
+
+
+
+              <!-- TOPICS -->
+
+              <div class="topics-list">
+
+                @for (
+                  topic of subject.topics;
+                  track topic.name;
+                  let i = $index
+                ) {
+
+                  <div class="topic-item">
+
+                    <div class="topic-number">
+                      {{ i + 1 }}
+                    </div>
+
+                    <div class="topic-content">
+
+                      <h4>
+                        {{ topic.name }}
+                      </h4>
+
+                      <p>
+                        {{ topic.description }}
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =================================================
+           EXAM PATTERN
+      ================================================== -->
+
+      <section class="content-card exam-card">
+
+        <div class="section-heading">
+
+          <div class="heading-icon exam-icon">
+            📝
+          </div>
+
+          <div>
+
+            <h2>
+              Exam Pattern
+            </h2>
+
+            <p>
+              Examination structure and marking information
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- EXAM SUMMARY -->
+
+        <div class="exam-summary">
+
+          <div class="summary-box">
+
+            <span class="summary-icon">
+              ⏱️
+            </span>
+
+            <div>
+
+              <small>
+                Duration
+              </small>
+
+              <strong>
+                {{ currentCourse.examPattern.duration }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <span class="summary-icon">
+              ☑️
+            </span>
+
+            <div>
+
+              <small>
+                Question Type
+              </small>
+
+              <strong>
+                {{ currentCourse.examPattern.questionType }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <span class="summary-icon">
+              🔢
+            </span>
+
+            <div>
+
+              <small>
+                Total Questions
+              </small>
+
+              <strong>
+                {{ currentCourse.examPattern.totalQuestions }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-box">
+
+            <span class="summary-icon">
+              🏆
+            </span>
+
+            <div>
+
+              <small>
+                Total Marks
+              </small>
+
+              <strong>
+                {{ currentCourse.examPattern.totalMarks }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- EXAM TABLE -->
+
+        <div class="table-wrapper">
+
+          <table class="exam-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Section
+                </th>
+
+                <th>
+                  No. of Questions
+                </th>
+
+                <th>
+                  Marks
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                row of currentCourse.examPattern.sections;
+                track row.section;
+                let last = $last
+              ) {
+
+                <tr [class.total-row]="last">
+
+                  <td>
+
+                    <strong>
+                      {{ row.section }}
+                    </strong>
+
+                  </td>
+
+                  <td>
+                    {{ row.questions }}
+                  </td>
+
+                  <td>
+                    {{ row.marks }}
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+
+        <!-- NOTE -->
+
+        @if (currentCourse.examPattern.note) {
+
+          <div class="exam-note">
+
+            <span class="note-icon">
+              ℹ️
+            </span>
+
+            <p>
+              {{ currentCourse.examPattern.note }}
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+
+
+      <!-- =================================================
+           PREPARATION MESSAGE
+      ================================================== -->
+
+      <section class="preparation-card">
+
+        <div class="preparation-icon">
+          🎯
+        </div>
+
+        <div>
+
+          <h3>
+            Prepare with VJM Coaching Center
+          </h3>
+
+          <p>
+            Learn concepts, practise questions and prepare
+            systematically for your entrance examination.
+          </p>
+
+        </div>
+
+        <a
+          routerLink="/student-login"
+          class="login-preparation-btn"
+        >
+          Student Login →
+        </a>
+
+      </section>
+
+
+    </section>
+
+  </main>
+
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-inner">
+
+      <img
+        src="assets/vjm-logo.png"
+        alt="VJM Coaching Center"
+        class="footer-logo"
+      >
+
+      <div>
+
+        <h3>
+          VJM COACHING CENTER
+        </h3>
+
+        <p>
+          Navodaya • Sainik School • Gurukula • School Tuition
+        </p>
+
+        <strong>
+          Learn • Practice • Succeed
+        </strong>
+
+        <small>
+          © 2026 VJM Coaching Center. All Rights Reserved.
+        </small>
+
+      </div>
+
+    </div>
 
   </footer>
+
+
+
+  <!-- =====================================================
+       BACK TO TOP
+  ====================================================== -->
+
+  <button
+    type="button"
+    class="back-to-top"
+    (click)="scrollToTop()"
+    aria-label="Back to top"
+  >
+    ↑
+  </button>
 
 </div>

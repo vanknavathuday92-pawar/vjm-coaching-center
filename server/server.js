@@ -1,100 +1,58 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const Razorpay = require('razorpay');
-
-dotenv.config();
+const crypto = require('crypto');
+require('dotenv').config();
 
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
 
-
 const razorpay = new Razorpay({
-
   key_id: process.env.RAZORPAY_KEY_ID,
-
   key_secret: process.env.RAZORPAY_KEY_SECRET
-
 });
 
 
-app.get('/', (req, res) => {
+/*
+========================================
+CREATE RAZORPAY ORDER
+========================================
+*/
 
-  res.send('VJM Coaching Center Payment Server is running.');
-
-});
-
-
-app.post('/create-order', async (req, res) => {
+app.post('/api/payment/create-order', async (req, res) => {
 
   try {
 
+    const amount = 6000 * 100;
+
     const options = {
-
-      amount: 600000,
-
+      amount: amount,
       currency: 'INR',
-
-      receipt:
-        'VJM_' +
-        Date.now(),
-
+      receipt: 'vjm_' + Date.now(),
       notes: {
-
-        center:
-          'VJM Coaching Center'
-
+        course: 'VJM Online Coaching',
+        studentId: req.body.studentId || ''
       }
-
     };
 
-
-    const order =
-      await razorpay.orders.create(
-        options
-      );
-
-
-    console.log(
-      'Razorpay Order Created:',
-      order.id
-    );
-
+    const order = await razorpay.orders.create(options);
 
     res.json({
-
       success: true,
-
-      orderId:
-        order.id,
-
-      amount:
-        order.amount,
-
-      currency:
-        order.currency
-
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency
     });
-
 
   } catch (error) {
 
-    console.error(
-      'Razorpay order creation error:',
-      error
-    );
-
+    console.error(error);
 
     res.status(500).json({
-
       success: false,
-
-      message:
-        'Unable to create Razorpay order.'
-
+      message: 'Unable to create payment order'
     });
 
   }
@@ -102,17 +60,84 @@ app.post('/create-order', async (req, res) => {
 });
 
 
-const PORT =
-  process.env.PORT || 3000;
+/*
+========================================
+VERIFY RAZORPAY PAYMENT
+========================================
+*/
+
+app.post('/api/payment/verify', async (req, res) => {
+
+  try {
+
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      studentId
+    } = req.body;
+
+    const body =
+      razorpay_order_id +
+      '|' +
+      razorpay_payment_id;
+
+    const expectedSignature =
+      crypto
+        .createHmac(
+          'sha256',
+          process.env.RAZORPAY_KEY_SECRET
+        )
+        .update(body.toString())
+        .digest('hex');
+
+    if (expectedSignature !== razorpay_signature) {
+
+      return res.status(400).json({
+        success: false,
+        message: 'Payment verification failed'
+      });
+
+    }
 
 
-app.listen(
-  PORT,
-  () => {
+    /*
+      IMPORTANT:
 
-    console.log(
-      `VJM Payment Server running on port ${PORT}`
-    );
+      Here you should update Firebase:
+
+      student.paymentStatus = "paid"
+
+      student.paymentId = razorpay_payment_id
+
+      student.orderId = razorpay_order_id
+
+    */
+
+
+    res.json({
+      success: true,
+      message: 'Payment verified successfully'
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: 'Payment verification error'
+    });
 
   }
-);
+
+});
+
+
+app.listen(3000, () => {
+
+  console.log(
+    'VJM Payment Server running on http://localhost:3000'
+  );
+
+});

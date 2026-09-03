@@ -1,557 +1,122 @@
-:host {
-  display: block;
-}
-
-* {
-  box-sizing: border-box;
-}
-
 .payment-page {
   min-height: 100vh;
-  background: #f5f7fb;
-  color: #07143d;
-}
-
-
-/* ===============================
-   NAVBAR
-================================ */
-
-.payment-navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
-  min-height: 78px;
-  padding: 12px 5%;
-
+  padding: 40px 20px;
+  background: #f3f6ff;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background: #07143d;
-
-  box-shadow:
-    0 4px 18px rgba(0, 0, 0, .15);
-}
-
-
-/* BRAND */
-
-.payment-brand {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-
-  color: white;
-}
-
-.brand-icon {
-  width: 45px;
-  height: 45px;
-
-  display: flex;
-  align-items: center;
   justify-content: center;
-
-  background: #ffc400;
-  border-radius: 10px;
-
-  font-size: 24px;
+  align-items: flex-start;
 }
-
-.payment-brand h1 {
-  margin: 0;
-
-  font-size: 19px;
-  font-weight: 800;
-}
-
-.payment-brand span {
-  display: block;
-
-  margin-top: 3px;
-
-  color: #ffc400;
-
-  font-size: 11px;
-  font-weight: 600;
-}
-
-
-/* BACK */
-
-.back-button {
-  padding: 11px 18px;
-
-  border: 1px solid rgba(255,255,255,.5);
-  border-radius: 8px;
-
-  color: white;
-
-  text-decoration: none;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  transition: .2s;
-}
-
-.back-button:hover {
-  background: white;
-  color: #07143d;
-}
-
-
-/* ===============================
-   MAIN
-================================ */
-
-.payment-content {
-  width: min(100% - 30px, 850px);
-
-  margin: auto;
-
-  padding: 65px 0 80px;
-}
-
-
-/* ===============================
-   HEADING
-================================ */
-
-.payment-heading {
-  text-align: center;
-
-  margin-bottom: 35px;
-}
-
-.payment-heading span {
-  color: #d69e00;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing: 3px;
-}
-
-.payment-heading h2 {
-  margin: 10px 0;
-
-  color: #07143d;
-
-  font-size: clamp(30px, 5vw, 42px);
-}
-
-.payment-heading p {
-  margin: 0;
-
-  color: #707070;
-
-  font-size: 15px;
-}
-
-
-/* ===============================
-   PAYMENT CARD
-================================ */
 
 .payment-card {
-  padding: 30px;
-
-  background: white;
-
-  border: 1px solid #e2e6ed;
-
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  padding: 40px;
   border-radius: 20px;
-
-  box-shadow:
-    0 15px 45px rgba(0, 0, 0, .10);
-}
-
-
-/* ===============================
-   COURSE SUMMARY
-================================ */
-
-.course-summary {
-  display: flex;
-
-  align-items: center;
-
-  gap: 18px;
-
-  padding-bottom: 25px;
-
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.course-icon {
-  width: 55px;
-  height: 55px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  background: #fff4c7;
-
-  border-radius: 12px;
-
-  font-size: 27px;
-}
-
-.course-summary span,
-.amount-section span {
-  color: #d69e00;
-
-  font-size: 10px;
-
-  font-weight: 800;
-
-  letter-spacing: 2px;
-}
-
-.course-summary h3 {
-  margin: 5px 0;
-
-  color: #07143d;
-
-  font-size: 19px;
-}
-
-.course-summary p {
-  margin: 0;
-
-  color: #777;
-
-  font-size: 13px;
-}
-
-
-/* ===============================
-   AMOUNT
-================================ */
-
-.amount-section {
-  padding: 25px 0;
-
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
   text-align: center;
-
-  border-bottom: 1px solid #e5e7eb;
 }
 
-.amount-section h2 {
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: #10245c;
+  font-size: 28px;
   margin: 5px 0;
-
-  color: #07143d;
-
-  font-size: 40px;
-
-  font-weight: 800;
 }
 
-.amount-section p {
-  margin: 0;
-
-  color: #777;
-
-  font-size: 13px;
+h2 {
+  color: #d99b00;
+  margin-top: 15px;
 }
 
-
-/* ===============================
-   PAYMENT METHODS
-================================ */
-
-.payment-method-section {
-  padding: 25px 0;
+.description {
+  color: #555;
+  line-height: 1.6;
 }
 
-.payment-method-section > h3 {
-  margin: 0 0 5px;
-
-  color: #07143d;
-
-  font-size: 20px;
+.fee-box {
+  margin: 25px 0;
+  padding: 20px;
+  border-radius: 15px;
+  background: #fff8dc;
+  border: 2px solid #e5ae00;
 }
 
-.payment-method-section > p {
-  margin: 0 0 20px;
-
-  color: #777;
-
-  font-size: 13px;
-}
-
-
-/* METHODS */
-
-.payment-methods {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
-}
-
-.payment-method {
-  width: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 15px;
-
-  padding: 17px;
-
-  background: white;
-
-  border: 2px solid #e2e6ed;
-
-  border-radius: 12px;
-
-  cursor: pointer;
-
-  text-align: left;
-
-  transition: .2s;
-}
-
-.payment-method:hover {
-  border-color: #ffc400;
-
-  transform: translateY(-1px);
-}
-
-.payment-method.selected {
-  border-color: #ffc400;
-
-  background: #fffaf0;
-
-  box-shadow:
-    0 5px 15px rgba(255, 196, 0, .12);
-}
-
-
-/* ICON */
-
-.method-icon {
-  width: 45px;
-  height: 45px;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  background: #f1f3f7;
-
-  border-radius: 10px;
-
-  font-size: 22px;
-}
-
-
-/* DETAILS */
-
-.method-details {
-  flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 4px;
-}
-
-.method-details strong {
-  color: #07143d;
-
-  font-size: 15px;
-}
-
-.method-details span {
-  color: #777;
-
-  font-size: 12px;
-}
-
-
-/* RADIO */
-
-.radio {
-  color: #d69e00;
-
-  font-size: 22px;
-
-  font-weight: 800;
-}
-
-
-/* ===============================
-   PAY BUTTON
-================================ */
-
-.pay-button {
-  width: 100%;
-
-  padding: 16px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #07143d;
-
-  color: white;
-
+.fee-box span {
+  display: block;
+  color: #444;
   font-size: 16px;
-
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition: .2s;
 }
 
-.pay-button:hover {
-  background: #ffc400;
-
-  color: #07143d;
-
-  transform: translateY(-2px);
+.fee-box strong {
+  display: block;
+  color: #c62828;
+  font-size: 40px;
+  margin-top: 5px;
 }
 
-
-/* SECURE */
-
-.secure-note {
-  margin: 15px 0 0;
-
-  text-align: center;
-
-  color: #777;
-
-  font-size: 12px;
-}
-
-
-/* ===============================
-   BOTTOM
-================================ */
-
-.bottom-navigation {
-  display: flex;
-
-  justify-content: center;
-
-  margin-top: 30px;
-}
-
-.back-syllabus {
-  color: #07143d;
-
-  text-decoration: none;
-
-  font-weight: 700;
-
-  font-size: 14px;
-}
-
-.back-syllabus:hover {
-  color: #d69e00;
-}
-
-
-/* ===============================
-   FOOTER
-================================ */
-
-footer {
-  padding: 40px 20px;
-
-  text-align: center;
-
-  background: #07143d;
-
-  color: white;
-}
-
-footer h2 {
-  margin: 0 0 10px;
-
+h3 {
+  color: #10245c;
   font-size: 22px;
 }
 
-footer p {
-  margin: 6px 0;
-
-  color: #c8d0e3;
+.payment-details {
+  margin: 25px 0;
+  padding: 15px;
+  background: #f5f7fc;
+  border-radius: 12px;
+  text-align: left;
 }
 
-footer .copyright {
-  margin-top: 22px;
-
-  color: #9da8c0;
-
-  font-size: 12px;
+.payment-details p {
+  margin: 10px 0;
 }
 
+.pay-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #10245c;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
 
-/* ===============================
-   MOBILE
-================================ */
+.pay-btn:hover {
+  background: #d99b00;
+  color: #111;
+}
 
-@media (max-width: 550px) {
+.verification-note {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #777;
+}
 
-  .payment-navbar {
-    padding: 12px 15px;
+@media (max-width: 600px) {
 
-    flex-direction: column;
-
-    gap: 10px;
-  }
-
-  .payment-brand {
-    justify-content: center;
-  }
-
-  .payment-brand h1 {
-    font-size: 16px;
-  }
-
-  .back-button {
-    width: 100%;
-
-    text-align: center;
-  }
-
-  .payment-content {
-    width: calc(100% - 20px);
-
-    padding: 40px 0 60px;
+  .payment-page {
+    padding: 20px 12px;
   }
 
   .payment-card {
-    padding: 20px;
-
+    padding: 25px 18px;
     border-radius: 15px;
   }
 
-  .course-summary {
-    align-items: flex-start;
+  h1 {
+    font-size: 23px;
   }
 
-  .amount-section h2 {
+  .fee-box strong {
     font-size: 34px;
   }
-
 }
