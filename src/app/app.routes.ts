@@ -13,7 +13,16 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./student-login/student-login').then(m => m.StudentLogin)
   },
-
+{
+  path: 'admin-login',
+  loadComponent: () =>
+    import('./admin-login/admin-login').then(m => m.AdminLogin)
+},
+  {
+    path: 'admin-dashboard',
+    loadComponent: () =>
+      import('./admin-dashboard/admin-dashboard').then(m => m.AdminDashboard)
+  },
  {
   path: 'payment',
   canActivate: [PaymentGuard],
